@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>God & Devil - 전투 화면</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #222;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    .status-bar, .bottom-bar {
+      background: #333;
+      padding: 10px;
+      text-align: center;
+    }
+    .battle-area {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 300px;
+      background: url('https://via.placeholder.com/600x300/444/fff?text=Battle+Stage') no-repeat center;
+      background-size: cover;
+    }
+    .hero, .enemy {
+      width: 80px;
+      height: 80px;
+      background: #666;
+      border: 2px solid #fff;
+      text-align: center;
+      line-height: 80px;
+    }
+    .side-buttons, .menu-buttons {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      top: 100px;
+      gap: 10px;
+    }
+    .side-buttons { left: 10px; }
+    .menu-buttons { right: 10px; }
+    .side-buttons button, .menu-buttons button, .bottom-bar button {
+      padding: 5px;
+      background: #555;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="status-bar">
+    <span>닉네임: 신의용사</span> | <span>골드: 1,240,000</span> | <span>스테이지: 12-4</span>
+  </div>
+
+  <div class="battle-area">
+    <div class="hero">영웅</div>
+    <div class="enemy">적</div>
+  </div>
+
+  <div class="side-buttons">
+    <button>캐릭터</button>
+    <button>장비</button>
+    <button>성장</button>
+  </div>
+
+  <div class="menu-buttons">
+    <button>우편함</button>
+    <button>미션</button>
+    <button>상점</button>
+  </div>
+
+  <div class="bottom-bar">
+    <button>2배속</button>
+    <button>자동전투 ON</button>
+  </div>
+
+  <div id="skill-panel" style="background:#111; padding:10px; max-height:300px; overflow-y:auto; text-align:center; border: 2px solid lime;">
+    <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+      <div style="width: 150px; background: #444; padding: 5px; border-radius: 5px;">파이어볼<br><small>쿨타임 5s</small></div>
+      <div style="width: 150px; background: #444; padding: 5px; border-radius: 5px;">회복<br><small>쿨타임 8s</small></div>
+      <div style="width: 150px; background: #444; padding: 5px; border-radius: 5px;">얼음창<br><small>쿨타임 7s</small></div>
+      <div style="width: 150px; background: #444; padding: 5px; border-radius: 5px;">맹타<br><small>쿨타임 6s</small></div>
+      <div style="width: 150px; background: #444; padding: 5px; border-radius: 5px;">중력 폭발<br><small>쿨타임 20s</small></div>
+    </div>
+  </div>
+
+  <div id="inventory-panel" style="display:none; width: 100%; height: 300px; background:#111; padding:10px; overflow-y:auto; text-align:center; border: 2px solid yellow;">
+  <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; justify-items: center;">
+    <div style="width: 60px; height: 60px; background: #444; line-height: 60px;">item1</div>
+    <div style="width: 60px; height: 60px; background: #444; line-height: 60px;">item2</div>
+    <div style="width: 60px; height: 60px; background: #444; line-height: 60px;">item3</div>
+    <div style="width: 60px; height: 60px; background: #444; line-height: 60px;">item4</div>
+    <div style="width: 60px; height: 60px; background: #444; line-height: 60px;">item5</div>
+    <div style="width: 60px; height: 60px; background: #444; line-height: 60px;">item6</div>
+    <div style="width: 60px; height: 60px; background: #444; line-height: 60px;">item7</div>
+    <div style="width: 60px; height: 60px; background: #444; line-height: 60px;">item8</div>
+    <div style="width: 60px; height: 60px; background: #444; line-height: 60px;">item9</div>
+    <div style="width: 60px; height: 60px; background: #444; line-height: 60px;">item10</div>
+  </div>
+</div>
+    </div>
+  </div>
+
+  <div id="character-panel" style="display:none; width: 100%; height: 300px; background:#111; padding:10px; text-align:center; border: 2px solid skyblue;">
+    <div style="display: flex; gap: 20px; justify-content: center; align-items: center;">
+      <div style="text-align: left; font-size: 14px;">
+        <p><strong>종류:</strong> 근거리 전사</p>
+        <p><strong>등급:</strong> 전설 (SSR)</p>
+        <p><strong>레벨:</strong> 45</p>
+        <p><strong>진영:</strong> God</p>
+      </div>
+      <div style="position: relative; width: 180px; height: 270px; background: #333;">
+        <div style="position: absolute; top: 5px; left: calc(50% + 45px); width: 30px; height: 30px; background: #555; border: 2px solid #aaa; font-size: 10px;">귀걸이</div>
+        <div style="position: absolute; top: 45px; left: calc(50% + 45px); width: 30px; height: 30px; background: #555; border: 2px solid #aaa; font-size: 10px;">반지1</div>
+        <div style="position: absolute; top: 85px; left: calc(50% + 45px); width: 30px; height: 30px; background: #555; border: 2px solid #aaa; font-size: 10px;">반지2</div>
+        <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 50px; height: 50px; background: #555; border: 2px solid #aaa; font-size: 10px;">투구</div>
+        <div style="position: absolute; top: 60px; left: 50%; transform: translateX(-50%); width: 80px; height: 80px; background: #666; border-radius: 50%;"></div>
+        <div style="position: absolute; top: 150px; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; background: #555; border: 2px solid #aaa; font-size: 10px;">갑옷</div>
+        <div style="position: absolute; top: 150px; left: 10px; width: 40px; height: 40px; background: #555; border: 2px solid #aaa; font-size: 10px;">장갑</div>
+        <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 30px; background: #555; border: 2px solid #aaa; font-size: 10px;">신발</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="shop-panel" style="display:none; width: 100%; height: 300px; background:#111; padding:10px; text-align:center; border: 2px solid red;">
+    <p>상점 영역입니다.</p>
+  </div>
+
+  <div class="tab-bar" style="background: #222; border-top: 1px solid #444; display: flex; justify-content: space-around; padding: 10px 0; position: sticky; bottom: 0;">
+    <span style="color: lime; font-size: 14px; cursor: pointer;">스킬</span>
+    <span style="color: #fff; font-size: 14px; cursor: pointer;">인벤토리</span>
+    <span style="color: #fff; font-size: 14px; cursor: pointer;">캐릭터</span>
+    <span style="color: #fff; font-size: 14px; cursor: pointer;">상점</span>
+  </div>
+
+  <script>
+    const tabSpans = document.querySelectorAll('.tab-bar span');
+    const skillPanel = document.getElementById('skill-panel');
+    const inventoryPanel = document.getElementById('inventory-panel');
+    const characterPanel = document.getElementById('character-panel');
+    const shopPanel = document.getElementById('shop-panel');
+
+    tabSpans.forEach(span => {
+      span.addEventListener('click', () => {
+        tabSpans.forEach(tab => tab.style.color = '#fff');
+        skillPanel.style.display = 'none';
+        inventoryPanel.style.display = 'none';
+        characterPanel.style.display = 'none';
+        shopPanel.style.display = 'none';
+
+        if (span.textContent === '스킬') {
+          span.style.color = 'lime';
+          skillPanel.style.display = 'block';
+        } else if (span.textContent === '인벤토리') {
+          span.style.color = 'yellow';
+          inventoryPanel.style.display = 'block';
+        } else if (span.textContent === '캐릭터') {
+          span.style.color = 'skyblue';
+          characterPanel.style.display = 'block';
+        } else if (span.textContent === '상점') {
+          span.style.color = 'red';
+          shopPanel.style.display = 'block';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
