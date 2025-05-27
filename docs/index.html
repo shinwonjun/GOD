@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>캐릭터 vs 적 시뮬레이션</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .tab-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .tab-button {
+      flex: 1;
+      padding: 12px 0;
+      background-color: #eee;
+      border: 1px solid #ccc;
+      border-bottom: none;
+      cursor: pointer;
+      text-align: center;
+      font-weight: 600;
+    }
+    .tab-button.active {
+      background-color: white;
+      border-top: 3px solid #007bff;
+      font-weight: 700;
+    }
+    .tab-content {
+      display: none;
+      min-height: 850px; /* ✅ 모든 탭 동일한 높이 적용 */
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .tab-contents-wrapper {
+      border: 1px solid #ccc;
+      background: #fafafa;
+      padding: 20px;
+      border-radius: 0 8px 8px 8px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 6px 10px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    .upgrade-sections {
+      display: flex;
+      gap: 20px;
+    }
+    .left-section, .center-section, .right-section {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      background: #fff;
+      border-radius: 6px;
+    }
+    .form-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+    .form-buttons button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .form-buttons button:hover {
+      background: #0056b3;
+    }
+	.levelup-log {
+	  color: green;
+	  font-weight: bold;
+	}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h2>simulation</h2>
+
+<div class="tab-buttons">
+  <div class="tab-button active" data-tab="simulationInfo">시뮬레이션 정보</div>
+  <div class="tab-button" data-tab="player">내 캐릭터 정보</div>
+  <div class="tab-button" data-tab="resource">재화 정보</div>
+  <div class="tab-button" data-tab="upgrade">업그레이드 비용</div>
+  <div class="tab-button" data-tab="enemy">적 정보</div>
+</div>
+
+<form id="attackForm">
+  <div class="tab-contents-wrapper">
+	<div id="simulationInfo" class="tab-content active">
+	  <label>시뮬레이션 이름:</label>
+	  <input type="text" id="simulationName" value="simulations" />
+	 <label>전략 선택:</label>
+		<div style="margin-bottom: 15px;">
+		  <label><input type="radio" name="strategyType" value="balanced" checked onchange="showStrategyInputs('balanced')" /> ✅ 균형형</label>
+		  <label><input type="radio" name="strategyType" value="dps" onchange="showStrategyInputs('dps')" /> 🔥 DPS 집중형</label>
+		  <label><input type="radio" name="strategyType" value="crit" onchange="showStrategyInputs('crit')" /> 🎯 크리티컬 집중형</label>
+		</div>
+
+		<div id="strategyInputs">
+		  <div id="balancedInputs">
+			<strong>균형형 분배:</strong>
+			<label>레벨업 (%)</label><input type="number" id="balancedLevelUp" value="20" />
+			<label>공격력 (%)</label><input type="number" id="balancedAttack" value="25" />
+			<label>크리티컬 확률 (%)</label><input type="number" id="balancedCritChance" value="20" />
+			<label>크리티컬 데미지 (%)</label><input type="number" id="balancedCritDamage" value="15" />
+			<label>공격속도 (%)</label><input type="number" id="balancedSpeed" value="20" />
+		  </div>
+
+		  <div id="dpsInputs" style="display:none">
+			<strong>DPS 집중형 분배:</strong>
+			<label>레벨업 (%)</label><input type="number" id="dpsLevelUp" value="15" />
+			<label>공격력 (%)</label><input type="number" id="dpsAttack" value="40" />
+			<label>크리티컬 확률 (%)</label><input type="number" id="dpsCritChance" value="10" />
+			<label>크리티컬 데미지 (%)</label><input type="number" id="dpsCritDamage" value="10" />
+			<label>공격속도 (%)</label><input type="number" id="dpsSpeed" value="25" />
+		  </div>
+
+		  <div id="critInputs" style="display:none">
+			<strong>크리티컬 집중형 분배:</strong>
+			<label>레벨업 (%)</label><input type="number" id="critLevelUp" value="15" />
+			<label>공격력 (%)</label><input type="number" id="critAttack" value="15" />
+			<label>크리티컬 확률 (%)</label><input type="number" id="critCritChance" value="35" />
+			<label>크리티컬 데미지 (%)</label><input type="number" id="critCritDamage" value="25" />
+			<label>공격속도 (%)</label><input type="number" id="critSpeed" value="10" />
+		  </div>
+		</div>
+		<div id="strategyWarning" style="display:none; color:red; font-weight:bold; margin-top:10px;">
+		  ⚠️ 분배 총합이 100%를 초과했습니다. 다시 조정해주세요.
+		</div>
+
+	</div>
+    <div id="player" class="tab-content">
+      <label>내 캐릭터 레벨:</label>
+      <input type="number" id="playerLevel" value="1" min="1" />
+      <label>내 캐릭터 최대 레벨:</label>
+      <input type="number" id="playerMaxLevel" value="100" min="1" />
+      <label>기본 공격력:</label>
+      <input type="number" id="baseAttack" value="10" min="0" />
+      <label>공격 속도 (초당 공격 횟수):</label>
+      <input type="number" id="attackSpeed" value="1" min="0.1" step="0.1" />
+      <label>공격력 증가 상수 C:</label>
+      <input type="number" id="attackC" value="0.02" step="0.001" />
+      <label>기본 크리티컬 확률 (%):</label>
+      <input type="number" id="critChance" value="0" max="100" />
+      <label>기본 크리티컬 데미지 배율:</label>
+      <input type="number" id="critDamage" value="10" min="1" />
+    </div>
+
+    <div id="resource" class="tab-content">
+      <label>기본 재화:</label>
+      <input type="number" id="baseResource" value="100" />
+      <label>재화 획득 간격 (초):</label>
+      <input type="number" id="resourceInterval" value="60" />
+    </div>
+
+    <div id="upgrade" class="tab-content">
+      <div class="upgrade-sections">
+        <div class="left-section">
+          <label>레벨업:</label>
+          <input type="number" id="upgradeCostLevel" value="10" />
+          <label>기본 공격력:</label>
+          <input type="number" id="upgradeCostAttack" value="10" />
+          <label>기본 공격속도:</label>
+          <input type="number" id="upgradeCostSpeed" value="50" />
+          <label>크리티컬 확률:</label>
+          <input type="number" id="upgradeCostCritChance" value="100" />
+          <label>크리티컬 데미지:</label>
+          <input type="number" id="upgradeCostCritDamage" value="500" />
+        </div>
+        <div class="center-section">
+          <label>레벨업 최대 레벨:</label>
+          <input type="number" id="maxLevelUp" value="100" />
+          <label>공격력 최대 레벨:</label>
+          <input type="number" id="maxAttackLevel" value="100" />
+          <label>공격속도 최대 레벨:</label>
+          <input type="number" id="maxSpeedLevel" value="100" />
+          <label>크리 확률 최대 레벨:</label>
+          <input type="number" id="maxCritChanceLevel" value="100" />
+          <label>크리 데미지 최대 레벨:</label>
+          <input type="number" id="maxCritDamageLevel" value="100" />
+        </div>
+        <div class="right-section">
+          <label>레벨업 비용 상수:</label>
+          <input type="number" id="levelCostC" value="1.2" step="0.01" />
+          <label>공격력 비용 상수:</label>
+          <input type="number" id="attackCostC" value="1.2" step="0.01" />
+          <label>공격속도 비용 상수:</label>
+          <input type="number" id="speedCostC" value="1.2" step="0.01" />
+          <label>크리 확률 비용 상수:</label>
+          <input type="number" id="critChanceCostC" value="1.2" step="0.01" />
+          <label>크리 데미지 비용 상수:</label>
+          <input type="number" id="critDamageCostC" value="1.2" step="0.01" />
+        </div>
+      </div>
+    </div>
+
+    <div id="enemy" class="tab-content">
+      <label>적 초기 레벨:</label>
+      <input type="number" id="enemyLevel" value="1" min="1" />
+      <label>적 최대 레벨:</label>
+      <input type="number" id="enemyMaxLevel" value="100" />
+      <label>적 기본 체력:</label>
+      <input type="number" id="enemyHP" value="10" />
+      <label>적 기본 방어력:</label>
+      <input type="number" id="enemyBaseDef" value="10" />
+      <label>방어력 증가 상수 C:</label>
+      <input type="number" id="defC" value="0.02" step="0.001" />
+      <label>자연상수 e:</label>
+      <input type="number" id="defE" value="2.71828" step="0.00001" />
+      <label>체력 증가율 r:</label>
+      <input type="number" id="hpGrowthRate" value="1.15" step="0.01" />
+      <label>보상 기본 재화:</label>
+      <input type="number" id="rewardBase" value="100" />
+      <label>보상 증가 상수 C:</label>
+      <input type="number" id="rewardCostC" value="1.1" />
+      <label>총 사냥 시간 (초):</label>
+      <input type="number" id="maxTime" value="1800" />
+      <label>최대 처치 수:</label>
+      <input type="number" id="maxKill" value="999" />
+    </div>
+  </div>
+
+  <div class="form-buttons">
+    <button type="submit" id="simulationBtn">시뮬레이션 시작</button>
+    <button type="submit" id="downloadBtn">settings save</button>
+	<input type="file" id="loadFileInput" style="display:none" accept=".json" />
+    <button type="submit" id="loadBtn">settings load</button>
+  </div>
+</form>
+
+<div id="result"></div>
+
+<script src="tabs.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0/dist/chartjs-plugin-annotation.min.js"></script>
+<script src="simulation-info.js"></script>
+<script src="simulation-core.js" ></script>
+<script src="simulation-upgrade.js"></script>
+<script src="simulation-save.js"></script>
+<script src="simulation-load.js"></script>
+<script src="simulation.js"></script>
+</body>
+</html>
