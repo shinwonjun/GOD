@@ -1,0 +1,182 @@
+[
+  {
+	"Id": 101,
+    "Material": "천",
+    "Part": "투구",
+    "Discription": "공격속도 + 소폭 치명타 확률"
+  },
+  {
+	"Id": 102,
+    "Material": "천",
+    "Part": "갑옷",
+    "Discription": "공격속도 + 소폭 치명타 데미지 증가율"
+  },
+  {
+	"Id": 103,
+    "Material": "천",
+    "Part": "장갑",
+    "Discription": "공격속도 + 치명타 확률 상승"
+  },
+  {
+	"Id": 104,
+    "Material": "천",
+    "Part": "신발",
+    "Discription": "공격속도 크게 상승 + 소폭 공격력"
+  },
+  {
+	"Id": 105,
+    "Material": "천",
+    "Part": "목걸이",
+    "Discription": "공격속도 + 치명타 데미지 증가율 균형형"
+  },
+  {
+	"Id": 106,
+    "Material": "천",
+    "Part": "반지",
+    "Discription": "공격속도 + 소폭 치명타 확률 + 치명타 데미지 증가율"
+  },
+  {	  
+	"Id": 201,
+    "Material": "가죽",
+    "Part": "투구",
+    "Discription": "치명타 확률 크게 상승 + 소폭 공격속도"
+  },
+  {
+	"Id": 202,
+    "Material": "가죽",
+    "Part": "갑옷",
+    "Discription": "공격속도 + 치명타 확률 상승"
+  },
+  {
+	"Id": 203,
+    "Material": "가죽",
+    "Part": "장갑",
+    "Discription": "치명타 확률 + 소폭 공격력"
+  },
+  {
+	"Id": 204,
+    "Material": "가죽",
+    "Part": "신발",
+    "Discription": "공격속도 + 치명타 확률 균형형"
+  },
+  {
+	"Id": 205,
+    "Material": "가죽",
+    "Part": "목걸이",
+    "Discription": "치명타 확률 + 소폭 치명타 데미지 증가율"
+  },
+  {
+	"Id": 206,
+    "Material": "가죽",
+    "Part": "반지",
+    "Discription": "치명타 확률 + 치명타 데미지 증가율 상승"
+  },
+  {
+	"Id": 301,
+    "Material": "철",
+    "Part": "투구",
+    "Discription": "공격력 크게 상승 + 소폭 치명타 데미지 증가율"
+  },
+  {
+	"Id": 302,
+    "Material": "철",
+    "Part": "갑옷",
+    "Discription": "공격력 + 치명타 데미지 증가율 균형형"
+  },
+  {
+	"Id": 303,
+    "Material": "철",
+    "Part": "장갑",
+    "Discription": "공격력 + 치명타 데미지 증가율 상승"
+  },
+  {
+	"Id": 304,
+    "Material": "철",
+    "Part": "신발",
+    "Discription": "공격력 + 소폭 치명타 확률"
+  },
+  {
+	"Id": 305,
+    "Material": "철",
+    "Part": "목걸이",
+    "Discription": "공격력 + 치명타 데미지 증가율 균형형"
+  },
+  {
+	"Id": 306,
+    "Material": "철",
+    "Part": "반지",
+    "Discription": "치명타 데미지 증가율 크게 상승 + 소폭 공격력"
+  },
+  {
+	"Id": 401,
+    "Material": "사슬",
+    "Part": "투구",
+    "Discription": "공격력 + 공격속도 균형형"
+  },
+  {
+	"Id": 402,
+    "Material": "사슬",
+    "Part": "갑옷",
+    "Discription": "공격력 크게 상승 + 소폭 공격속도"
+  },
+  {
+	"Id": 403,
+    "Material": "사슬",
+    "Part": "장갑",
+    "Discription": "공격력 + 공격속도 모두 상승"
+  },
+  {
+	"Id": 404,
+    "Material": "사슬",
+    "Part": "신발",
+    "Discription": "공격속도 크게 상승 + 소폭 공격력"
+  },
+  {
+	"Id": 405,
+    "Material": "사슬",
+    "Part": "목걸이",
+    "Discription": "공격력 + 공격속도 균형형"
+  },
+  {
+	"Id": 406,
+    "Material": "사슬",
+    "Part": "반지",
+    "Discription": "공격력 + 공격속도 소폭 상승"
+  },
+  {
+	"Id": 501,
+    "Material": "돌",
+    "Part": "투구",
+    "Discription": "치명타 확률 크게 상승 + 소폭 치명타 데미지 증가율"
+  },
+  {
+	"Id": 502,
+    "Material": "돌",
+    "Part": "갑옷",
+    "Discription": "치명타 확률 + 치명타 데미지 증가율 균형형"
+  },
+  {
+	"Id": 503,
+    "Material": "돌",
+    "Part": "장갑",
+    "Discription": "치명타 확률 + 치명타 데미지 증가율 크게 상승"
+  },
+  {
+	"Id": 504,
+    "Material": "돌",
+    "Part": "신발",
+    "Discription": "치명타 확률 상승 + 소폭 공격속도"
+  },
+  {
+	"Id": 505,
+    "Material": "돌",
+    "Part": "목걸이",
+    "Discription": "치명타 확률 + 치명타 데미지 증가율 균형형"
+  },
+  {
+	"Id": 506,
+    "Material": "돌",
+    "Part": "반지",
+    "Discription": "치명타 데미지 증가율 크게 상승 + 소폭 치명타 확률"
+  }
+]

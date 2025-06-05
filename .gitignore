@@ -1,0 +1,37 @@
+# =========== #
+# Unity generated #
+# =========== #
+Temp/
+Obj/
+Library/
+Library/AssetDatabase/
+Library/AssetDatabase-*/ 
+Library/BuildPlayerData/
+Library/Collab/
+Library/CrashReport*
+Library/PackageCache/
+MemoryCaptures/
+Logs/
+UserSettings/
+
+# =========== #
+# OS generated #
+# =========== #
+.DS_Store
+Thumbs.db
+
+# =========== #
+# Visual Studio #
+# =========== #
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb

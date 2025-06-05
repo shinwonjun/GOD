@@ -1,0 +1,7 @@
+{
+  "Level": "The current level of the character.",
+  "AttackPower": "The attack power value of the character.",
+  "AttackSpeed": "The attack speed multiplier of the character.",
+  "CriticalChance": "The chance of landing a critical hit.",
+  "CriticalDamage": "The damage multiplier applied on a critical hit."
+}
