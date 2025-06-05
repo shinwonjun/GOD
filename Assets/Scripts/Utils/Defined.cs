@@ -19,6 +19,17 @@ namespace STATUS_UI
         CriticalChance,
         CriticalDamage,
     }
+
+    public enum Character
+    {
+        Pitching,
+        Armor,
+        Shoes,
+        Gloves,
+        Necklace,
+        ringL,
+        ringR,
+    }
 }
 
 namespace POPUP

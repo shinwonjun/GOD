@@ -5,9 +5,16 @@ using UnityEngine;
 
 public class UIManager : MonoSingleton<UIManager>
 {
+    // Stat Tab
     public Dictionary<STATUS_UI.Stat, StatView> statHandlers = new Dictionary<STATUS_UI.Stat, StatView>();
+
+    // Inventory Tab
     public Dictionary<string, ItemSlotView> inventoryHandlers = new Dictionary<string, ItemSlotView>();
 
+    // Character Tab
+    public Dictionary<STATUS_UI.Character, CharacterSlotView> characterHandlers = new Dictionary<STATUS_UI.Character, CharacterSlotView>();
+
+    // Popup
     public Dictionary<POPUP.POPUP, PopupBase> popupHandlers = new Dictionary<POPUP.POPUP, PopupBase>();
 
     public Transform PopupPanel { get; set; } = null;

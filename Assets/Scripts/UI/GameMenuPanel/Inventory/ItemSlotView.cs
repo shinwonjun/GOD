@@ -32,7 +32,7 @@ public class ItemSlotView : MonoBehaviour
     /// </summary>
     private void OnClickItem()
     {
-        if (UIManager.Instance != null)
+        if (UIManager.Instance != null && descriptionText != "")
         {
             UIManager.Instance.ShowPopup(descriptionText);
         }
