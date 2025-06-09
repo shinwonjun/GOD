@@ -3,7 +3,8 @@ using UnityEngine.UI;
 
 public class CharacterSlotView : MonoBehaviour
 {
-    public STATUS_UI.Character type;
+    [SerializeField]
+    public STATUS_UI.Character type { get; set; } = STATUS_UI.Character.None;
     public string descriptionText { get; set; } = "";
     private Button _button;
     private void Awake()

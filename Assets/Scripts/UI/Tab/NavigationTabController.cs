@@ -16,8 +16,9 @@ public class NavigationTabController : MonoBehaviour
 
     private bool isFirstTabLoaded = false;
     // Addressables 주소 (Addressable Asset Settings에서 설정한 주소 이름)
-    private string addressableKey_stat = "Assets/Addressables/Prefabs/UI/Tab_stat/stat.prefab";
+    private string addressableKey_statslot = "Assets/Addressables/Prefabs/UI/Tab_stat/statslot.prefab";
     private string addressableKey_itemslot = "Assets/Addressables/Prefabs/UI/Tab_inventory/itemslot.prefab";
+    private string addressableKey_characterslot = "Assets/Addressables/Prefabs/UI/Tab_Character/characterslot.prefab";
     private string addressableKey_popupItem = "Assets/Addressables/Prefabs/UI/Popup/popupItem.prefab";
 
 
@@ -62,22 +63,25 @@ public class NavigationTabController : MonoBehaviour
         {
             tabContents[i].SetActive(i == index);
         }
-        
+
 
         if (index == 0 && !isFirstTabLoaded)
         {
-            LoadStatPrefabToFirstTab();
+            LoadStatSlotPrefabToFirstTab();
             LoadItemSlotPrefabToFirstTab();
+            LoadCharacterSlotPrefabToFirstTab();
+
+            LoadPopupPrefabToFirstTab();
             isFirstTabLoaded = true;
         }
     }
 
-    void LoadStatPrefabToFirstTab()
+    void LoadStatSlotPrefabToFirstTab()
     {
-        Addressables.LoadAssetAsync<GameObject>(addressableKey_stat).Completed += OnLoadPrefabsStat;
+        Addressables.LoadAssetAsync<GameObject>(addressableKey_statslot).Completed += OnLoadPrefabsStatSlot;
     }
 
-    private void OnLoadPrefabsStat(AsyncOperationHandle<GameObject> handle)
+    private void OnLoadPrefabsStatSlot(AsyncOperationHandle<GameObject> handle)
     {
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
@@ -91,21 +95,21 @@ public class NavigationTabController : MonoBehaviour
                     var parent = tabContents[(int)currentTabIndex];
                     var parentContent = parent.GetComponent<UIGameMenuPanelTab>().content;
 
-                    GameObject statInstance = Instantiate(handle.Result, Vector3.zero, Quaternion.identity, parentContent);
-                    statInstance.name = "stat_" + statName;
-                    statInstance.transform.localScale = Vector3.one;
+                    GameObject statSlotInstance = Instantiate(handle.Result, Vector3.zero, Quaternion.identity, parentContent);
+                    statSlotInstance.name = "statslot_" + statName;
+                    statSlotInstance.transform.localScale = Vector3.one;
 
-                    var statView = statInstance.GetComponent<StatView>();
+                    var statSlotView = statSlotInstance.GetComponent<StatSlotView>();
 
-                    statView.setTitle(statName);
-                    statView.setDiscription(statValue);
-                    UIManager.Instance.statHandlers[statEnum] = statView;
+                    statSlotView.setTitle(statName);
+                    statSlotView.setDiscription(statValue);
+                    UIManager.Instance.statHandlers[statEnum] = statSlotView;
                 }
             }
         }
         else
         {
-            Debug.LogError($"Failed to load Addressable prefab at {addressableKey_stat}");
+            Debug.LogError($"Failed to load Addressable prefab at {addressableKey_statslot}");
         }
     }
 
@@ -113,9 +117,6 @@ public class NavigationTabController : MonoBehaviour
     void LoadItemSlotPrefabToFirstTab()
     {
         Addressables.LoadAssetAsync<GameObject>(addressableKey_itemslot).Completed += OnLoadPrefabsItemSlot;
-        
-        Addressables.LoadAssetAsync<GameObject>(addressableKey_popupItem).Completed += OnLoadPrefabsPopupItem;
-        
     }
 
     private void OnLoadPrefabsItemSlot(AsyncOperationHandle<GameObject> handle)
@@ -140,11 +141,11 @@ public class NavigationTabController : MonoBehaviour
                     // ItemData의 Part와 Discription을 출력
                     Debug.Log($"Part: {item.Part}, Discription: {item.Discription}");
 
-                    GameObject itemInstance = Instantiate(handle.Result, Vector3.zero, Quaternion.identity, parentContent);
-                    itemInstance.name = "itemslot_" + idx;
-                    itemInstance.transform.localScale = Vector3.one;
+                    GameObject itemslotInstance = Instantiate(handle.Result, Vector3.zero, Quaternion.identity, parentContent);
+                    itemslotInstance.name = "itemslot_" + idx;
+                    itemslotInstance.transform.localScale = Vector3.one;
 
-                    var itemSlotView = itemInstance.GetComponent<ItemSlotView>();
+                    var itemSlotView = itemslotInstance.GetComponent<ItemSlotView>();
                     itemSlotView.descriptionText = item.Discription;
 
                     UIManager.Instance.inventoryHandlers["itemslot_" + idx] = itemSlotView;
@@ -155,6 +156,45 @@ public class NavigationTabController : MonoBehaviour
         {
             Debug.LogError($"Failed to load Addressable prefab at {addressableKey_itemslot}");
         }
+    }
+
+    private void LoadCharacterSlotPrefabToFirstTab()
+    {
+        Addressables.LoadAssetAsync<GameObject>(addressableKey_characterslot).Completed += OnLoadPrefabsCharacterSlot;
+    }
+
+    private void OnLoadPrefabsCharacterSlot(AsyncOperationHandle<GameObject> handle)
+    {
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            foreach (STATUS_UI.Character characterEnum in Enum.GetValues(typeof(STATUS_UI.Character)))
+            {
+                string name = characterEnum.ToString();           // enum 값을 문자열로 변환
+                var parent = tabContents[(int)STATUS_UI.TAB.Character];
+
+                Transform slot = parent.transform.Find("Slot/" + name);
+                if (slot != null)
+                {
+                    GameObject characterslotInstance = Instantiate(handle.Result, Vector3.zero, Quaternion.identity, slot);
+                    characterslotInstance.name = "characterslot_" + name;
+                    characterslotInstance.transform.localScale = Vector3.one;
+                    characterslotInstance.transform.localPosition = Vector3.zero;
+
+                    var characterSlotView = characterslotInstance.GetComponent<CharacterSlotView>();
+                    characterSlotView.type = characterEnum;
+                    UIManager.Instance.characterHandlers[characterEnum] = characterSlotView;
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError($"Failed to load Addressable prefab at {addressableKey_characterslot}");
+        }
+    }
+
+    private void LoadPopupPrefabToFirstTab()
+    {
+        Addressables.LoadAssetAsync<GameObject>(addressableKey_popupItem).Completed += OnLoadPrefabsPopupItem;
     }
 
     private void OnLoadPrefabsPopupItem(AsyncOperationHandle<GameObject> handle)

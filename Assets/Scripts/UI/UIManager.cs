@@ -6,7 +6,7 @@ using UnityEngine;
 public class UIManager : MonoSingleton<UIManager>
 {
     // Stat Tab
-    public Dictionary<STATUS_UI.Stat, StatView> statHandlers = new Dictionary<STATUS_UI.Stat, StatView>();
+    public Dictionary<STATUS_UI.Stat, StatSlotView> statHandlers = new Dictionary<STATUS_UI.Stat, StatSlotView>();
 
     // Inventory Tab
     public Dictionary<string, ItemSlotView> inventoryHandlers = new Dictionary<string, ItemSlotView>();

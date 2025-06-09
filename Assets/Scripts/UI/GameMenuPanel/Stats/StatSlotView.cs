@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class StatView : MonoBehaviour
+public class StatSlotView : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI textTitle;
     [SerializeField] private TextMeshProUGUI textLevel;

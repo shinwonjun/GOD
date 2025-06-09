@@ -22,13 +22,14 @@ namespace STATUS_UI
 
     public enum Character
     {
+        None = -1,
         Pitching,
         Armor,
         Shoes,
         Gloves,
         Necklace,
-        ringL,
-        ringR,
+        RingL,
+        RingR,
     }
 }
 
