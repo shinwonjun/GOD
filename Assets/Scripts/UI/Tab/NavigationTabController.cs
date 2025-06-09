@@ -4,13 +4,12 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 using System.Collections.Generic;
+using NUnit.Framework.Constraints;
 public class NavigationTabController : MonoBehaviour
 {
-    [SerializeField]
-    public Toggle[] toggles; // 4개의 Toggle들 연결
+    [SerializeField] public Toggle[] toggles; // 4개의 Toggle들 연결
 
-    [SerializeField]
-    public GameObject[] tabContents; // 4개의 각 탭에 해당하는 패널 혹은 컨텐츠
+    [SerializeField] public GameObject[] tabContents; // 4개의 각 탭에 해당하는 패널 혹은 컨텐츠
 
     public STATUS_UI.TAB currentTabIndex { get; private set; } = STATUS_UI.TAB.None;
 
@@ -20,6 +19,7 @@ public class NavigationTabController : MonoBehaviour
     private string addressableKey_itemslot = "Assets/Addressables/Prefabs/UI/Tab_inventory/itemslot.prefab";
     private string addressableKey_characterslot = "Assets/Addressables/Prefabs/UI/Tab_Character/characterslot.prefab";
     private string addressableKey_popupItem = "Assets/Addressables/Prefabs/UI/Popup/popupItem.prefab";
+    private string addressableKey_popupCharacter = "Assets/Addressables/Prefabs/UI/Popup/popupCharacter.prefab";
 
 
     void Start()
@@ -127,27 +127,25 @@ public class NavigationTabController : MonoBehaviour
             var parentContent = parent.GetComponent<UIGameMenuPanelTab>().content;
             int idx = 0;
 
-            foreach (KeyValuePair<string, List<ItemData>> kvp in DataManager.Instance.itemData)
+            foreach (KeyValuePair<string, List<DATA.ItemData>> kvp in DataManager.Instance.itemData)
             {
                 string materialKey = kvp.Key;               // 예: "천", "가죽", "철" 등
-                List<ItemData> itemList = kvp.Value;        // 해당 Material에 속한 ItemData 리스트
+                List<DATA.ItemData> itemList = kvp.Value;        // 해당 Material에 속한 ItemData 리스트
 
                 // Material 이름부터 출력
                 Debug.Log($"=== Material: {materialKey} (총 {itemList.Count}개 아이템) ===");
 
                 // 루프 2: 해당 Material 리스트 안의 각 ItemData를 순회
-                foreach (ItemData item in itemList)
+                foreach (DATA.ItemData item in itemList)
                 {
-                    // ItemData의 Part와 Discription을 출력
-                    Debug.Log($"Part: {item.Part}, Discription: {item.Discription}");
+                    Debug.Log($"Part: {item.Part}, Discription: {item.Description}");
 
                     GameObject itemslotInstance = Instantiate(handle.Result, Vector3.zero, Quaternion.identity, parentContent);
                     itemslotInstance.name = "itemslot_" + idx;
                     itemslotInstance.transform.localScale = Vector3.one;
 
                     var itemSlotView = itemslotInstance.GetComponent<ItemSlotView>();
-                    itemSlotView.descriptionText = item.Discription;
-
+                    itemSlotView.SetData(item);
                     UIManager.Instance.inventoryHandlers["itemslot_" + idx] = itemSlotView;
                 }
             }
@@ -182,6 +180,10 @@ public class NavigationTabController : MonoBehaviour
 
                     var characterSlotView = characterslotInstance.GetComponent<CharacterSlotView>();
                     characterSlotView.type = characterEnum;
+
+                    var item = DataManager.Instance.characterData[name];
+                    characterSlotView.SetData(item);
+
                     UIManager.Instance.characterHandlers[characterEnum] = characterSlotView;
                 }
             }
@@ -195,6 +197,7 @@ public class NavigationTabController : MonoBehaviour
     private void LoadPopupPrefabToFirstTab()
     {
         Addressables.LoadAssetAsync<GameObject>(addressableKey_popupItem).Completed += OnLoadPrefabsPopupItem;
+        Addressables.LoadAssetAsync<GameObject>(addressableKey_popupCharacter).Completed += OnLoadPrefabsPopupCharacter;
     }
 
     private void OnLoadPrefabsPopupItem(AsyncOperationHandle<GameObject> handle)
@@ -207,8 +210,28 @@ public class NavigationTabController : MonoBehaviour
             instance.name = "popupItem";
             instance.transform.localScale = Vector3.one;
 
-            var popup = instance.GetComponent<PopupBase>();
+            var popup = instance.GetComponent<IPopupBase>();
             UIManager.Instance.popupHandlers[POPUP.POPUP.item] = popup;
+            instance.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError($"Failed to load Addressable prefab at {addressableKey_popupItem}");
+        }
+    }
+
+    private void OnLoadPrefabsPopupCharacter(AsyncOperationHandle<GameObject> handle)
+    {
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            var parent = UIManager.Instance.PopupPanel;
+
+            GameObject instance = Instantiate(handle.Result, Vector3.zero, Quaternion.identity, parent);
+            instance.name = "popupCharacter";
+            instance.transform.localScale = Vector3.one;
+
+            var popup = instance.GetComponent<IPopupBase>();
+            UIManager.Instance.popupHandlers[POPUP.POPUP.character] = popup;
             instance.SetActive(false);
         }
         else

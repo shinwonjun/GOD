@@ -1,29 +1,11 @@
-using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using UnityEngine;
-
-[Serializable]
-public class ItemData
-{
-    [JsonProperty("Id")]
-    public string Id;
-
-    [JsonProperty("Material")]
-    public string Material;
-
-    [JsonProperty("Part")]
-    public string Part;
-
-    [JsonProperty("Discription")]
-    public string Discription;
-}
-
 
 public class DataManager : Singleton<DataManager>
 {
     public Dictionary<string, string> statData { get; private set; }
-    public Dictionary<string, List<ItemData>> itemData = new Dictionary<string, List<ItemData>>();
+    public Dictionary<string, List<DATA.ItemData>> itemData = new Dictionary<string, List<DATA.ItemData>>();
+    public Dictionary<string, DATA.CharacterData> characterData = new Dictionary<string, DATA.CharacterData>();
 
 
 
@@ -31,6 +13,7 @@ public class DataManager : Singleton<DataManager>
     {
         LoadStatData();
         LoadItemData();
+        LoadCharacterData();
     }
     private void LoadStatData()
     {
@@ -52,7 +35,7 @@ public class DataManager : Singleton<DataManager>
     private void LoadItemData()
     {
         // 1) item_data.json을 List<ItemData> 형태로 파싱
-        List<ItemData> allItems = JsonLoader.LoadFromResources<List<ItemData>>("data/item_data");
+        List<DATA.ItemData> allItems = JsonLoader.LoadFromResources<List<DATA.ItemData>>("data/item_data");
         if (allItems == null)
         {
             Debug.LogError("DataManager: item_data.json 로드 실패!");
@@ -60,8 +43,8 @@ public class DataManager : Singleton<DataManager>
         }
 
         // 2) itemData 딕셔너리 초기화 및 그룹화
-        itemData = new Dictionary<string, List<ItemData>>();
-        foreach (ItemData item in allItems)
+        itemData = new Dictionary<string, List<DATA.ItemData>>();
+        foreach (DATA.ItemData item in allItems)
         {
             string key = item.Material;
             if (itemData.ContainsKey(key))
@@ -70,7 +53,7 @@ public class DataManager : Singleton<DataManager>
             }
             else
             {
-                itemData[key] = new List<ItemData> { item };
+                itemData[key] = new List<DATA.ItemData> { item };
             }
         }
 
@@ -78,6 +61,23 @@ public class DataManager : Singleton<DataManager>
         foreach (var kvp in itemData)
         {
             Debug.LogFormat("DataManager: Material = {0}, Count = {1}", kvp.Key, kvp.Value.Count);
+        }
+    }
+
+    private void LoadCharacterData()
+    {
+        List<DATA.CharacterData> datas = new List<DATA.CharacterData>();
+        datas = JsonLoader.LoadFromResources<List<DATA.CharacterData>>("data/character_data");
+        if (datas == null)
+        {
+            Debug.LogError("DataManager: scharacter_data.json 로드 실패!");
+            return;
+        }
+
+        foreach (DATA.CharacterData item in datas)
+        {
+            string key = item.Part;
+            characterData[key] = item;
         }
     }
 }

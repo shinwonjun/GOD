@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class UIManager : MonoSingleton<UIManager>
 {
+    [SerializeField] public NavigationTabController tabHandlers;
     // Stat Tab
     public Dictionary<STATUS_UI.Stat, StatSlotView> statHandlers = new Dictionary<STATUS_UI.Stat, StatSlotView>();
 
@@ -15,7 +16,7 @@ public class UIManager : MonoSingleton<UIManager>
     public Dictionary<STATUS_UI.Character, CharacterSlotView> characterHandlers = new Dictionary<STATUS_UI.Character, CharacterSlotView>();
 
     // Popup
-    public Dictionary<POPUP.POPUP, PopupBase> popupHandlers = new Dictionary<POPUP.POPUP, PopupBase>();
+    public Dictionary<POPUP.POPUP, IPopupBase> popupHandlers = new Dictionary<POPUP.POPUP, IPopupBase>();
 
     public Transform PopupPanel { get; set; } = null;
     public GameObject currentPopup { get; set; } = null;
@@ -26,25 +27,11 @@ public class UIManager : MonoSingleton<UIManager>
     }
     void Start()
     {
-        initHandler();
         DataManager.Instance.InitData();
     }
 
-    void initHandler()
+    public void ShowPopup(string description, POPUP.POPUP type)
     {
-
-    }
-
-    public void ShowPopup(string description)
-    {
-        currentPopup = popupHandlers[POPUP.POPUP.item].ShowPopup(description);
-    }
-
-    public void HidePopup()
-    {
-        if (currentPopup)
-        {
-            currentPopup.GetComponent<PopupBase>()?.HidePopup();
-        }
+        currentPopup = popupHandlers[type].ShowPopup(description);
     }
 }

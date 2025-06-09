@@ -1,12 +1,13 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PopupBase : MonoBehaviour
+public class PopupCharacter : MonoBehaviour, IPopupBase
 {
-
-    public TextMeshProUGUI uiText;              // UnityEngine.UI.Text를 쓸 때
-    public Button closeButton;
+    [SerializeField] public Button closeButton;
+    [SerializeField] public Button infoButton;
+    [SerializeField] public Button equipButton;     // 장착, 장착해제 두가지 기능
 
     public void Awake()
     {
@@ -14,20 +15,19 @@ public class PopupBase : MonoBehaviour
             closeButton.onClick.AddListener(HidePopup);
     }
 
-    /// <summary>
-    /// 팝업을 화면에 띄우고, 내용(description)을 설정한다.
-    /// </summary>
+
     public GameObject ShowPopup(string description)
     {
-        // 텍스트 설정
-        uiText.text = description;
+        bool ac = description == "" ? false : true;
+        infoButton.gameObject.SetActive(ac);
+        equipButton.gameObject.SetActive(true);
+
         gameObject.transform.localPosition = Vector3.zero;
         gameObject.SetActive(true);
+
         return gameObject;
     }
-    /// <summary>
-    /// 팝업을 닫는다.
-    /// </summary>
+
     public void HidePopup()
     {
         gameObject.SetActive(false);

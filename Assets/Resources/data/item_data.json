@@ -1,182 +1,182 @@
 [
   {
-	"Id": 101,
-    "Material": "천",
-    "Part": "투구",
-    "Discription": "공격속도 + 소폭 치명타 확률"
+    "Id": 101,
+    "Material": "cloth",
+    "Part": "Pitching",
+    "Description": "cloth Pitching"
   },
   {
-	"Id": 102,
-    "Material": "천",
-    "Part": "갑옷",
-    "Discription": "공격속도 + 소폭 치명타 데미지 증가율"
+    "Id": 102,
+    "Material": "cloth",
+    "Part": "Armor",
+    "Description": "cloth Armor"
   },
   {
-	"Id": 103,
-    "Material": "천",
-    "Part": "장갑",
-    "Discription": "공격속도 + 치명타 확률 상승"
+    "Id": 103,
+    "Material": "cloth",
+    "Part": "Gloves",
+    "Description": "cloth Gloves"
   },
   {
-	"Id": 104,
-    "Material": "천",
-    "Part": "신발",
-    "Discription": "공격속도 크게 상승 + 소폭 공격력"
+    "Id": 104,
+    "Material": "cloth",
+    "Part": "Shoes",
+    "Description": "cloth Shoes"
   },
   {
-	"Id": 105,
-    "Material": "천",
-    "Part": "목걸이",
-    "Discription": "공격속도 + 치명타 데미지 증가율 균형형"
+    "Id": 105,
+    "Material": "cloth",
+    "Part": "Necklace",
+    "Description": "cloth Necklace"
   },
   {
-	"Id": 106,
-    "Material": "천",
-    "Part": "반지",
-    "Discription": "공격속도 + 소폭 치명타 확률 + 치명타 데미지 증가율"
-  },
-  {	  
-	"Id": 201,
-    "Material": "가죽",
-    "Part": "투구",
-    "Discription": "치명타 확률 크게 상승 + 소폭 공격속도"
+    "Id": 106,
+    "Material": "cloth",
+    "Part": "Ring",
+    "Description": "cloth Ring"
   },
   {
-	"Id": 202,
-    "Material": "가죽",
-    "Part": "갑옷",
-    "Discription": "공격속도 + 치명타 확률 상승"
+    "Id": 201,
+    "Material": "leather",
+    "Part": "Pitching",
+    "Description": "leather"
   },
   {
-	"Id": 203,
-    "Material": "가죽",
-    "Part": "장갑",
-    "Discription": "치명타 확률 + 소폭 공격력"
+    "Id": 202,
+    "Material": "leather",
+    "Part": "Armor",
+    "Description": "leather"
   },
   {
-	"Id": 204,
-    "Material": "가죽",
-    "Part": "신발",
-    "Discription": "공격속도 + 치명타 확률 균형형"
+    "Id": 203,
+    "Material": "leather",
+    "Part": "Gloves",
+    "Description": "leather"
   },
   {
-	"Id": 205,
-    "Material": "가죽",
-    "Part": "목걸이",
-    "Discription": "치명타 확률 + 소폭 치명타 데미지 증가율"
+    "Id": 204,
+    "Material": "leather",
+    "Part": "Shoes",
+    "Description": "leather"
   },
   {
-	"Id": 206,
-    "Material": "가죽",
-    "Part": "반지",
-    "Discription": "치명타 확률 + 치명타 데미지 증가율 상승"
+    "Id": 205,
+    "Material": "leather",
+    "Part": "Necklace",
+    "Description": "leather"
   },
   {
-	"Id": 301,
-    "Material": "철",
-    "Part": "투구",
-    "Discription": "공격력 크게 상승 + 소폭 치명타 데미지 증가율"
+    "Id": 206,
+    "Material": "leather",
+    "Part": "Ring",
+    "Description": "leather"
   },
   {
-	"Id": 302,
-    "Material": "철",
-    "Part": "갑옷",
-    "Discription": "공격력 + 치명타 데미지 증가율 균형형"
+    "Id": 301,
+    "Material": "rock",
+    "Part": "Pitching",
+    "Description": "rock"
   },
   {
-	"Id": 303,
-    "Material": "철",
-    "Part": "장갑",
-    "Discription": "공격력 + 치명타 데미지 증가율 상승"
+    "Id": 302,
+    "Material": "rock",
+    "Part": "Armor",
+    "Description": "rock"
   },
   {
-	"Id": 304,
-    "Material": "철",
-    "Part": "신발",
-    "Discription": "공격력 + 소폭 치명타 확률"
+    "Id": 303,
+    "Material": "rock",
+    "Part": "Gloves",
+    "Description": "rock"
   },
   {
-	"Id": 305,
-    "Material": "철",
-    "Part": "목걸이",
-    "Discription": "공격력 + 치명타 데미지 증가율 균형형"
+    "Id": 304,
+    "Material": "rock",
+    "Part": "Shoes",
+    "Description": "rock"
   },
   {
-	"Id": 306,
-    "Material": "철",
-    "Part": "반지",
-    "Discription": "치명타 데미지 증가율 크게 상승 + 소폭 공격력"
+    "Id": 305,
+    "Material": "rock",
+    "Part": "Necklace",
+    "Description": "rock"
   },
   {
-	"Id": 401,
-    "Material": "사슬",
-    "Part": "투구",
-    "Discription": "공격력 + 공격속도 균형형"
+    "Id": 306,
+    "Material": "rock",
+    "Part": "Ring",
+    "Description": "rock"
   },
   {
-	"Id": 402,
-    "Material": "사슬",
-    "Part": "갑옷",
-    "Discription": "공격력 크게 상승 + 소폭 공격속도"
+    "Id": 401,
+    "Material": "chain",
+    "Part": "Pitching",
+    "Description": "chain"
   },
   {
-	"Id": 403,
-    "Material": "사슬",
-    "Part": "장갑",
-    "Discription": "공격력 + 공격속도 모두 상승"
+    "Id": 402,
+    "Material": "chain",
+    "Part": "Armor",
+    "Description": "chain"
   },
   {
-	"Id": 404,
-    "Material": "사슬",
-    "Part": "신발",
-    "Discription": "공격속도 크게 상승 + 소폭 공격력"
+    "Id": 403,
+    "Material": "chain",
+    "Part": "Gloves",
+    "Description": "chain"
   },
   {
-	"Id": 405,
-    "Material": "사슬",
-    "Part": "목걸이",
-    "Discription": "공격력 + 공격속도 균형형"
+    "Id": 404,
+    "Material": "chain",
+    "Part": "Shoes",
+    "Description": "chain"
   },
   {
-	"Id": 406,
-    "Material": "사슬",
-    "Part": "반지",
-    "Discription": "공격력 + 공격속도 소폭 상승"
+    "Id": 405,
+    "Material": "chain",
+    "Part": "Necklace",
+    "Description": "chain"
   },
   {
-	"Id": 501,
-    "Material": "돌",
-    "Part": "투구",
-    "Discription": "치명타 확률 크게 상승 + 소폭 치명타 데미지 증가율"
+    "Id": 406,
+    "Material": "chain",
+    "Part": "Ring",
+    "Description": "chain"
   },
   {
-	"Id": 502,
-    "Material": "돌",
-    "Part": "갑옷",
-    "Discription": "치명타 확률 + 치명타 데미지 증가율 균형형"
+    "Id": 501,
+    "Material": "steel",
+    "Part": "Pitching",
+    "Description": "steel"
   },
   {
-	"Id": 503,
-    "Material": "돌",
-    "Part": "장갑",
-    "Discription": "치명타 확률 + 치명타 데미지 증가율 크게 상승"
+    "Id": 502,
+    "Material": "steel",
+    "Part": "Armor",
+    "Description": "steel"
   },
   {
-	"Id": 504,
-    "Material": "돌",
-    "Part": "신발",
-    "Discription": "치명타 확률 상승 + 소폭 공격속도"
+    "Id": 503,
+    "Material": "steel",
+    "Part": "Gloves",
+    "Description": "steel"
   },
   {
-	"Id": 505,
-    "Material": "돌",
-    "Part": "목걸이",
-    "Discription": "치명타 확률 + 치명타 데미지 증가율 균형형"
+    "Id": 504,
+    "Material": "steel",
+    "Part": "Shoes",
+    "Description": "steel"
   },
   {
-	"Id": 506,
-    "Material": "돌",
-    "Part": "반지",
-    "Discription": "치명타 데미지 증가율 크게 상승 + 소폭 치명타 확률"
+    "Id": 505,
+    "Material": "steel",
+    "Part": "Necklace",
+    "Description": "steel"
+  },
+  {
+    "Id": 506,
+    "Material": "steel",
+    "Part": "Ring",
+    "Description": "steel"
   }
 ]
