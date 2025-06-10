@@ -3,180 +3,840 @@
     "Id": 101,
     "Material": "cloth",
     "Part": "Pitching",
-    "Description": "cloth Pitching"
+    "Description": "cloth Pitching 1",
+    "Sprite": "cloth_Pitching1"
   },
   {
     "Id": 102,
     "Material": "cloth",
-    "Part": "Armor",
-    "Description": "cloth Armor"
+    "Part": "Pitching",
+    "Description": "cloth Pitching 2",
+    "Sprite": "cloth_Pitching2"
   },
   {
     "Id": 103,
     "Material": "cloth",
-    "Part": "Gloves",
-    "Description": "cloth Gloves"
+    "Part": "Pitching",
+    "Description": "cloth Pitching 3",
+    "Sprite": "cloth_Pitching3"
   },
   {
     "Id": 104,
     "Material": "cloth",
-    "Part": "Shoes",
-    "Description": "cloth Shoes"
-  },
-  {
-    "Id": 105,
-    "Material": "cloth",
-    "Part": "Necklace",
-    "Description": "cloth Necklace"
-  },
-  {
-    "Id": 106,
-    "Material": "cloth",
-    "Part": "Ring",
-    "Description": "cloth Ring"
+    "Part": "Pitching",
+    "Description": "cloth Pitching 4",
+    "Sprite": "cloth_Pitching4"
   },
   {
     "Id": 201,
     "Material": "leather",
     "Part": "Pitching",
-    "Description": "leather"
+    "Description": "leather Pitching 1",
+    "Sprite": "leather_Pitching1"
   },
   {
     "Id": 202,
     "Material": "leather",
-    "Part": "Armor",
-    "Description": "leather"
+    "Part": "Pitching",
+    "Description": "leather Pitching 2",
+    "Sprite": "leather_Pitching2"
   },
   {
     "Id": 203,
     "Material": "leather",
-    "Part": "Gloves",
-    "Description": "leather"
+    "Part": "Pitching",
+    "Description": "leather Pitching 3",
+    "Sprite": "leather_Pitching3"
   },
   {
     "Id": 204,
     "Material": "leather",
-    "Part": "Shoes",
-    "Description": "leather"
-  },
-  {
-    "Id": 205,
-    "Material": "leather",
-    "Part": "Necklace",
-    "Description": "leather"
-  },
-  {
-    "Id": 206,
-    "Material": "leather",
-    "Part": "Ring",
-    "Description": "leather"
+    "Part": "Pitching",
+    "Description": "leather Pitching 4",
+    "Sprite": "leather_Pitching4"
   },
   {
     "Id": 301,
     "Material": "rock",
     "Part": "Pitching",
-    "Description": "rock"
+    "Description": "rock Pitching 1",
+    "Sprite": "rock_Pitching1"
   },
   {
     "Id": 302,
     "Material": "rock",
-    "Part": "Armor",
-    "Description": "rock"
+    "Part": "Pitching",
+    "Description": "rock Pitching 2",
+    "Sprite": "rock_Pitching2"
   },
   {
     "Id": 303,
     "Material": "rock",
-    "Part": "Gloves",
-    "Description": "rock"
+    "Part": "Pitching",
+    "Description": "rock Pitching 3",
+    "Sprite": "rock_Pitching3"
   },
   {
     "Id": 304,
     "Material": "rock",
-    "Part": "Shoes",
-    "Description": "rock"
-  },
-  {
-    "Id": 305,
-    "Material": "rock",
-    "Part": "Necklace",
-    "Description": "rock"
-  },
-  {
-    "Id": 306,
-    "Material": "rock",
-    "Part": "Ring",
-    "Description": "rock"
+    "Part": "Pitching",
+    "Description": "rock Pitching 4",
+    "Sprite": "rock_Pitching4"
   },
   {
     "Id": 401,
     "Material": "chain",
     "Part": "Pitching",
-    "Description": "chain"
+    "Description": "chain Pitching 1",
+    "Sprite": "chain_Pitching1"
   },
   {
     "Id": 402,
     "Material": "chain",
-    "Part": "Armor",
-    "Description": "chain"
+    "Part": "Pitching",
+    "Description": "chain Pitching 2",
+    "Sprite": "chain_Pitching2"
   },
   {
     "Id": 403,
     "Material": "chain",
-    "Part": "Gloves",
-    "Description": "chain"
+    "Part": "Pitching",
+    "Description": "chain Pitching 3",
+    "Sprite": "chain_Pitching3"
   },
   {
     "Id": 404,
     "Material": "chain",
-    "Part": "Shoes",
-    "Description": "chain"
-  },
-  {
-    "Id": 405,
-    "Material": "chain",
-    "Part": "Necklace",
-    "Description": "chain"
-  },
-  {
-    "Id": 406,
-    "Material": "chain",
-    "Part": "Ring",
-    "Description": "chain"
+    "Part": "Pitching",
+    "Description": "chain Pitching 4",
+    "Sprite": "chain_Pitching4"
   },
   {
     "Id": 501,
     "Material": "steel",
     "Part": "Pitching",
-    "Description": "steel"
+    "Description": "steel Pitching 1",
+    "Sprite": "steel_Pitching1"
   },
   {
     "Id": 502,
     "Material": "steel",
-    "Part": "Armor",
-    "Description": "steel"
+    "Part": "Pitching",
+    "Description": "steel Pitching 2",
+    "Sprite": "steel_Pitching2"
   },
   {
     "Id": 503,
     "Material": "steel",
-    "Part": "Gloves",
-    "Description": "steel"
+    "Part": "Pitching",
+    "Description": "steel Pitching 3",
+    "Sprite": "steel_Pitching3"
   },
   {
     "Id": 504,
     "Material": "steel",
-    "Part": "Shoes",
-    "Description": "steel"
+    "Part": "Pitching",
+    "Description": "steel Pitching 4",
+    "Sprite": "steel_Pitching4"
+  },
+  {
+    "Id": 105,
+    "Material": "cloth",
+    "Part": "Armor",
+    "Description": "cloth Armor",
+    "Sprite": "cloth_Armor1"
+  },
+  {
+    "Id": 106,
+    "Material": "cloth",
+    "Part": "Armor",
+    "Description": "cloth Armor 2",
+    "Sprite": "cloth_Armor2"
+  },
+  {
+    "Id": 107,
+    "Material": "cloth",
+    "Part": "Armor",
+    "Description": "cloth Armor 3",
+    "Sprite": "cloth_Armor3"
+  },
+  {
+    "Id": 108,
+    "Material": "cloth",
+    "Part": "Armor",
+    "Description": "cloth Armor 4",
+    "Sprite": "cloth_Armor4"
+  },
+  {
+    "Id": 205,
+    "Material": "leather",
+    "Part": "Armor",
+    "Description": "leather Armor 1",
+    "Sprite": "leather_Armor1"
+  },
+  {
+    "Id": 206,
+    "Material": "leather",
+    "Part": "Armor",
+    "Description": "leather Armor 2",
+    "Sprite": "leather_Armor2"
+  },
+  {
+    "Id": 207,
+    "Material": "leather",
+    "Part": "Armor",
+    "Description": "leather Armor 3",
+    "Sprite": "leather_Armor3"
+  },
+  {
+    "Id": 208,
+    "Material": "leather",
+    "Part": "Armor",
+    "Description": "leather Armor 4",
+    "Sprite": "leather_Armor4"
+  },
+  {
+    "Id": 305,
+    "Material": "rock",
+    "Part": "Armor",
+    "Description": "rock Armor 1",
+    "Sprite": "rock_Armor1"
+  },
+  {
+    "Id": 306,
+    "Material": "rock",
+    "Part": "Armor",
+    "Description": "rock Armor 2",
+    "Sprite": "rock_Armor2"
+  },
+  {
+    "Id": 307,
+    "Material": "rock",
+    "Part": "Armor",
+    "Description": "rock Armor 3",
+    "Sprite": "rock_Armor3"
+  },
+  {
+    "Id": 308,
+    "Material": "rock",
+    "Part": "Armor",
+    "Description": "rock Armor 4",
+    "Sprite": "rock_Armor4"
+  },
+  {
+    "Id": 405,
+    "Material": "chain",
+    "Part": "Armor",
+    "Description": "chain Armor 1",
+    "Sprite": "chain_Armor1"
+  },
+  {
+    "Id": 406,
+    "Material": "chain",
+    "Part": "Armor",
+    "Description": "chain Armor 2",
+    "Sprite": "chain_Armor2"
+  },
+  {
+    "Id": 407,
+    "Material": "chain",
+    "Part": "Armor",
+    "Description": "chain Armor 3",
+    "Sprite": "chain_Armor3"
+  },
+  {
+    "Id": 408,
+    "Material": "chain",
+    "Part": "Armor",
+    "Description": "chain Armor 4",
+    "Sprite": "chain_Armor4"
   },
   {
     "Id": 505,
     "Material": "steel",
-    "Part": "Necklace",
-    "Description": "steel"
+    "Part": "Armor",
+    "Description": "steel Armor 1",
+    "Sprite": "steel_Armor1"
   },
   {
     "Id": 506,
     "Material": "steel",
+    "Part": "Armor",
+    "Description": "steel Armor 2",
+    "Sprite": "steel_Armor2"
+  },
+  {
+    "Id": 507,
+    "Material": "steel",
+    "Part": "Armor",
+    "Description": "steel Armor 3",
+    "Sprite": "steel_Armor3"
+  },
+  {
+    "Id": 508,
+    "Material": "steel",
+    "Part": "Armor",
+    "Description": "steel Armor 4",
+    "Sprite": "steel_Armor4"
+  },
+  {
+    "Id": 109,
+    "Material": "cloth",
+    "Part": "Gloves",
+    "Description": "cloth Gloves 1",
+    "Sprite": "cloth_Gloves1"
+  },
+  {
+    "Id": 110,
+    "Material": "cloth",
+    "Part": "Gloves",
+    "Description": "cloth Gloves 2",
+    "Sprite": "cloth_Gloves2"
+  },
+  {
+    "Id": 111,
+    "Material": "cloth",
+    "Part": "Gloves",
+    "Description": "cloth Gloves 3",
+    "Sprite": "cloth_Gloves3"
+  },
+  {
+    "Id": 112,
+    "Material": "cloth",
+    "Part": "Gloves",
+    "Description": "cloth Gloves 4",
+    "Sprite": "cloth_Gloves4"
+  },
+  {
+    "Id": 209,
+    "Material": "leather",
+    "Part": "Gloves",
+    "Description": "leather Gloves 1",
+    "Sprite": "leather_Gloves1"
+  },
+  {
+    "Id": 210,
+    "Material": "leather",
+    "Part": "Gloves",
+    "Description": "leather Gloves 2",
+    "Sprite": "leather_Gloves2"
+  },
+  {
+    "Id": 211,
+    "Material": "leather",
+    "Part": "Gloves",
+    "Description": "leather Gloves 3",
+    "Sprite": "leather_Gloves3"
+  },
+  {
+    "Id": 212,
+    "Material": "leather",
+    "Part": "Gloves",
+    "Description": "leather Gloves 4",
+    "Sprite": "leather_Gloves4"
+  },
+  {
+    "Id": 309,
+    "Material": "rock",
+    "Part": "Gloves",
+    "Description": "rock Gloves 1",
+    "Sprite": "rock_Gloves1"
+  },
+  {
+    "Id": 310,
+    "Material": "rock",
+    "Part": "Gloves",
+    "Description": "rock Gloves 2",
+    "Sprite": "rock_Gloves2"
+  },
+  {
+    "Id": 311,
+    "Material": "rock",
+    "Part": "Gloves",
+    "Description": "rock Gloves 3",
+    "Sprite": "rock_Gloves3"
+  },
+  {
+    "Id": 312,
+    "Material": "rock",
+    "Part": "Gloves",
+    "Description": "rock Gloves 4",
+    "Sprite": "rock_Gloves4"
+  },
+  {
+    "Id": 409,
+    "Material": "chain",
+    "Part": "Gloves",
+    "Description": "chain Gloves 1",
+    "Sprite": "chain_Gloves1"
+  },
+  {
+    "Id": 410,
+    "Material": "chain",
+    "Part": "Gloves",
+    "Description": "chain Gloves 2",
+    "Sprite": "chain_Gloves2"
+  },
+  {
+    "Id": 411,
+    "Material": "chain",
+    "Part": "Gloves",
+    "Description": "chain Gloves 3",
+    "Sprite": "chain_Gloves3"
+  },
+  {
+    "Id": 412,
+    "Material": "chain",
+    "Part": "Gloves",
+    "Description": "chain Gloves 4",
+    "Sprite": "chain_Gloves4"
+  },
+  {
+    "Id": 509,
+    "Material": "steel",
+    "Part": "Gloves",
+    "Description": "steel Gloves 1",
+    "Sprite": "steel_Gloves1"
+  },
+  {
+    "Id": 510,
+    "Material": "steel",
+    "Part": "Gloves",
+    "Description": "steel Gloves 2",
+    "Sprite": "steel_Gloves2"
+  },
+  {
+    "Id": 511,
+    "Material": "steel",
+    "Part": "Gloves",
+    "Description": "steel Gloves 3",
+    "Sprite": "steel_Gloves3"
+  },
+  {
+    "Id": 512,
+    "Material": "steel",
+    "Part": "Gloves",
+    "Description": "steel Gloves 4",
+    "Sprite": "steel_Gloves4"
+  },
+  {
+    "Id": 113,
+    "Material": "cloth",
+    "Part": "Shoes",
+    "Description": "cloth Shoes 1",
+    "Sprite": "cloth_Shoes1"
+  },
+  {
+    "Id": 114,
+    "Material": "cloth",
+    "Part": "Shoes",
+    "Description": "cloth Shoes 2",
+    "Sprite": "cloth_Shoes2"
+  },
+  {
+    "Id": 115,
+    "Material": "cloth",
+    "Part": "Shoes",
+    "Description": "cloth Shoes 3",
+    "Sprite": "cloth_Shoes3"
+  },
+  {
+    "Id": 116,
+    "Material": "cloth",
+    "Part": "Shoes",
+    "Description": "cloth Shoes 4",
+    "Sprite": "cloth_Shoes4"
+  },
+  {
+    "Id": 213,
+    "Material": "leather",
+    "Part": "Shoes",
+    "Description": "leather Shoes 1",
+    "Sprite": "leather_Shoes1"
+  },
+  {
+    "Id": 214,
+    "Material": "leather",
+    "Part": "Shoes",
+    "Description": "leather Shoes 2",
+    "Sprite": "leather_Shoes2"
+  },
+  {
+    "Id": 215,
+    "Material": "leather",
+    "Part": "Shoes",
+    "Description": "leather Shoes 3",
+    "Sprite": "leather_Shoes3"
+  },
+  {
+    "Id": 216,
+    "Material": "leather",
+    "Part": "Shoes",
+    "Description": "leather Shoes 4",
+    "Sprite": "leather_Shoes4"
+  },
+  {
+    "Id": 313,
+    "Material": "rock",
+    "Part": "Shoes",
+    "Description": "rock Shoes 1",
+    "Sprite": "rock_Shoes1"
+  },
+  {
+    "Id": 314,
+    "Material": "rock",
+    "Part": "Shoes",
+    "Description": "rock Shoes 2",
+    "Sprite": "rock_Shoes2"
+  },
+  {
+    "Id": 315,
+    "Material": "rock",
+    "Part": "Shoes",
+    "Description": "rock Shoes 3",
+    "Sprite": "rock_Shoes3"
+  },
+  {
+    "Id": 316,
+    "Material": "rock",
+    "Part": "Shoes",
+    "Description": "rock Shoes 4",
+    "Sprite": "rock_Shoes4"
+  },
+  {
+    "Id": 413,
+    "Material": "chain",
+    "Part": "Shoes",
+    "Description": "chain Shoes 1",
+    "Sprite": "chain_Shoes1"
+  },
+  {
+    "Id": 414,
+    "Material": "chain",
+    "Part": "Shoes",
+    "Description": "chain Shoes 2",
+    "Sprite": "chain_Shoes2"
+  },
+  {
+    "Id": 415,
+    "Material": "chain",
+    "Part": "Shoes",
+    "Description": "chain Shoes 3",
+    "Sprite": "chain_Shoes3"
+  },
+  {
+    "Id": 416,
+    "Material": "chain",
+    "Part": "Shoes",
+    "Description": "chain Shoes 4",
+    "Sprite": "chain_Shoes4"
+  },
+  {
+    "Id": 513,
+    "Material": "steel",
+    "Part": "Shoes",
+    "Description": "steel Shoes 1",
+    "Sprite": "steel_Shoes1"
+  },
+  {
+    "Id": 514,
+    "Material": "steel",
+    "Part": "Shoes",
+    "Description": "steel Shoes 2",
+    "Sprite": "steel_Shoes2"
+  },
+  {
+    "Id": 515,
+    "Material": "steel",
+    "Part": "Shoes",
+    "Description": "steel Shoes 3",
+    "Sprite": "steel_Shoes3"
+  },
+  {
+    "Id": 516,
+    "Material": "steel",
+    "Part": "Shoes",
+    "Description": "steel Shoes 4",
+    "Sprite": "steel_Shoes4"
+  },
+  {
+    "Id": 117,
+    "Material": "cloth",
+    "Part": "Necklace",
+    "Description": "cloth Necklace 1",
+    "Sprite": "cloth_Necklace1"
+  },
+  {
+    "Id": 118,
+    "Material": "cloth",
+    "Part": "Necklace",
+    "Description": "cloth Necklace 2",
+    "Sprite": "cloth_Necklace2"
+  },
+  {
+    "Id": 119,
+    "Material": "cloth",
+    "Part": "Necklace",
+    "Description": "cloth Necklace 3",
+    "Sprite": "cloth_Necklace3"
+  },
+  {
+    "Id": 120,
+    "Material": "cloth",
+    "Part": "Necklace",
+    "Description": "cloth Necklace 4",
+    "Sprite": "cloth_Necklace4"
+  },
+  {
+    "Id": 217,
+    "Material": "leather",
+    "Part": "Necklace",
+    "Description": "leather Necklace 1",
+    "Sprite": "leather_Necklace1"
+  },
+  {
+    "Id": 218,
+    "Material": "leather",
+    "Part": "Necklace",
+    "Description": "leather Necklace 2",
+    "Sprite": "leather_Necklace2"
+  },
+  {
+    "Id": 219,
+    "Material": "leather",
+    "Part": "Necklace",
+    "Description": "leather Necklace 3",
+    "Sprite": "leather_Necklace3"
+  },
+  {
+    "Id": 220,
+    "Material": "leather",
+    "Part": "Necklace",
+    "Description": "leather Necklace 4",
+    "Sprite": "leather_Necklace4"
+  },
+  {
+    "Id": 317,
+    "Material": "rock",
+    "Part": "Necklace",
+    "Description": "rock Necklace 1",
+    "Sprite": "rock_Necklace1"
+  },
+  {
+    "Id": 318,
+    "Material": "rock",
+    "Part": "Necklace",
+    "Description": "rock Necklace 2",
+    "Sprite": "rock_Necklace2"
+  },
+  {
+    "Id": 319,
+    "Material": "rock",
+    "Part": "Necklace",
+    "Description": "rock Necklace 3",
+    "Sprite": "rock_Necklace3"
+  },
+  {
+    "Id": 320,
+    "Material": "rock",
+    "Part": "Necklace",
+    "Description": "rock Necklace 4",
+    "Sprite": "rock_Necklace4"
+  },
+  {
+    "Id": 417,
+    "Material": "chain",
+    "Part": "Necklace",
+    "Description": "chain Necklace 1",
+    "Sprite": "chain_Necklace1"
+  },
+  {
+    "Id": 418,
+    "Material": "chain",
+    "Part": "Necklace",
+    "Description": "chain Necklace 2",
+    "Sprite": "chain_Necklace2"
+  },
+  {
+    "Id": 419,
+    "Material": "chain",
+    "Part": "Necklace",
+    "Description": "chain Necklace 3",
+    "Sprite": "chain_Necklace3"
+  },
+  {
+    "Id": 420,
+    "Material": "chain",
+    "Part": "Necklace",
+    "Description": "chain Necklace 4",
+    "Sprite": "chain_Necklace4"
+  },
+  {
+    "Id": 517,
+    "Material": "steel",
+    "Part": "Necklace",
+    "Description": "steel Necklace 1",
+    "Sprite": "steel_Necklace1"
+  },
+  {
+    "Id": 518,
+    "Material": "steel",
+    "Part": "Necklace",
+    "Description": "steel Necklace 2",
+    "Sprite": "steel_Necklace2"
+  },
+  {
+    "Id": 519,
+    "Material": "steel",
+    "Part": "Necklace",
+    "Description": "steel Necklace 3",
+    "Sprite": "steel_Necklace3"
+  },
+  {
+    "Id": 520,
+    "Material": "steel",
+    "Part": "Necklace",
+    "Description": "steel Necklace 4",
+    "Sprite": "steel_Necklace4"
+  },
+  {
+    "Id": 121,
+    "Material": "cloth",
     "Part": "Ring",
-    "Description": "steel"
+    "Description": "cloth Ring 1",
+    "Sprite": "cloth_Ring1"
+  },
+  {
+    "Id": 122,
+    "Material": "cloth",
+    "Part": "Ring",
+    "Description": "cloth Ring 2",
+    "Sprite": "cloth_Ring2"
+  },
+  {
+    "Id": 123,
+    "Material": "cloth",
+    "Part": "Ring",
+    "Description": "cloth Ring 3",
+    "Sprite": "cloth_Ring3"
+  },
+  {
+    "Id": 124,
+    "Material": "cloth",
+    "Part": "Ring",
+    "Description": "cloth Ring 4",
+    "Sprite": "cloth_Ring4"
+  },
+  {
+    "Id": 221,
+    "Material": "leather",
+    "Part": "Ring",
+    "Description": "leather Ring 1",
+    "Sprite": "leather_Ring1"
+  },
+  {
+    "Id": 222,
+    "Material": "leather",
+    "Part": "Ring",
+    "Description": "leather Ring 2",
+    "Sprite": "leather_Ring2"
+  },
+  {
+    "Id": 223,
+    "Material": "leather",
+    "Part": "Ring",
+    "Description": "leather Ring 3",
+    "Sprite": "leather_Ring3"
+  },
+  {
+    "Id": 224,
+    "Material": "leather",
+    "Part": "Ring",
+    "Description": "leather Ring 4",
+    "Sprite": "leather_Ring4"
+  },
+  {
+    "Id": 321,
+    "Material": "rock",
+    "Part": "Ring",
+    "Description": "rock Ring 2",
+    "Sprite": "rock_Ring1"
+  },
+  {
+    "Id": 322,
+    "Material": "rock",
+    "Part": "Ring",
+    "Description": "rock Ring 2",
+    "Sprite": "rock_Ring2"
+  },
+  {
+    "Id": 323,
+    "Material": "rock",
+    "Part": "Ring",
+    "Description": "rock Ring 3",
+    "Sprite": "rock_Ring3"
+  },
+  {
+    "Id": 324,
+    "Material": "rock",
+    "Part": "Ring",
+    "Description": "rock Ring 4",
+    "Sprite": "rock_Ring4"
+  },
+  {
+    "Id": 421,
+    "Material": "chain",
+    "Part": "Ring",
+    "Description": "chain Ring 1",
+    "Sprite": "chain_Ring1"
+  },
+  {
+    "Id": 422,
+    "Material": "chain",
+    "Part": "Ring",
+    "Description": "chain Ring 2",
+    "Sprite": "chain_Ring2"
+  },
+  {
+    "Id": 423,
+    "Material": "chain",
+    "Part": "Ring",
+    "Description": "chain Ring 3",
+    "Sprite": "chain_Ring3"
+  },
+  {
+    "Id": 424,
+    "Material": "chain",
+    "Part": "Ring",
+    "Description": "chain Ring 4",
+    "Sprite": "chain_Ring4"
+  },
+  {
+    "Id": 521,
+    "Material": "steel",
+    "Part": "Ring",
+    "Description": "steel Ring 1",
+    "Sprite": "steel_Ring1"
+  },
+  {
+    "Id": 522,
+    "Material": "steel",
+    "Part": "Ring",
+    "Description": "steel Ring 2",
+    "Sprite": "steel_Ring2"
+  },
+  {
+    "Id": 523,
+    "Material": "steel",
+    "Part": "Ring",
+    "Description": "steel Ring 3",
+    "Sprite": "steel_Ring3"
+  },
+  {
+    "Id": 524,
+    "Material": "steel",
+    "Part": "Ring",
+    "Description": "steel Ring 4",
+    "Sprite": "steel_Ring4"
   }
 ]

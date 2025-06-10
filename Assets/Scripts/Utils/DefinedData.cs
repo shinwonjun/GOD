@@ -15,6 +15,9 @@ namespace DATA
 
         [JsonProperty("Description")]
         public string Description;
+
+        [JsonProperty("Sprite")]
+        public string Sprite;
     }
 
     public class CharacterData

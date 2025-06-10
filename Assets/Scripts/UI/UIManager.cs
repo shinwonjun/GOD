@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class UIManager : MonoSingleton<UIManager>
 {
@@ -17,6 +18,9 @@ public class UIManager : MonoSingleton<UIManager>
 
     // Popup
     public Dictionary<POPUP.POPUP, IPopupBase> popupHandlers = new Dictionary<POPUP.POPUP, IPopupBase>();
+
+    // ItemAtlas
+    public SpriteAtlas atlasItem { get; set; } = null;
 
     public Transform PopupPanel { get; set; } = null;
     public GameObject currentPopup { get; set; } = null;

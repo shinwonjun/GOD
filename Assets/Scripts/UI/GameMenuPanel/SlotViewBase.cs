@@ -9,11 +9,11 @@ public abstract class SlotViewBase<TData> : MonoBehaviour, IPointerClickHandler
     public abstract TData GetData();
     public abstract void SetData(TData newData);
 
-    public void OnPointerClick(PointerEventData eventData)
+    public abstract void ShowPopup();
+
+    public virtual void OnPointerClick(PointerEventData eventData)
     {
         TData data = GetData();
         ShowPopup();
     }
-
-    public abstract void ShowPopup();
 }

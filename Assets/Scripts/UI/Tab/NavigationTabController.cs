@@ -5,6 +5,8 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 using System.Collections.Generic;
 using NUnit.Framework.Constraints;
+using UnityEngine.U2D;
+using System.Threading.Tasks;
 public class NavigationTabController : MonoBehaviour
 {
     [SerializeField] public Toggle[] toggles; // 4개의 Toggle들 연결
@@ -22,7 +24,11 @@ public class NavigationTabController : MonoBehaviour
     private string addressableKey_popupCharacter = "Assets/Addressables/Prefabs/UI/Popup/popupCharacter.prefab";
 
 
-    void Start()
+    
+    private string addressableKey_itemLabel = "ItemAtlas";
+
+
+    async void Start()
     {
         // 각 Toggle에 onValueChanged 이벤트 연결
         for (int i = 0; i < toggles.Length; i++)
@@ -35,10 +41,11 @@ public class NavigationTabController : MonoBehaviour
             });
         }
 
+        await LoadItemAtlas();
+
         // 시작 시 첫 탭 활성화
         OnTabSelected(0);
     }
-
     void OnTabSelected(int index)
     {
         if ((int)currentTabIndex == index)
@@ -73,6 +80,28 @@ public class NavigationTabController : MonoBehaviour
 
             LoadPopupPrefabToFirstTab();
             isFirstTabLoaded = true;
+        }
+    }
+
+    async Task LoadItemAtlas()
+    {
+        var handle = Addressables.LoadAssetAsync<SpriteAtlas>(addressableKey_itemLabel);
+
+        if (!handle.IsValid())
+        {
+            Debug.LogError("❌ InvalidHandle: Address may be wrong or not built!");
+            return;
+        }
+
+        UIManager.Instance.atlasItem = await handle.Task;
+
+        if (UIManager.Instance.atlasItem == null)
+        {
+            Debug.LogError("❌ Atlas is null even after valid handle!");
+        }
+        else
+        {
+            Debug.Log("✅ SpriteAtlas loaded: " + UIManager.Instance.atlasItem.name);
         }
     }
 
@@ -146,6 +175,8 @@ public class NavigationTabController : MonoBehaviour
 
                     var itemSlotView = itemslotInstance.GetComponent<ItemSlotView>();
                     itemSlotView.SetData(item);
+
+                    itemslotInstance.GetComponent<Image>().sprite = UIManager.Instance.atlasItem.GetSprite(item.Sprite);
                     UIManager.Instance.inventoryHandlers["itemslot_" + idx] = itemSlotView;
                 }
             }
