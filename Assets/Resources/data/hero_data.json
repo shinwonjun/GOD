@@ -1,0 +1,490 @@
+[
+  {
+    "Id": "1",
+    "Name": "Zeus1",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Zeus1 is a powerful figure from the God lineage.",
+    "Sprite": "Zeus1"
+  },
+  {
+    "Id": "2",
+    "Name": "Zeus2",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Zeus2 is a powerful figure from the God lineage.",
+    "Sprite": "Zeus2"
+  },
+  {
+    "Id": "3",
+    "Name": "Zeus3",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Zeus3 is a powerful figure from the God lineage.",
+    "Sprite": "Zeus3"
+  },
+  {
+    "Id": "4",
+    "Name": "Hera1",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Hera1 is a powerful figure from the God lineage.",
+    "Sprite": "Hera1"
+  },
+  {
+    "Id": "5",
+    "Name": "Hera2",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Hera2 is a powerful figure from the God lineage.",
+    "Sprite": "Hera2"
+  },
+  {
+    "Id": "6",
+    "Name": "Hera3",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Hera3 is a powerful figure from the God lineage.",
+    "Sprite": "Hera3"
+  },
+  {
+    "Id": "7",
+    "Name": "Poseidon1",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Poseidon1 is a powerful figure from the God lineage.",
+    "Sprite": "Poseidon1"
+  },
+  {
+    "Id": "8",
+    "Name": "Poseidon2",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Poseidon2 is a powerful figure from the God lineage.",
+    "Sprite": "Poseidon2"
+  },
+  {
+    "Id": "9",
+    "Name": "Poseidon3",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Poseidon3 is a powerful figure from the God lineage.",
+    "Sprite": "Poseidon3"
+  },
+  {
+    "Id": "10",
+    "Name": "Athena1",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Athena1 is a powerful figure from the God lineage.",
+    "Sprite": "Athena1"
+  },
+  {
+    "Id": "11",
+    "Name": "Athena2",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Athena2 is a powerful figure from the God lineage.",
+    "Sprite": "Athena2"
+  },
+  {
+    "Id": "12",
+    "Name": "Athena3",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Athena3 is a powerful figure from the God lineage.",
+    "Sprite": "Athena3"
+  },
+  {
+    "Id": "13",
+    "Name": "Apollo1",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Apollo1 is a powerful figure from the God lineage.",
+    "Sprite": "Apollo1"
+  },
+  {
+    "Id": "14",
+    "Name": "Apollo2",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Apollo2 is a powerful figure from the God lineage.",
+    "Sprite": "Apollo2"
+  },
+  {
+    "Id": "15",
+    "Name": "Apollo3",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Apollo3 is a powerful figure from the God lineage.",
+    "Sprite": "Apollo3"
+  },
+  {
+    "Id": "16",
+    "Name": "Hermes1",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Hermes1 is a powerful figure from the God lineage.",
+    "Sprite": "Hermes1"
+  },
+  {
+    "Id": "17",
+    "Name": "Hermes2",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Hermes2 is a powerful figure from the God lineage.",
+    "Sprite": "Hermes2"
+  },
+  {
+    "Id": "18",
+    "Name": "Hermes3",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Hermes3 is a powerful figure from the God lineage.",
+    "Sprite": "Hermes3"
+  },
+  {
+    "Id": "19",
+    "Name": "Hermes4",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Hermes4 is a powerful figure from the God lineage.",
+    "Sprite": "Hermes4"
+  },
+  {
+    "Id": "20",
+    "Name": "Ares1",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Ares1 is a powerful figure from the God lineage.",
+    "Sprite": "Ares1"
+  },
+  {
+    "Id": "21",
+    "Name": "Ares2",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Ares2 is a powerful figure from the God lineage.",
+    "Sprite": "Ares2"
+  },
+  {
+    "Id": "22",
+    "Name": "Ares3",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Ares3 is a powerful figure from the God lineage.",
+    "Sprite": "Ares3"
+  },
+  {
+    "Id": "23",
+    "Name": "Hephaestus1",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Hephaestus1 is a powerful figure from the God lineage.",
+    "Sprite": "Hephaestus1"
+  },
+  {
+    "Id": "24",
+    "Name": "Hephaestus2",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Hephaestus2 is a powerful figure from the God lineage.",
+    "Sprite": "Hephaestus2"
+  },
+  {
+    "Id": "25",
+    "Name": "Hephaestus3",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Hephaestus3 is a powerful figure from the God lineage.",
+    "Sprite": "Hephaestus3"
+  },
+  {
+    "Id": "26",
+    "Name": "Artemis1",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Artemis1 is a powerful figure from the God lineage.",
+    "Sprite": "Artemis1"
+  },
+  {
+    "Id": "27",
+    "Name": "Artemis2",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Artemis2 is a powerful figure from the God lineage.",
+    "Sprite": "Artemis2"
+  },
+  {
+    "Id": "28",
+    "Name": "Artemis3",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Artemis3 is a powerful figure from the God lineage.",
+    "Sprite": "Artemis3"
+  },
+  {
+    "Id": "29",
+    "Name": "Aphrodite1",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Aphrodite1 is a powerful figure from the God lineage.",
+    "Sprite": "Aphrodite1"
+  },
+  {
+    "Id": "30",
+    "Name": "Aphrodite2",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Aphrodite2 is a powerful figure from the God lineage.",
+    "Sprite": "Aphrodite2"
+  },
+  {
+    "Id": "31",
+    "Name": "Aphrodite3",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Aphrodite3 is a powerful figure from the God lineage.",
+    "Sprite": "Aphrodite3"
+  },
+  {
+    "Id": "32",
+    "Name": "Demeter1",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Demeter1 is a powerful figure from the God lineage.",
+    "Sprite": "Demeter1"
+  },
+  {
+    "Id": "33",
+    "Name": "Demeter2",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Demeter2 is a powerful figure from the God lineage.",
+    "Sprite": "Demeter2"
+  },
+  {
+    "Id": "34",
+    "Name": "Demeter3",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Demeter3 is a powerful figure from the God lineage.",
+    "Sprite": "Demeter3"
+  },
+  {
+    "Id": "35",
+    "Name": "Demeter4",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Demeter4 is a powerful figure from the God lineage.",
+    "Sprite": "Demeter4"
+  },
+  {
+    "Id": "36",
+    "Name": "Dionysos1",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Dionysos1 is a powerful figure from the God lineage.",
+    "Sprite": "Dionysos1"
+  },
+  {
+    "Id": "37",
+    "Name": "Dionysos2",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Dionysos2 is a powerful figure from the God lineage.",
+    "Sprite": "Dionysos2"
+  },
+  {
+    "Id": "38",
+    "Name": "Dionysos3",
+    "Type": "GOD",
+    "Options": [],
+    "Description": "Dionysos3 is a powerful figure from the God lineage.",
+    "Sprite": "Dionysos3"
+  },
+  {
+    "Id": "39",
+    "Name": "Beelzebub1",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Beelzebub1 is a powerful figure from the Demon lineage.",
+    "Sprite": "Beelzebub1"
+  },
+  {
+    "Id": "40",
+    "Name": "Beelzebub2",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Beelzebub2 is a powerful figure from the Demon lineage.",
+    "Sprite": "Beelzebub2"
+  },
+  {
+    "Id": "41",
+    "Name": "Beelzebub3",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Beelzebub3 is a powerful figure from the Demon lineage.",
+    "Sprite": "Beelzebub3"
+  },
+  {
+    "Id": "42",
+    "Name": "Lucifer1",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Lucifer1 is a powerful figure from the Demon lineage.",
+    "Sprite": "Lucifer1"
+  },
+  {
+    "Id": "43",
+    "Name": "Lucifer2",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Lucifer2 is a powerful figure from the Demon lineage.",
+    "Sprite": "Lucifer2"
+  },
+  {
+    "Id": "44",
+    "Name": "Lucifer3",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Lucifer3 is a powerful figure from the Demon lineage.",
+    "Sprite": "Lucifer3"
+  },
+  {
+    "Id": "45",
+    "Name": "Leviathan1",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Leviathan1 is a powerful figure from the Demon lineage.",
+    "Sprite": "Leviathan1"
+  },
+  {
+    "Id": "46",
+    "Name": "Leviathan2",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Leviathan2 is a powerful figure from the Demon lineage.",
+    "Sprite": "Leviathan2"
+  },
+  {
+    "Id": "47",
+    "Name": "Leviathan3",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Leviathan3 is a powerful figure from the Demon lineage.",
+    "Sprite": "Leviathan3"
+  },
+  {
+    "Id": "48",
+    "Name": "Asmodeus1",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Asmodeus1 is a powerful figure from the Demon lineage.",
+    "Sprite": "Asmodeus1"
+  },
+  {
+    "Id": "49",
+    "Name": "Asmodeus2",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Asmodeus2 is a powerful figure from the Demon lineage.",
+    "Sprite": "Asmodeus2"
+  },
+  {
+    "Id": "50",
+    "Name": "Asmodeus3",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Asmodeus3 is a powerful figure from the Demon lineage.",
+    "Sprite": "Asmodeus3"
+  },
+  {
+    "Id": "51",
+    "Name": "Mammon1",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Mammon1 is a powerful figure from the Demon lineage.",
+    "Sprite": "Mammon1"
+  },
+  {
+    "Id": "52",
+    "Name": "Mammon2",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Mammon2 is a powerful figure from the Demon lineage.",
+    "Sprite": "Mammon2"
+  },
+  {
+    "Id": "53",
+    "Name": "Mammon3",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Mammon3 is a powerful figure from the Demon lineage.",
+    "Sprite": "Mammon3"
+  },
+  {
+    "Id": "54",
+    "Name": "Mammon4",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Mammon4 is a powerful figure from the Demon lineage.",
+    "Sprite": "Mammon4"
+  },
+  {
+    "Id": "55",
+    "Name": "Belphegor1",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Belphegor1 is a powerful figure from the Demon lineage.",
+    "Sprite": "Belphegor1"
+  },
+  {
+    "Id": "56",
+    "Name": "Belphegor2",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Belphegor2 is a powerful figure from the Demon lineage.",
+    "Sprite": "Belphegor2"
+  },
+  {
+    "Id": "57",
+    "Name": "Belphegor3",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Belphegor3 is a powerful figure from the Demon lineage.",
+    "Sprite": "Belphegor3"
+  },
+  {
+    "Id": "58",
+    "Name": "Satan1",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Satan1 is a powerful figure from the Demon lineage.",
+    "Sprite": "Satan1"
+  },
+  {
+    "Id": "59",
+    "Name": "Satan2",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Satan2 is a powerful figure from the Demon lineage.",
+    "Sprite": "Satan2"
+  },
+  {
+    "Id": "60",
+    "Name": "Satan3",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Satan3 is a powerful figure from the Demon lineage.",
+    "Sprite": "Satan3"
+  },
+  {
+    "Id": "61",
+    "Name": "Satan4",
+    "Type": "DEMON",
+    "Options": [],
+    "Description": "Satan4 is a powerful figure from the Demon lineage.",
+    "Sprite": "Satan4"
+  }
+]

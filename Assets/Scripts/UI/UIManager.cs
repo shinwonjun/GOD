@@ -16,11 +16,17 @@ public class UIManager : MonoSingleton<UIManager>
     // Character Tab
     public Dictionary<STATUS_UI.Character, CharacterSlotView> characterHandlers = new Dictionary<STATUS_UI.Character, CharacterSlotView>();
 
+    // Dex Tab
+    public Dictionary<string, DexSlotView> dexHandlers = new Dictionary<string, DexSlotView>();
+
     // Popup
     public Dictionary<POPUP.POPUP, IPopupBase> popupHandlers = new Dictionary<POPUP.POPUP, IPopupBase>();
 
-    // ItemAtlas
-    public SpriteAtlas atlasItem { get; set; } = null;
+    // Atlas
+
+    public Dictionary<STATUS_UI.TAB, SpriteAtlas> uiAtlas = new Dictionary<STATUS_UI.TAB, SpriteAtlas>();
+    public SpriteAtlas statAtlas { get; set; } = null;
+    public SpriteAtlas itemAtlas { get; set; } = null;
 
     public Transform PopupPanel { get; set; } = null;
     public GameObject currentPopup { get; set; } = null;
@@ -36,6 +42,13 @@ public class UIManager : MonoSingleton<UIManager>
 
     public void ShowPopup(string description, POPUP.POPUP type)
     {
-        currentPopup = popupHandlers[type].ShowPopup(description);
+        if (popupHandlers.ContainsKey(type))
+        {
+            currentPopup = popupHandlers[type].ShowPopup(description);
+        }
+        else
+        {
+            Debug.Log(type + " 타입의 팝업은 아직 없습니다.");
+        }
     }
 }

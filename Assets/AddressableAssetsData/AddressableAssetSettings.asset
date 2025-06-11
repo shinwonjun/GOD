@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 2be9a343e0686e040b6e246e02239b5b
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: f5dfa20a549008d6a170e383d6c7da30
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -100,7 +100,9 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
-    - ItemAtlas
+    - itemAtlas
+    - statAtlas
+    - heroAtlas
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 374aa45c66d00b44e80fb3eaa9219d91, type: 2}

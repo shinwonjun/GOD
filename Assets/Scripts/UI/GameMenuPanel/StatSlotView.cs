@@ -2,8 +2,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class StatSlotView : MonoBehaviour
+public class StatSlotView : SlotViewBase<DATA.StatData>
 {
+    [SerializeField] private Image image;
     [SerializeField] private TextMeshProUGUI textTitle;
     [SerializeField] private TextMeshProUGUI textLevel;
     [SerializeField] private TextMeshProUGUI textDiscription;
@@ -11,39 +12,58 @@ public class StatSlotView : MonoBehaviour
 
     [HideInInspector] public int level { get; private set; } = 1;
 
+    private DATA.StatData data;
+    public override DATA.StatData GetData() => data;
+    public override void SetData(DATA.StatData newData)
+    {
+        tabType = STATUS_UI.TAB.Stats;
+        popupType = POPUP.POPUP.stat;
+        data = newData;
+
+        setTitle(data.Name);
+        setLevel(level.ToString());
+        setDescription(data.Description);
+        setImage(data.Sprite);
+    }
 
 
     private void Awake()
     {
         upgradeButton.onClick.AddListener(OnUpgradeButtonClicked);
-
         setLevel(level.ToString());
+    }
+    public override void ShowPopup()
+    {
+        UIManager.Instance.ShowPopup(data.Description, popupType);
     }
 
     private void OnUpgradeButtonClicked()
     {
         Debug.Log("업그레이드 버튼 클릭됨!");
-        // 여기서 원하는 로직 처리
     }
 
     private void OnDestroy()
     {
-        // 메모리 누수 방지 위해 리스너 해제 권장
         upgradeButton.onClick.RemoveListener(OnUpgradeButtonClicked);
     }
 
-    public void setTitle(string _title)
+    private void setTitle(string _title)
     {
         textTitle.text = _title;
     }
 
-    public void setLevel(string _level)
+    private void setLevel(string _level)
     {
         textLevel.text = _level;
     }
 
-    public void setDiscription(string _discription)
+    private void setDescription(string _discription)
     {
         textDiscription.text = _discription;
+    }
+
+    private void setImage(string _sprite)
+    {
+        image.sprite = UIManager.Instance.uiAtlas[tabType].GetSprite(_sprite);
     }
 }

@@ -4,9 +4,11 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 using System.Collections.Generic;
-using NUnit.Framework.Constraints;
 using UnityEngine.U2D;
 using System.Threading.Tasks;
+using System.Linq;
+using NUnit.Framework.Constraints;
+using Unity.VisualScripting;
 public class NavigationTabController : MonoBehaviour
 {
     [SerializeField] public Toggle[] toggles; // 4개의 Toggle들 연결
@@ -20,12 +22,16 @@ public class NavigationTabController : MonoBehaviour
     private string addressableKey_statslot = "Assets/Addressables/Prefabs/UI/Tab_stat/statslot.prefab";
     private string addressableKey_itemslot = "Assets/Addressables/Prefabs/UI/Tab_inventory/itemslot.prefab";
     private string addressableKey_characterslot = "Assets/Addressables/Prefabs/UI/Tab_Character/characterslot.prefab";
+    private string addressableKey_dexsList = "Assets/Addressables/Prefabs/UI/Tab_Dex/dexList.prefab";
+    private string addressableKey_dexslot = "Assets/Addressables/Prefabs/UI/Tab_Dex/dexSlot.prefab";
     private string addressableKey_popupItem = "Assets/Addressables/Prefabs/UI/Popup/popupItem.prefab";
     private string addressableKey_popupCharacter = "Assets/Addressables/Prefabs/UI/Popup/popupCharacter.prefab";
 
 
-    
-    private string addressableKey_itemLabel = "ItemAtlas";
+     
+    private const string addressableKey_statAtlas = "statAtlas";
+    private const string addressableKey_itemAtlas = "itemAtlas";
+    private const string addressableKey_heroAtlas = "heroAtlas";
 
 
     async void Start()
@@ -41,7 +47,7 @@ public class NavigationTabController : MonoBehaviour
             });
         }
 
-        await LoadItemAtlas();
+        await LoadUIAtlases();
 
         // 시작 시 첫 탭 활성화
         OnTabSelected(0);
@@ -77,31 +83,77 @@ public class NavigationTabController : MonoBehaviour
             LoadStatSlotPrefabToFirstTab();
             LoadItemSlotPrefabToFirstTab();
             LoadCharacterSlotPrefabToFirstTab();
+            LoadDexSlotPrefabToFirstTab();
 
             LoadPopupPrefabToFirstTab();
             isFirstTabLoaded = true;
         }
     }
 
-    async Task LoadItemAtlas()
+    async Task LoadUIAtlases()
     {
-        var handle = Addressables.LoadAssetAsync<SpriteAtlas>(addressableKey_itemLabel);
-
-        if (!handle.IsValid())
         {
-            Debug.LogError("❌ InvalidHandle: Address may be wrong or not built!");
-            return;
+            var handle = Addressables.LoadAssetAsync<SpriteAtlas>(addressableKey_itemAtlas);
+
+            if (!handle.IsValid())
+            {
+                Debug.LogError("❌ InvalidHandle: Address may be wrong or not built!");
+                return;
+            }
+
+            SpriteAtlas atlas = await handle.Task;
+
+            if (atlas == null)
+            {
+                Debug.LogError("❌ Atlas is null even after valid handle!");
+            }
+            else
+            {
+                UIManager.Instance.uiAtlas[STATUS_UI.TAB.Inventory] = atlas;
+                Debug.Log("✅ SpriteAtlas loaded: " + atlas.name);
+            }
         }
-
-        UIManager.Instance.atlasItem = await handle.Task;
-
-        if (UIManager.Instance.atlasItem == null)
         {
-            Debug.LogError("❌ Atlas is null even after valid handle!");
+            var handle = Addressables.LoadAssetAsync<SpriteAtlas>(addressableKey_statAtlas);
+
+            if (!handle.IsValid())
+            {
+                Debug.LogError("❌ InvalidHandle: Address may be wrong or not built!");
+                return;
+            }
+
+            SpriteAtlas atlas = await handle.Task;
+
+            if (atlas == null)
+            {
+                Debug.LogError("❌ Atlas is null even after valid handle!");
+            }
+            else
+            {
+                UIManager.Instance.uiAtlas[STATUS_UI.TAB.Stats] = atlas;
+                Debug.Log("✅ SpriteAtlas loaded: " + atlas.name);
+            }
         }
-        else
         {
-            Debug.Log("✅ SpriteAtlas loaded: " + UIManager.Instance.atlasItem.name);
+            var handle = Addressables.LoadAssetAsync<SpriteAtlas>(addressableKey_heroAtlas);
+
+            if (!handle.IsValid())
+            {
+                Debug.LogError("❌ InvalidHandle: Address may be wrong or not built!");
+                return;
+            }
+
+            SpriteAtlas atlas = await handle.Task;
+
+            if (atlas == null)
+            {
+                Debug.LogError("❌ Atlas is null even after valid handle!");
+            }
+            else
+            {
+                UIManager.Instance.uiAtlas[STATUS_UI.TAB.Dex] = atlas;
+                Debug.Log("✅ SpriteAtlas loaded: " + atlas.name);
+            }
         }
     }
 
@@ -114,24 +166,20 @@ public class NavigationTabController : MonoBehaviour
     {
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
-            foreach (var kvp in DataManager.Instance.statData)
+            var parent = tabContents[(int)STATUS_UI.TAB.Stats];
+            var parentContent = parent.GetComponent<UIGameMenuPanelTab>().content;
+            foreach (DATA.StatData item in DataManager.Instance.statData)
             {
-                string statName = kvp.Key;
-                string statValue = kvp.Value;
-
-                if (Enum.TryParse(statName, true, out STATUS_UI.Stat statEnum))
+                Debug.Log($"Name: {item.Name}, Discription: {item.Description}");
+                if (Enum.TryParse(item.Name, true, out STATUS_UI.Stat statEnum))
                 {
-                    var parent = tabContents[(int)currentTabIndex];
-                    var parentContent = parent.GetComponent<UIGameMenuPanelTab>().content;
 
                     GameObject statSlotInstance = Instantiate(handle.Result, Vector3.zero, Quaternion.identity, parentContent);
-                    statSlotInstance.name = "statslot_" + statName;
+                    statSlotInstance.name = "statslot_" + item.Name;
                     statSlotInstance.transform.localScale = Vector3.one;
 
                     var statSlotView = statSlotInstance.GetComponent<StatSlotView>();
-
-                    statSlotView.setTitle(statName);
-                    statSlotView.setDiscription(statValue);
+                    statSlotView.SetData(item);
                     UIManager.Instance.statHandlers[statEnum] = statSlotView;
                 }
             }
@@ -174,9 +222,7 @@ public class NavigationTabController : MonoBehaviour
                     itemslotInstance.transform.localScale = Vector3.one;
 
                     var itemSlotView = itemslotInstance.GetComponent<ItemSlotView>();
-                    itemSlotView.SetData(item);
-
-                    itemslotInstance.GetComponent<Image>().sprite = UIManager.Instance.atlasItem.GetSprite(item.Sprite);
+                    itemSlotView.SetData(item);                    
                     UIManager.Instance.inventoryHandlers["itemslot_" + idx] = itemSlotView;
                 }
             }
@@ -223,6 +269,62 @@ public class NavigationTabController : MonoBehaviour
         {
             Debug.LogError($"Failed to load Addressable prefab at {addressableKey_characterslot}");
         }
+    }
+
+    private void LoadDexSlotPrefabToFirstTab()
+    {
+        Addressables.LoadAssetAsync<GameObject>(addressableKey_dexsList).Completed += handle =>
+        {
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                Dictionary<string, GameObject> dexListInstances = new Dictionary<string, GameObject>();
+                var parent = tabContents[(int)STATUS_UI.TAB.Dex];
+                var parentContent = parent.GetComponent<UIGameMenuPanelTab>().content;
+
+                foreach (DATA.HeroList list in DataManager.Instance.heroList)
+                {
+                    string name = list.Name;
+                    GameObject dexListInstance = Instantiate(handle.Result, Vector3.zero, Quaternion.identity, parentContent);
+                    dexListInstance.name = name;
+                    dexListInstance.transform.localScale = Vector3.one;
+                    dexListInstances[name] = dexListInstance.transform.Find("ScrollView/Content").gameObject;
+                }
+
+                // DexSlot은 여기서 로드 시작
+                Addressables.LoadAssetAsync<GameObject>(addressableKey_dexslot).Completed += slotHandle =>
+                {
+                    if (slotHandle.Status == AsyncOperationStatus.Succeeded)
+                    {
+                        for(int i=0; i < DataManager.Instance.heroList.Count; ++i)
+                        {
+                            var hero = DataManager.Instance.heroList[i];
+                            string heroName = hero.Name;
+                            var heroData = DataManager.Instance.heroData[GAME.HeroType.GOD.ToString()];
+                            var filtered = heroData.Where(h => h.Name.IndexOf(heroName, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+                            var parent = dexListInstances[heroName];
+
+                            // 루프 2: 해당 Material 리스트 안의 각 ItemData를 순회
+                            foreach (DATA.HeroData item in filtered)
+                            {
+                                Debug.Log($"Name: {item.Name}, Type: {item.Type}, Discription: {item.Description}");
+
+                                GameObject dexSlotInstance = Instantiate(slotHandle.Result, Vector3.zero, Quaternion.identity, parent.transform);
+                                dexSlotInstance.name = "dexslot_" + item.Id;
+                                dexSlotInstance.transform.localScale = Vector3.one;
+
+                                var dexSlotView = dexSlotInstance.GetComponent<DexSlotView>();
+                                dexSlotView.SetData(item);
+                                UIManager.Instance.dexHandlers["dexslot_" + item.Id] = dexSlotView;
+                            }
+                        }
+                    }
+                };
+            }
+            else
+            {
+                Debug.LogError("❌ DexList 로드 실패");
+            }
+        };
     }
 
     private void LoadPopupPrefabToFirstTab()

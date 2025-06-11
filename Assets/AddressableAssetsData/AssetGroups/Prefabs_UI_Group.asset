@@ -15,16 +15,28 @@ MonoBehaviour:
   m_GroupName: Prefabs_UI_Group
   m_GUID: 290ac8117e3d76f4d9ce3cd978c6676f
   m_SerializeEntries:
+  - m_GUID: 2ea5c36f2dd025b4aac1450157464f0f
+    m_Address: Assets/Addressables/Sprites/UI/Atlases/HeroAtlas.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - heroAtlas
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 48f2a3c42ea89c04c9a97d2f21102e4f
     m_Address: Assets/Addressables/Prefabs/UI
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fa27f5a5adc298244b272bbb2aba8d25
-    m_Address: Assets/Addressables/Sprites/UI/Atlases
+  - m_GUID: 6537f2e688921184683d7659f59bce62
+    m_Address: Assets/Addressables/Sprites/UI/Atlases/ItemAtlas.spriteatlasv2
     m_ReadOnly: 0
     m_SerializedLabels:
-    - ItemAtlas
+    - itemAtlas
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 89e81505d626c3540a35ff7048aac336
+    m_Address: Assets/Addressables/Sprites/UI/Atlases/StatAtlas.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - statAtlas
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 14e3d69d60855d94480fcd9c8ff46bcf, type: 2}

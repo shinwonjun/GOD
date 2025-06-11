@@ -8,6 +8,7 @@ namespace STATUS_UI
         Stats,
         Inventory,
         Character,
+        Dex,
         Store
     }
 
@@ -38,6 +39,7 @@ namespace POPUP
     public enum POPUP
     {
         None = -1,
+        stat,
         item,
         character,
     }
@@ -65,5 +67,15 @@ namespace ITEM
         rock,       // 돌
         chain,      // 사슬
         steel,      // 철
+    }
+}
+
+namespace GAME
+{
+    public enum HeroType
+    {
+        None = -1,
+        GOD,
+        DEMON,
     }
 }

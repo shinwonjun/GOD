@@ -1,0 +1,78 @@
+[
+  {
+    "Name": "Zeus",
+    "Type": "GOD"
+  },
+  {
+    "Name": "Hera",
+    "Type": "GOD"
+  },
+  {
+    "Name": "Poseidon",
+    "Type": "GOD"
+  },
+  {
+    "Name": "Athena",
+    "Type": "GOD"
+  },
+  {
+    "Name": "Apollo",
+    "Type": "GOD"
+  },
+  {
+    "Name": "Hermes",
+    "Type": "GOD"
+  },
+  {
+    "Name": "Ares",
+    "Type": "GOD"
+  },
+  {
+    "Name": "Hephaestus",
+    "Type": "GOD"
+  },
+  {
+    "Name": "Artemis",
+    "Type": "GOD"
+  },
+  {
+    "Name": "Aphrodite",
+    "Type": "GOD"
+  },
+  {
+    "Name": "Demeter",
+    "Type": "GOD"
+  },
+  {
+    "Name": "Dionysos",
+    "Type": "GOD"
+  },
+  {
+    "Name": "Beelzebub",
+    "Type": "DEMON"
+  },
+  {
+    "Name": "Lucifer",
+    "Type": "DEMON"
+  },
+  {
+    "Name": "Leviathan",
+    "Type": "DEMON"
+  },
+  {
+    "Name": "Asmodeus",
+    "Type": "DEMON"
+  },
+  {
+    "Name": "Mammon",
+    "Type": "DEMON"
+  },
+  {
+    "Name": "Belphegor",
+    "Type": "DEMON"
+  },
+  {
+    "Name": "Satan",
+    "Type": "DEMON"
+  }
+]

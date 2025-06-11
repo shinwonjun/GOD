@@ -3,9 +3,12 @@ using UnityEngine;
 
 public class DataManager : Singleton<DataManager>
 {
-    public Dictionary<string, string> statData { get; private set; }
+    public List<DATA.StatData> statData = new List<DATA.StatData>();
     public Dictionary<string, List<DATA.ItemData>> itemData = new Dictionary<string, List<DATA.ItemData>>();
-    public Dictionary<string, DATA.CharacterData> characterData = new Dictionary<string, DATA.CharacterData>();
+    public Dictionary<string, DATA.EquipslotData> characterData = new Dictionary<string, DATA.EquipslotData>();
+    
+    public List<DATA.HeroList> heroList = new List<DATA.HeroList>();
+    public Dictionary<string, List<DATA.HeroData>> heroData = new Dictionary<string, List<DATA.HeroData>>();
 
 
 
@@ -14,21 +17,16 @@ public class DataManager : Singleton<DataManager>
         LoadStatData();
         LoadItemData();
         LoadCharacterData();
+        LoadHeroList();
+        LoadHeroData();
     }
     private void LoadStatData()
     {
-        statData = JsonLoader.LoadFromResources<Dictionary<string, string>>("data/stat_data");
+        statData = JsonLoader.LoadFromResources<List<DATA.StatData>>("data/stat_data");
         if (statData == null)
         {
             Debug.LogError("DataManager: stat_data.json 로드 실패!");
-            statData = new Dictionary<string, string>()
-            {
-                { "Level", "The current level of the character." },
-                { "AttackPower", "The attack power value of the character." },
-                { "AttackSpeed", "The attack speed multiplier of the character." },
-                { "CriticalChance", "The chance of landing a critical hit." },
-                { "CriticalDamage", "The damage multiplier applied on a critical hit." }
-            };
+            return;
         }
     }
 
@@ -66,18 +64,65 @@ public class DataManager : Singleton<DataManager>
 
     private void LoadCharacterData()
     {
-        List<DATA.CharacterData> datas = new List<DATA.CharacterData>();
-        datas = JsonLoader.LoadFromResources<List<DATA.CharacterData>>("data/character_data");
+        List<DATA.EquipslotData> datas = new List<DATA.EquipslotData>();
+        datas = JsonLoader.LoadFromResources<List<DATA.EquipslotData>>("data/equipslot_data");
         if (datas == null)
         {
             Debug.LogError("DataManager: scharacter_data.json 로드 실패!");
             return;
         }
 
-        foreach (DATA.CharacterData item in datas)
+        foreach (DATA.EquipslotData item in datas)
         {
             string key = item.Part;
             characterData[key] = item;
+        }
+    }
+
+    private void LoadHeroList()
+    {
+        heroList = JsonLoader.LoadFromResources<List<DATA.HeroList>>("data/herolist_data");
+        if (heroList == null)
+        {
+            Debug.LogError("DataManager: hero_list.json 로드 실패!");
+            return;
+        }
+
+        // 디버그용 로그: 각 재질(Material)별 아이템 개수 확인
+        foreach (var kvp in heroList)
+        {
+            Debug.LogFormat("HeroName = {0}, Type = {1}", kvp.Name, kvp.Type);
+        }
+    }
+
+    private void LoadHeroData()
+    {
+        List<DATA.HeroData> allHeros = JsonLoader.LoadFromResources<List<DATA.HeroData>>("data/hero_data");
+        if (allHeros == null)
+        {
+            Debug.LogError("DataManager: hero_data.json 로드 실패!");
+            return;
+        }
+
+        // 2) heroData 딕셔너리 초기화 및 그룹화
+        heroData = new Dictionary<string, List<DATA.HeroData>>();
+        foreach (DATA.HeroData item in allHeros)
+        {
+            string key = item.Type;
+            if (heroData.ContainsKey(key))
+            {
+                heroData[key].Add(item);
+            }
+            else
+            {
+                heroData[key] = new List<DATA.HeroData> { item };
+            }
+        }
+
+        // 디버그용 로그: 각 재질(Material)별 아이템 개수 확인
+        foreach (var kvp in heroData)
+        {
+            Debug.LogFormat("DataManager: Material = {0}, Count = {1}", kvp.Key, kvp.Value.Count);
         }
     }
 }

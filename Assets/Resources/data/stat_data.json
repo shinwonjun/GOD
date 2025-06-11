@@ -1,7 +1,27 @@
-{
-  "Level": "The current level of the character.",
-  "AttackPower": "The attack power value of the character.",
-  "AttackSpeed": "The attack speed multiplier of the character.",
-  "CriticalChance": "The chance of landing a critical hit.",
-  "CriticalDamage": "The damage multiplier applied on a critical hit."
-}
+[
+	{
+		"Name": "Level",
+		"Description": "The current level of the character.",
+		"Sprite": "Lv",
+	},
+	{
+		"Name": "AttackPower",
+		"Description": "The attack power value of the character.",
+		"Sprite": "Ap",
+	},
+	{
+		"Name": "AttackSpeed",
+		"Description": "The attack speed multiplier of the character.",
+		"Sprite": "As",
+	},
+	{
+		"Name": "CriticalChance",
+		"Description": "The chance of landing a critical hit.",
+		"Sprite": "Cc",
+	},
+	{
+		"Name": "CriticalDamage",
+		"Description": "The damage multiplier applied on a critical hit.",
+		"Sprite": "Cd",
+	},
+]
