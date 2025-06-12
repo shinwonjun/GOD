@@ -11,9 +11,9 @@ using NUnit.Framework.Constraints;
 using Unity.VisualScripting;
 public class NavigationTabController : MonoBehaviour
 {
-    [SerializeField] public Toggle[] toggles; // 4개의 Toggle들 연결
+    [SerializeField] public Toggle[] toggles; // 5개의 Toggle들 연결
 
-    [SerializeField] public GameObject[] tabContents; // 4개의 각 탭에 해당하는 패널 혹은 컨텐츠
+    [SerializeField] public GameObject[] tabContents; // 5개의 각 탭에 해당하는 패널 혹은 컨텐츠
 
     public STATUS_UI.TAB currentTabIndex { get; private set; } = STATUS_UI.TAB.None;
 
@@ -28,7 +28,7 @@ public class NavigationTabController : MonoBehaviour
     private string addressableKey_popupCharacter = "Assets/Addressables/Prefabs/UI/Popup/popupCharacter.prefab";
 
 
-     
+
     private const string addressableKey_statAtlas = "statAtlas";
     private const string addressableKey_itemAtlas = "itemAtlas";
     private const string addressableKey_heroAtlas = "heroAtlas";
@@ -167,7 +167,7 @@ public class NavigationTabController : MonoBehaviour
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
             var parent = tabContents[(int)STATUS_UI.TAB.Stats];
-            var parentContent = parent.GetComponent<UIGameMenuPanelTab>().content;
+            var parentContent = parent.GetComponent<GameMenuPanelTabBase>().content[0];
             foreach (DATA.StatData item in DataManager.Instance.statData)
             {
                 Debug.Log($"Name: {item.Name}, Discription: {item.Description}");
@@ -201,7 +201,7 @@ public class NavigationTabController : MonoBehaviour
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
             var parent = tabContents[(int)STATUS_UI.TAB.Inventory];
-            var parentContent = parent.GetComponent<UIGameMenuPanelTab>().content;
+            var parentContent = parent.GetComponent<GameMenuPanelTabBase>().content[0];
             int idx = 0;
 
             foreach (KeyValuePair<string, List<DATA.ItemData>> kvp in DataManager.Instance.itemData)
@@ -222,7 +222,7 @@ public class NavigationTabController : MonoBehaviour
                     itemslotInstance.transform.localScale = Vector3.one;
 
                     var itemSlotView = itemslotInstance.GetComponent<ItemSlotView>();
-                    itemSlotView.SetData(item);                    
+                    itemSlotView.SetData(item);
                     UIManager.Instance.inventoryHandlers["itemslot_" + idx] = itemSlotView;
                 }
             }
@@ -271,60 +271,85 @@ public class NavigationTabController : MonoBehaviour
         }
     }
 
-    private void LoadDexSlotPrefabToFirstTab()
+    private async void LoadDexSlotPrefabToFirstTab()
     {
-        Addressables.LoadAssetAsync<GameObject>(addressableKey_dexsList).Completed += handle =>
+        try
         {
-            if (handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                Dictionary<string, GameObject> dexListInstances = new Dictionary<string, GameObject>();
-                var parent = tabContents[(int)STATUS_UI.TAB.Dex];
-                var parentContent = parent.GetComponent<UIGameMenuPanelTab>().content;
+            var dexListPrefab = await Addressables.LoadAssetAsync<GameObject>(addressableKey_dexsList).Task;
+            var dexSlotPrefab = await Addressables.LoadAssetAsync<GameObject>(addressableKey_dexslot).Task;
 
-                foreach (DATA.HeroList list in DataManager.Instance.heroList)
+            var dexListInstances = new Dictionary<string, GameObject>();
+            var heroList = DataManager.Instance.heroList;
+            var parent = tabContents[(int)STATUS_UI.TAB.Dex];
+
+            Transform[] parentContents = new Transform[]
+            {
+                parent.GetComponent<GameMenuPanelTabBase>().content[0], // GOD
+                parent.GetComponent<GameMenuPanelTabBase>().content[1]  // DEMON
+            };
+
+
+            var heroDataMap = new List<DATA.HeroData>[]
+            {
+                DataManager.Instance.heroData[GAME.HeroType.GOD.ToString()],
+                DataManager.Instance.heroData[GAME.HeroType.DEMON.ToString()]
+            };
+
+            // 1. DexList 생성
+            foreach (GAME.HeroType heroType in Enum.GetValues(typeof(GAME.HeroType)))
+            {
+                if (heroType == GAME.HeroType.None)
+                    continue;
+
+                int index = (int)heroType;
+
+                // 1. heroData 가져오기
+                var heroDataList = DataManager.Instance.heroData[heroType.ToString()];
+
+                // 2. parentContent 매핑
+                var parentContent = parentContents[index];
+
+                // 3. heroList에서 해당 type에 해당하는 Hero만 필터링
+                var matchingHeroes = heroList.Where(h => h.Type == heroType.ToString());
+
+                foreach (var hero in matchingHeroes)
                 {
-                    string name = list.Name;
-                    GameObject dexListInstance = Instantiate(handle.Result, Vector3.zero, Quaternion.identity, parentContent);
-                    dexListInstance.name = name;
+                    // DexList 생성
+                    GameObject dexListInstance = Instantiate(dexListPrefab, parentContent);
+                    dexListInstance.name = hero.Name;
                     dexListInstance.transform.localScale = Vector3.one;
-                    dexListInstances[name] = dexListInstance.transform.Find("ScrollView/Content").gameObject;
-                }
 
-                // DexSlot은 여기서 로드 시작
-                Addressables.LoadAssetAsync<GameObject>(addressableKey_dexslot).Completed += slotHandle =>
-                {
-                    if (slotHandle.Status == AsyncOperationStatus.Succeeded)
+                    // Content 경로 찾기
+                    var content = dexListInstance.transform.Find("ScrollView/Content");
+                    if (content == null)
                     {
-                        for(int i=0; i < DataManager.Instance.heroList.Count; ++i)
-                        {
-                            var hero = DataManager.Instance.heroList[i];
-                            string heroName = hero.Name;
-                            var heroData = DataManager.Instance.heroData[GAME.HeroType.GOD.ToString()];
-                            var filtered = heroData.Where(h => h.Name.IndexOf(heroName, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
-                            var parent = dexListInstances[heroName];
-
-                            // 루프 2: 해당 Material 리스트 안의 각 ItemData를 순회
-                            foreach (DATA.HeroData item in filtered)
-                            {
-                                Debug.Log($"Name: {item.Name}, Type: {item.Type}, Discription: {item.Description}");
-
-                                GameObject dexSlotInstance = Instantiate(slotHandle.Result, Vector3.zero, Quaternion.identity, parent.transform);
-                                dexSlotInstance.name = "dexslot_" + item.Id;
-                                dexSlotInstance.transform.localScale = Vector3.one;
-
-                                var dexSlotView = dexSlotInstance.GetComponent<DexSlotView>();
-                                dexSlotView.SetData(item);
-                                UIManager.Instance.dexHandlers["dexslot_" + item.Id] = dexSlotView;
-                            }
-                        }
+                        Debug.LogError($"❌ '{hero.Name}' 하위에 'ScrollView/Content' 오브젝트 없음");
+                        continue;
                     }
-                };
+
+                    dexListInstances[hero.Name] = content.gameObject;
+
+                    // DexSlot 생성
+                    var filtered = heroDataList.Where(h => h.Name.Contains(hero.Name)).ToList();
+                    foreach (var item in filtered)
+                    {
+                        GameObject dexSlotInstance = Instantiate(dexSlotPrefab, content);
+                        dexSlotInstance.name = $"dexslot_{item.Id}";
+                        dexSlotInstance.transform.localScale = Vector3.one;
+
+                        var dexSlotView = dexSlotInstance.GetComponent<DexSlotView>();
+                        dexSlotView?.SetData(item);
+                        UIManager.Instance.dexHandlers[dexSlotInstance.name] = dexSlotView;
+                    }
+                }
             }
-            else
-            {
-                Debug.LogError("❌ DexList 로드 실패");
-            }
-        };
+
+            Debug.Log("✅ Dex UI 생성 완료");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"❌ Dex UI 로딩 중 오류 발생: {ex.Message}");
+        }
     }
 
     private void LoadPopupPrefabToFirstTab()

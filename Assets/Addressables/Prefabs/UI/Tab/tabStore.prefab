@@ -85,7 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6689799958179748846}
   - component: {fileID: 2488269443943901163}
-  - component: {fileID: -8172714931244084829}
+  - component: {fileID: 8993548827651485545}
   m_Layer: 9
   m_Name: tabStore
   m_TagString: Untagged
@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Content: {fileID: 2938152425037743146}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &-8172714931244084829
+--- !u!114 &8993548827651485545
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,10 +153,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5096157785250005315}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82423d7e334441e4594ddf41207ad813, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c4cd8eb1e9f05a4b851f8034bc216e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tab: 3
+  tab: 4
+  content:
+  - {fileID: 2938152425037743146}
 --- !u!1 &6633092529809354631
 GameObject:
   m_ObjectHideFlags: 0

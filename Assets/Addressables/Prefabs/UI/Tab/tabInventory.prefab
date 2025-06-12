@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 874954737358750849}
   - component: {fileID: 9119972481918105449}
-  - component: {fileID: 173014021442187069}
+  - component: {fileID: 1150764742004450645}
   m_Layer: 9
   m_Name: tabInventory
   m_TagString: Untagged
@@ -54,7 +54,7 @@ MonoBehaviour:
   m_Content: {fileID: 5990522066876437318}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
@@ -69,7 +69,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &173014021442187069
+--- !u!114 &1150764742004450645
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,10 +78,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3480327172231119534}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82423d7e334441e4594ddf41207ad813, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c4cd8eb1e9f05a4b851f8034bc216e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tab: 1
+  content:
+  - {fileID: 5990522066876437318}
 --- !u!1 &4070769046770662136
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,11 +116,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7974754060908764563}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -459.99988}
-  m_SizeDelta: {x: 980, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -0.0006713867}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &4902422120412565273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,10 +141,10 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 150, y: 150}
-  m_Spacing: {x: 10, y: 10}
+  m_CellSize: {x: 225, y: 225}
+  m_Spacing: {x: 20, y: 10}
   m_Constraint: 1
-  m_ConstraintCount: 6
+  m_ConstraintCount: 4
 --- !u!114 &7200169350380783397
 MonoBehaviour:
   m_ObjectHideFlags: 0
