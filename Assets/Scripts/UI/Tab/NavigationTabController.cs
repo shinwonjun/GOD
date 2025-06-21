@@ -34,8 +34,20 @@ public class NavigationTabController : MonoBehaviour
     private const string addressableKey_heroAtlas = "heroAtlas";
 
 
-    async void Start()
+    void Start()
     {
+    }
+
+    public async Task InitTab()
+    {
+        await LoadUIAtlases();
+        await LoadStatSlotPrefabToFirstTab();
+        await LoadItemSlotPrefabToFirstTab();
+        await LoadCharacterSlotPrefabToFirstTab();
+        await LoadDexSlotPrefabToFirstTab();
+        await LoadPopupPrefabToFirstTab();
+
+
         // 각 Toggle에 onValueChanged 이벤트 연결
         for (int i = 0; i < toggles.Length; i++)
         {
@@ -47,11 +59,11 @@ public class NavigationTabController : MonoBehaviour
             });
         }
 
-        await LoadUIAtlases();
-
         // 시작 시 첫 탭 활성화
         OnTabSelected(0);
+
     }
+
     void OnTabSelected(int index)
     {
         if ((int)currentTabIndex == index)
@@ -80,12 +92,11 @@ public class NavigationTabController : MonoBehaviour
 
         if (index == 0 && !isFirstTabLoaded)
         {
-            LoadStatSlotPrefabToFirstTab();
-            LoadItemSlotPrefabToFirstTab();
-            LoadCharacterSlotPrefabToFirstTab();
-            LoadDexSlotPrefabToFirstTab();
-
-            LoadPopupPrefabToFirstTab();
+            // LoadStatSlotPrefabToFirstTab();
+            // LoadItemSlotPrefabToFirstTab();
+            // LoadCharacterSlotPrefabToFirstTab();
+            // LoadDexSlotPrefabToFirstTab();
+            // LoadPopupPrefabToFirstTab();
             isFirstTabLoaded = true;
         }
     }
@@ -157,9 +168,11 @@ public class NavigationTabController : MonoBehaviour
         }
     }
 
-    void LoadStatSlotPrefabToFirstTab()
+    public async Task LoadStatSlotPrefabToFirstTab()
     {
-        Addressables.LoadAssetAsync<GameObject>(addressableKey_statslot).Completed += OnLoadPrefabsStatSlot;
+        var handle = Addressables.LoadAssetAsync<GameObject>(addressableKey_statslot);
+        await handle.Task;
+        OnLoadPrefabsStatSlot(handle);
     }
 
     private void OnLoadPrefabsStatSlot(AsyncOperationHandle<GameObject> handle)
@@ -191,9 +204,11 @@ public class NavigationTabController : MonoBehaviour
     }
 
 
-    void LoadItemSlotPrefabToFirstTab()
+    async Task LoadItemSlotPrefabToFirstTab()
     {
-        Addressables.LoadAssetAsync<GameObject>(addressableKey_itemslot).Completed += OnLoadPrefabsItemSlot;
+        var handle = Addressables.LoadAssetAsync<GameObject>(addressableKey_itemslot);
+        await handle.Task;
+        OnLoadPrefabsItemSlot(handle);
     }
 
     private void OnLoadPrefabsItemSlot(AsyncOperationHandle<GameObject> handle)
@@ -233,9 +248,11 @@ public class NavigationTabController : MonoBehaviour
         }
     }
 
-    private void LoadCharacterSlotPrefabToFirstTab()
+    private async Task LoadCharacterSlotPrefabToFirstTab()
     {
-        Addressables.LoadAssetAsync<GameObject>(addressableKey_characterslot).Completed += OnLoadPrefabsCharacterSlot;
+        var handle = Addressables.LoadAssetAsync<GameObject>(addressableKey_characterslot);
+        await handle.Task;
+        OnLoadPrefabsCharacterSlot(handle);
     }
 
     private void OnLoadPrefabsCharacterSlot(AsyncOperationHandle<GameObject> handle)
@@ -271,7 +288,7 @@ public class NavigationTabController : MonoBehaviour
         }
     }
 
-    private async void LoadDexSlotPrefabToFirstTab()
+    private async Task LoadDexSlotPrefabToFirstTab()
     {
         try
         {
@@ -352,10 +369,15 @@ public class NavigationTabController : MonoBehaviour
         }
     }
 
-    private void LoadPopupPrefabToFirstTab()
+    private async Task LoadPopupPrefabToFirstTab()
     {
-        Addressables.LoadAssetAsync<GameObject>(addressableKey_popupItem).Completed += OnLoadPrefabsPopupItem;
-        Addressables.LoadAssetAsync<GameObject>(addressableKey_popupCharacter).Completed += OnLoadPrefabsPopupCharacter;
+        var handle = Addressables.LoadAssetAsync<GameObject>(addressableKey_popupItem); ;
+        await handle.Task;
+        OnLoadPrefabsPopupItem(handle);
+
+        var handle2 = Addressables.LoadAssetAsync<GameObject>(addressableKey_popupCharacter);
+        await handle2.Task;
+        OnLoadPrefabsPopupCharacter(handle);
     }
 
     private void OnLoadPrefabsPopupItem(AsyncOperationHandle<GameObject> handle)

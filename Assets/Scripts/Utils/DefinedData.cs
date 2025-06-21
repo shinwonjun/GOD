@@ -1,12 +1,5 @@
 using Newtonsoft.Json;
 
-namespace GAME_DATA
-{
-    public class GameMyData : Singleton<GameMyData>
-    {
-    }
-}
-
 namespace DATA
 {
     public class HeroList

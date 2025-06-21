@@ -1,5 +1,9 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class DataManager : Singleton<DataManager>
 {
@@ -11,118 +15,169 @@ public class DataManager : Singleton<DataManager>
     public Dictionary<string, List<DATA.HeroData>> heroData = new Dictionary<string, List<DATA.HeroData>>();
 
 
+    private string addressableKey_stat_data = "Assets/Addressables/Data/stat_data.json";
+    private string addressableKey_item_data = "Assets/Addressables/Data/item_data.json";
+    private string addressableKey_equipslot_data = "Assets/Addressables/Data/equipslot_data.json";
+    private string addressableKey_herolist_data = "Assets/Addressables/Data/herolist_data.json";
+    private string addressableKey_hero_data = "Assets/Addressables/Data/hero_data.json";
 
-    public void InitData()
+    public async Task InitData()
     {
-        LoadStatData();
-        LoadItemData();
-        LoadCharacterData();
-        LoadHeroList();
-        LoadHeroData();
+        await LoadStatData();
+        await LoadItemData();
+        await LoadCharacterData();
+        await LoadHeroList();
+        await LoadHeroData();
     }
-    private void LoadStatData()
+
+    private async Task LoadStatData()
     {
-        statData = JsonLoader.LoadFromResources<List<DATA.StatData>>("data/stat_data");
-        if (statData == null)
+        var handle = Addressables.LoadAssetAsync<TextAsset>(addressableKey_stat_data);
+        await handle.Task; // 비동기적으로 완료를 기다림
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            //Addressables에서 로드된 데이터 파싱
+            TextAsset asset = handle.Result;
+            statData = JsonConvert.DeserializeObject<List<DATA.StatData>>(asset.text);
+        }
+        else
         {
             Debug.LogError("DataManager: stat_data.json 로드 실패!");
-            return;
         }
     }
 
-    private void LoadItemData()
+    private async Task LoadItemData()
     {
-        // 1) item_data.json을 List<ItemData> 형태로 파싱
-        List<DATA.ItemData> allItems = JsonLoader.LoadFromResources<List<DATA.ItemData>>("data/item_data");
-        if (allItems == null)
+        var handle = Addressables.LoadAssetAsync<TextAsset>(addressableKey_item_data);
+        await handle.Task; // 비동기적으로 완료를 기다림
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            //Addressables에서 로드된 데이터 파싱
+            TextAsset asset = handle.Result;
+            List<DATA.ItemData> allItems = JsonConvert.DeserializeObject<List<DATA.ItemData>>(asset.text);
+            itemData = new Dictionary<string, List<DATA.ItemData>>();
+            foreach (DATA.ItemData item in allItems)
+            {
+                string key = item.Material;
+                if (itemData.ContainsKey(key))
+                {
+                    itemData[key].Add(item);
+                }
+                else
+                {
+                    itemData[key] = new List<DATA.ItemData> { item };
+                }
+            }
+
+            // 디버그용 로그: 각 재질(Material)별 아이템 개수 확인
+            foreach (var kvp in itemData)
+            {
+                Debug.LogFormat("DataManager: Material = {0}, Count = {1}", kvp.Key, kvp.Value.Count);
+            }
+        }
+        else
         {
             Debug.LogError("DataManager: item_data.json 로드 실패!");
-            return;
-        }
-
-        // 2) itemData 딕셔너리 초기화 및 그룹화
-        itemData = new Dictionary<string, List<DATA.ItemData>>();
-        foreach (DATA.ItemData item in allItems)
-        {
-            string key = item.Material;
-            if (itemData.ContainsKey(key))
-            {
-                itemData[key].Add(item);
-            }
-            else
-            {
-                itemData[key] = new List<DATA.ItemData> { item };
-            }
-        }
-
-        // 디버그용 로그: 각 재질(Material)별 아이템 개수 확인
-        foreach (var kvp in itemData)
-        {
-            Debug.LogFormat("DataManager: Material = {0}, Count = {1}", kvp.Key, kvp.Value.Count);
         }
     }
 
-    private void LoadCharacterData()
+    private async Task LoadCharacterData()
     {
-        List<DATA.EquipslotData> datas = new List<DATA.EquipslotData>();
-        datas = JsonLoader.LoadFromResources<List<DATA.EquipslotData>>("data/equipslot_data");
-        if (datas == null)
+        var handle = Addressables.LoadAssetAsync<TextAsset>(addressableKey_equipslot_data);
+        await handle.Task; // 비동기적으로 완료를 기다림
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            //Addressables에서 로드된 데이터 파싱
+            TextAsset asset = handle.Result;
+            List<DATA.EquipslotData> datas = JsonConvert.DeserializeObject<List<DATA.EquipslotData>>(asset.text);
+            if (datas == null)
+            {
+                Debug.LogError("DataManager: scharacter_data.json 로드 실패!");
+                return;
+            }
+
+            foreach (DATA.EquipslotData item in datas)
+            {
+                string key = item.Part;
+                characterData[key] = item;
+            }
+        }
+        else
         {
             Debug.LogError("DataManager: scharacter_data.json 로드 실패!");
-            return;
-        }
-
-        foreach (DATA.EquipslotData item in datas)
-        {
-            string key = item.Part;
-            characterData[key] = item;
         }
     }
 
-    private void LoadHeroList()
+    private async Task LoadHeroList()
     {
-        heroList = JsonLoader.LoadFromResources<List<DATA.HeroList>>("data/herolist_data");
-        if (heroList == null)
-        {
-            Debug.LogError("DataManager: hero_list.json 로드 실패!");
-            return;
-        }
+        var handle = Addressables.LoadAssetAsync<TextAsset>(addressableKey_herolist_data);
+        await handle.Task; // 비동기적으로 완료를 기다림
 
-        // 디버그용 로그: 각 재질(Material)별 아이템 개수 확인
-        foreach (var kvp in heroList)
+        if (handle.Status == AsyncOperationStatus.Succeeded)
         {
-            Debug.LogFormat("HeroName = {0}, Type = {1}", kvp.Name, kvp.Type);
+            //Addressables에서 로드된 데이터 파싱
+            TextAsset asset = handle.Result;
+            heroList = JsonConvert.DeserializeObject<List<DATA.HeroList>>(asset.text);
+            if (heroList == null)
+            {
+                Debug.LogError("DataManager: hero_list.json 로드 실패1!");
+                return;
+            }
+            // 디버그용 로그: 각 재질(Material)별 아이템 개수 확인
+            foreach (var kvp in heroList)
+            {
+                Debug.LogFormat("HeroName = {0}, Type = {1}", kvp.Name, kvp.Type);
+            }
+        }
+        else
+        {
+            Debug.LogError("DataManager: hero_list.json 로드 실패2!");
         }
     }
 
-    private void LoadHeroData()
+    private async Task LoadHeroData()
     {
-        List<DATA.HeroData> allHeros = JsonLoader.LoadFromResources<List<DATA.HeroData>>("data/hero_data");
-        if (allHeros == null)
-        {
-            Debug.LogError("DataManager: hero_data.json 로드 실패!");
-            return;
-        }
+        var handle = Addressables.LoadAssetAsync<TextAsset>(addressableKey_hero_data);
+        await handle.Task; // 비동기적으로 완료를 기다림
 
-        // 2) heroData 딕셔너리 초기화 및 그룹화
-        heroData = new Dictionary<string, List<DATA.HeroData>>();
-        foreach (DATA.HeroData item in allHeros)
+        if (handle.Status == AsyncOperationStatus.Succeeded)
         {
-            string key = item.Type;
-            if (heroData.ContainsKey(key))
+            //Addressables에서 로드된 데이터 파싱
+            TextAsset asset = handle.Result;
+            List<DATA.HeroData> allHeros = JsonConvert.DeserializeObject<List<DATA.HeroData>>(asset.text);
+            if (allHeros == null)
             {
-                heroData[key].Add(item);
+                Debug.LogError("DataManager: hero_data.json 로드 실패1!");
+                return;
             }
-            else
+
+            // 2) heroData 딕셔너리 초기화 및 그룹화
+            heroData = new Dictionary<string, List<DATA.HeroData>>();
+            foreach (DATA.HeroData item in allHeros)
             {
-                heroData[key] = new List<DATA.HeroData> { item };
+                string key = item.Type;
+                if (heroData.ContainsKey(key))
+                {
+                    heroData[key].Add(item);
+                }
+                else
+                {
+                    heroData[key] = new List<DATA.HeroData> { item };
+                }
+            }
+
+            // 디버그용 로그: 각 재질(Material)별 아이템 개수 확인
+            foreach (var kvp in heroData)
+            {
+                Debug.LogFormat("DataManager: Material = {0}, Count = {1}", kvp.Key, kvp.Value.Count);
             }
         }
-
-        // 디버그용 로그: 각 재질(Material)별 아이템 개수 확인
-        foreach (var kvp in heroData)
+        else
         {
-            Debug.LogFormat("DataManager: Material = {0}, Count = {1}", kvp.Key, kvp.Value.Count);
+            Debug.LogError("DataManager: hero_data.json 로드 실패2!");
         }
     }
 }
