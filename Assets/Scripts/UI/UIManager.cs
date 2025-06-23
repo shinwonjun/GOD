@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.U2D;
 
@@ -40,10 +41,11 @@ public class UIManager : MonoSingleton<UIManager>
     {
     }
 
-    public async void LoadDataUI()
+    public async Task LoadDataUI()
     {
         await DataManager.Instance.InitData();
         await tabHandlers.InitTab();
+        await Task.Delay(0);
     }
 
     public void ShowPopup(string description, POPUP.POPUP type)

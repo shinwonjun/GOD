@@ -6,10 +6,16 @@ public class GameManager : MonoSingleton<GameManager>
     void Start()
     {
         NetworkManager.Start();
-        NetworkManager.SendRequest("PlayerData", "");
+        NetworkManager.SendRequest_Test("StartGame", "");
     }
-    public void StartGame(string playerdata)
+    public async Task StartGame()
     {
-        UIManager.Instance.LoadDataUI();
+        await UIManager.Instance.LoadDataUI();
+        await LoadGame();
+    }
+
+    public async Task LoadGame()
+    {
+        await Task.Delay(0);
     }
 }
