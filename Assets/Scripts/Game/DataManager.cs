@@ -8,7 +8,8 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 public class DataManager : Singleton<DataManager>
 {
     public List<DATA.StatData> statData = new List<DATA.StatData>();
-    public Dictionary<string, List<DATA.ItemData>> itemData = new Dictionary<string, List<DATA.ItemData>>();
+    public Dictionary<string, List<DATA.ItemData>> itemDataByMaterial = new Dictionary<string, List<DATA.ItemData>>();
+    public Dictionary<int, DATA.ItemData> itemData = new Dictionary<int, DATA.ItemData>();
     public Dictionary<string, DATA.EquipslotData> characterData = new Dictionary<string, DATA.EquipslotData>();
     
     public List<DATA.HeroList> heroList = new List<DATA.HeroList>();
@@ -57,24 +58,21 @@ public class DataManager : Singleton<DataManager>
             //Addressables에서 로드된 데이터 파싱
             TextAsset asset = handle.Result;
             List<DATA.ItemData> allItems = JsonConvert.DeserializeObject<List<DATA.ItemData>>(asset.text);
-            itemData = new Dictionary<string, List<DATA.ItemData>>();
+            itemData = new Dictionary<int, DATA.ItemData>();
             foreach (DATA.ItemData item in allItems)
             {
-                string key = item.Material;
-                if (itemData.ContainsKey(key))
+                int key = int.Parse(item.Id);
+                itemData.Add(key, item);
+
+                string material = item.Material;
+                if (itemDataByMaterial.ContainsKey(material))
                 {
-                    itemData[key].Add(item);
+                    itemDataByMaterial[material].Add(item);
                 }
                 else
                 {
-                    itemData[key] = new List<DATA.ItemData> { item };
+                    itemDataByMaterial[material] = new List<DATA.ItemData> { item };
                 }
-            }
-
-            // 디버그용 로그: 각 재질(Material)별 아이템 개수 확인
-            foreach (var kvp in itemData)
-            {
-                Debug.LogFormat("DataManager: Material = {0}, Count = {1}", kvp.Key, kvp.Value.Count);
             }
         }
         else

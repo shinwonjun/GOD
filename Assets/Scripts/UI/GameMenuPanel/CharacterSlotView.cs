@@ -13,6 +13,39 @@ public class CharacterSlotView : SlotViewBase<DATA.EquipslotData>
         tabType = STATUS_UI.TAB.Character;
         popupType = POPUP.POPUP.character;
         data = newData;
+
+        ITEM.AttachPart parts = ITEM.AttachPart.None;
+        switch (data.Part)
+        {
+            case "Pitching":
+                parts = ITEM.AttachPart.Pitching;
+                break;
+            case "Armor":
+                parts = ITEM.AttachPart.Armor;
+                break;
+            case "Gloves":
+                parts = ITEM.AttachPart.Gloves;
+                break;
+            case "Necklace":
+                parts = ITEM.AttachPart.Necklace;
+                break;
+            case "RingL":
+                parts = ITEM.AttachPart.RingL;
+                break;
+            case "RingR":
+                parts = ITEM.AttachPart.RingR;
+                break;
+            case "Shoes":
+                parts = ITEM.AttachPart.Shoes;
+                break;
+        }
+
+        var item = GameMyData.Instance.getEquipedPartsID(parts);
+
+        if (item != null)
+        {
+            setImage(item.Sprite);
+        }
     }
     private void Awake()
     {
@@ -24,5 +57,6 @@ public class CharacterSlotView : SlotViewBase<DATA.EquipslotData>
     }
     private void setImage(string _sprite)
     {
+        image.sprite = UIManager.Instance.uiAtlas[STATUS_UI.TAB.Inventory].GetSprite(_sprite);
     }
 }

@@ -219,7 +219,8 @@ public class NavigationTabController : MonoBehaviour
             var parentContent = parent.GetComponent<GameMenuPanelTabBase>().content[0];
             int idx = 0;
 
-            foreach (KeyValuePair<string, List<DATA.ItemData>> kvp in DataManager.Instance.itemData)
+
+            foreach (KeyValuePair<string, List<DATA.ItemData>> kvp in DataManager.Instance.itemDataByMaterial)
             {
                 string materialKey = kvp.Key;               // 예: "천", "가죽", "철" 등
                 List<DATA.ItemData> itemList = kvp.Value;        // 해당 Material에 속한 ItemData 리스트

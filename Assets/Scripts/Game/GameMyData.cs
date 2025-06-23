@@ -55,7 +55,7 @@ public class GameMyData : Singleton<GameMyData>
 
         // OwenedHeroIds
         listOwnedHeros = new List<int>(serverData.ownedHeroIds);
-        
+
         // equippedHeroIds
         listEquipHeros = new List<int>(serverData.equippedHeroIds);
 
@@ -97,5 +97,15 @@ public class GameMyData : Singleton<GameMyData>
     public Boolean checkEquipedDex(int id)
     {
         return listEquipHeros.Contains(id);
+    }
+
+    public DATA.ItemData getEquipedPartsID(ITEM.AttachPart parts)
+    {
+        if (dicdicEquipItems.ContainsKey(parts))
+        {
+            int id = dicdicEquipItems[parts];
+            return DataManager.Instance.itemData[id];
+        }
+        return null;
     }
 }

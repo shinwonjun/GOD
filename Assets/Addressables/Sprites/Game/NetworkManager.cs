@@ -80,7 +80,7 @@ public static class NetworkManager
         switch (responseType)
         {
             case "StartGame":
-                GameManager.Instance.StartGame();
+                GameManager.Instance.StartGame(json);
                 break;
             default:
                 Debug.LogWarning($"[NetworkManager] Unhandled responseType: {responseType}");

@@ -24,10 +24,7 @@ public static class FakeServer
 
     private static void SimulateStartGame(string responseType, string playerId)
     {
-        string response = $"{{\"playerId\":\"{playerId}\",\"score\":123,\"level\":5}}";
-
-
-         string strInfo = @"{
+         string response = @"{
             ""userId"": {
                 ""userId"": 99999
             },
@@ -40,12 +37,12 @@ public static class FakeServer
             },
             ""ownedHeroIds"":  [
                 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-                11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-                21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-                31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-                41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
-                51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
-                61
+                // 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                // 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+                // 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+                // 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+                // 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+                // 61
             ],
             ""equippedHeroIds"": [1, 4, 7],
             ""equippedItems"": {
@@ -65,8 +62,6 @@ public static class FakeServer
                 //501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524
             ]
         }";
-
-        GameMyData.Instance.LoadFromJson(strInfo);
 
         OnReceiveResponse?.Invoke(responseType, response);
     }
