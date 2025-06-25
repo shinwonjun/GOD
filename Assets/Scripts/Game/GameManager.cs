@@ -1,8 +1,12 @@
 
+using System;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
+    [SerializeField] public HeroHandler heroHandlers;
+    
     void Start()
     {
         NetworkManager.Start();
@@ -18,6 +22,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public async Task LoadGame()
     {
+        await heroHandlers.LoadHeroEnemy();
         await Task.Delay(0);
     }
 }

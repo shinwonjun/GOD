@@ -11,9 +11,10 @@ public class DataManager : Singleton<DataManager>
     public Dictionary<string, List<DATA.ItemData>> itemDataByMaterial = new Dictionary<string, List<DATA.ItemData>>();
     public Dictionary<int, DATA.ItemData> itemData = new Dictionary<int, DATA.ItemData>();
     public Dictionary<string, DATA.EquipslotData> characterData = new Dictionary<string, DATA.EquipslotData>();
-    
+
     public List<DATA.HeroList> heroList = new List<DATA.HeroList>();
-    public Dictionary<string, List<DATA.HeroData>> heroData = new Dictionary<string, List<DATA.HeroData>>();
+    public Dictionary<string, List<DATA.HeroData>> heroDataByHeroType = new Dictionary<string, List<DATA.HeroData>>();
+    public Dictionary<int, DATA.HeroData> heroData = new Dictionary<int, DATA.HeroData>();
 
 
     private string addressableKey_stat_data = "Assets/Addressables/Data/stat_data.json";
@@ -153,22 +154,23 @@ public class DataManager : Singleton<DataManager>
             }
 
             // 2) heroData 딕셔너리 초기화 및 그룹화
-            heroData = new Dictionary<string, List<DATA.HeroData>>();
+            heroDataByHeroType = new Dictionary<string, List<DATA.HeroData>>();
             foreach (DATA.HeroData item in allHeros)
             {
+                heroData.Add(int.Parse(item.Id), item);
+
                 string key = item.Type;
-                if (heroData.ContainsKey(key))
+                if (heroDataByHeroType.ContainsKey(key))
                 {
-                    heroData[key].Add(item);
+                    heroDataByHeroType[key].Add(item);
                 }
                 else
                 {
-                    heroData[key] = new List<DATA.HeroData> { item };
+                    heroDataByHeroType[key] = new List<DATA.HeroData> { item };
                 }
             }
 
-            // 디버그용 로그: 각 재질(Material)별 아이템 개수 확인
-            foreach (var kvp in heroData)
+            foreach (var kvp in heroDataByHeroType)
             {
                 Debug.LogFormat("DataManager: Material = {0}, Count = {1}", kvp.Key, kvp.Value.Count);
             }
@@ -177,5 +179,19 @@ public class DataManager : Singleton<DataManager>
         {
             Debug.LogError("DataManager: hero_data.json 로드 실패2!");
         }
+    }
+
+
+
+    /////////////////////////////////////////////////////////
+
+    public DATA.HeroData GetHeroData(int id)
+    {
+        if (heroData.ContainsKey(id))
+        {
+            return heroData[id];
+        }
+
+        return null;
     }
 }

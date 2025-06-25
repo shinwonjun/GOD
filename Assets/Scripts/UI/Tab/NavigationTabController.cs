@@ -309,8 +309,8 @@ public class NavigationTabController : MonoBehaviour
 
             var heroDataMap = new List<DATA.HeroData>[]
             {
-                DataManager.Instance.heroData[GAME.HeroType.GOD.ToString()],
-                DataManager.Instance.heroData[GAME.HeroType.DEMON.ToString()]
+                DataManager.Instance.heroDataByHeroType[GAME.HeroType.GOD.ToString()],
+                DataManager.Instance.heroDataByHeroType[GAME.HeroType.DEMON.ToString()]
             };
 
             // 1. DexList 생성
@@ -322,7 +322,7 @@ public class NavigationTabController : MonoBehaviour
                 int index = (int)heroType;
 
                 // 1. heroData 가져오기
-                var heroDataList = DataManager.Instance.heroData[heroType.ToString()];
+                var heroDataList = DataManager.Instance.heroDataByHeroType[heroType.ToString()];
 
                 // 2. parentContent 매핑
                 var parentContent = parentContents[index];

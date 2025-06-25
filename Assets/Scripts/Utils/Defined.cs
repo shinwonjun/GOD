@@ -77,5 +77,5 @@ namespace GAME
         None = -1,
         GOD,
         DEMON,
-    }
+    }    
 }

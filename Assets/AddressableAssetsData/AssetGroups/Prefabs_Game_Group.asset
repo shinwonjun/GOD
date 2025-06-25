@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Prefabs_Game_Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Prefabs_Game_Group
+  m_GUID: f8476c6aed39fa94bbfb4f8e703ae346
+  m_SerializeEntries:
+  - m_GUID: f6dba2b4344cd0d41ab5b7b3acaf9cc3
+    m_Address: Assets/Addressables/Prefabs/Game/Hero
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 14e3d69d60855d94480fcd9c8ff46bcf, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: a07fa40db09b3504ba0edaef5bdda07a, type: 2}
+    - {fileID: 11400000, guid: 1193c01c0f1ce664f9f6af8bc2b315bd, type: 2}
