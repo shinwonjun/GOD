@@ -14,7 +14,13 @@ public static class FakeServer
         switch (requestType)
         {
             case "StartGame":
-                SimulateStartGame(requestType, payload);
+                StartGame(requestType, payload);
+                break;
+            case "GetServerTime":
+                GetServerTime(requestType, payload);
+                break;
+            case "GetLastClaimTime":
+                GetLastClaimTime(requestType, payload);
                 break;
             default:
                 Debug.LogWarning("[FakeServer] Unknown request type.");
@@ -22,18 +28,19 @@ public static class FakeServer
         }
     }
 
-    private static void SimulateStartGame(string responseType, string playerId)
+    private static void StartGame(string responseType, string payload)
     {
-         string response = @"{
+        // GameMyData::GameServerResponse
+        string response = @"{
             ""userId"": {
                 ""userId"": 99999
             },
             ""statLevels"": {
-                ""Level"": 12,
-                ""AttackPower"": 25,
-                ""AttackSpeed"": 7,
-                ""CriticalChance"": 15,
-                ""CriticalDamage"": 30
+                ""Level"": 1,
+                ""AttackPower"": 1,
+                ""AttackSpeed"": 1,
+                ""CriticalChance"": 1,
+                ""CriticalDamage"": 1
             },
             ""ownedHeroIds"":  [
                 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
@@ -60,9 +67,24 @@ public static class FakeServer
                 //301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324,
                 //401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424,
                 //501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524
-            ]
+            ],
+            ""coin"": 1590000,
+            ""diamond"": 100
         }";
 
+        OnReceiveResponse?.Invoke(responseType, response);
+    }
+    private static void GetServerTime(string responseType, string payload)
+    {
+        var serverTime = DateTime.UtcNow.ToString("o"); // ISO 8601 format
+        var response = JsonConvert.SerializeObject(new { serverTime });
+        OnReceiveResponse?.Invoke(responseType, response);
+    }
+
+    private static void GetLastClaimTime(string responseType, string payload)
+    {
+        var lastClaimTime = DateTime.UtcNow.AddMinutes(-10).ToString("o"); // 10분 전
+        var response = JsonConvert.SerializeObject(new { lastClaimTime });
         OnReceiveResponse?.Invoke(responseType, response);
     }
 }

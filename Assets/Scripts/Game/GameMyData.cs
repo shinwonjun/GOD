@@ -2,8 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Numerics;
 using Newtonsoft.Json;
 using UnityEngine;
+
+[System.Serializable]
+public class ServerTimeResponse
+{
+    public string serverTime;
+}
+
+[System.Serializable]
+public class LastClaimTimeResponse
+{
+    public string lastClaimTime;
+}
 
 [System.Serializable]
 public class GameServerResponse
@@ -14,6 +27,8 @@ public class GameServerResponse
     public List<int> equippedHeroIds;
     public Dictionary<string, int> equippedItems;
     public List<int> ownedItems;
+    public BigInteger coin;
+    public BigInteger diamond;
 }
 
 [System.Serializable]
@@ -31,9 +46,14 @@ public class GameMyData : Singleton<GameMyData>
     public List<int> listEquipHeros = new List<int>();
     public Dictionary<ITEM.AttachPart, int> dicdicEquipItems = new Dictionary<ITEM.AttachPart, int>();
     public List<int> listOwnedItems = new List<int>();  // 보유하고 있는 아이템
+    public BigInteger coin = 0;
+    public BigInteger diamond = 0;
 
-
-    public void LoadFromJson(string json)
+    public object LoadFromJson(string json, Type cType)
+    {
+       return JsonConvert.DeserializeObject(json, cType);
+    }
+    public void LoadGameInfoJson(string json)
     {
         var serverData = JsonConvert.DeserializeObject<GameServerResponse>(json);
 
@@ -75,6 +95,10 @@ public class GameMyData : Singleton<GameMyData>
 
         // OwenedItems
         listOwnedItems = new List<int>(serverData.ownedItems);
+
+        // Currency
+        coin = serverData.coin;
+        diamond = serverData.diamond;
 
         Debug.Log("[GameMyData] Loaded successfully.");
     }

@@ -43,6 +43,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - statAtlas
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a97b4abb683fa8243924df358d1f0f05
+    m_Address: Assets/Addressables/Sprites/UI/Atlases/SystemUIAtlas.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - systemuiAtlas
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 14e3d69d60855d94480fcd9c8ff46bcf, type: 2}
   m_SchemaSet:

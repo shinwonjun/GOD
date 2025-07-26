@@ -49,6 +49,8 @@ public class StatSlotView : SlotViewBase<DATA.StatData>
 
     private void setTitle(string _title)
     {
+        //textTitle.font = UIManager.Instance.defaultFontAssets;
+        //textTitle.fontMaterial = UIManager.Instance.defaultFontAssets.material;
         textTitle.text = _title;
     }
 

@@ -1,4 +1,6 @@
+using System;
 using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -9,9 +11,9 @@ public static class NetworkManager
     public static void Start()
     {
         // 서버 응답 등록
-        FakeServer.OnReceiveResponse = (type, data) =>
+        FakeServer.OnReceiveResponse = async (type, data) =>
         {
-            HandlePacket(type, data);
+            await HandlePacket(type, data);
         };
     }
 
@@ -20,7 +22,7 @@ public static class NetworkManager
         Debug.Log($"[NetworkManager] Sending request: {requestType} / {payload}");
 
         // 서버에 요청 보내기 (비동기적으로 실행)
-        // API 엔드포인트 URL을 지정하고 요청을 보냄
+        // API 엔드포인트 URL을 지정하고 요청을 `
         string endpoint = apiUrl + requestType;  // 예시: "StartGame"
         SendHttpRequest(endpoint, payload);
     }
@@ -72,7 +74,7 @@ public static class NetworkManager
     }
 
     // 응답 패킷 처리
-    private static void HandlePacket(string responseType, string json)
+    private static async Task HandlePacket(string responseType, string json)
     {
         Debug.Log($"[NetworkManager] HandlePacket ResponseType: {responseType}, JSON: {json}");
 
@@ -80,7 +82,19 @@ public static class NetworkManager
         switch (responseType)
         {
             case "StartGame":
-                GameManager.Instance.StartGame(json);
+                await GameManager.Instance.StartGame(json);
+                break;
+            case "GetServerTime":
+                var serverTimeObj = GameMyData.Instance.LoadFromJson(json, typeof(ServerTimeResponse));
+                var serverTime = (ServerTimeResponse)serverTimeObj;
+                CurrencyManager.Instance.SetServerTime(DateTime.Parse(serverTime.serverTime));
+                Debug.Log("GetServerTime - " + serverTime.serverTime);
+                break;
+            case "GetLastClaimTime":
+                var lastClaimTimeObj = GameMyData.Instance.LoadFromJson(json, typeof(LastClaimTimeResponse));
+                var lastClaimTime = (LastClaimTimeResponse)lastClaimTimeObj;
+                CurrencyManager.Instance.SetLastClaimTime(DateTime.Parse(lastClaimTime.lastClaimTime));
+                Debug.Log("SetLastClaimTime - " + lastClaimTime.lastClaimTime);
                 break;
             default:
                 Debug.LogWarning($"[NetworkManager] Unhandled responseType: {responseType}");

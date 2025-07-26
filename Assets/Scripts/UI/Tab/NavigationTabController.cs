@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using NUnit.Framework.Constraints;
 using Unity.VisualScripting;
+using TMPro;
 public class NavigationTabController : MonoBehaviour
 {
     [SerializeField] public Toggle[] toggles; // 5개의 Toggle들 연결
@@ -32,6 +33,8 @@ public class NavigationTabController : MonoBehaviour
     private const string addressableKey_statAtlas = "statAtlas";
     private const string addressableKey_itemAtlas = "itemAtlas";
     private const string addressableKey_heroAtlas = "heroAtlas";
+    private const string addressableKey_systemuiAtlas = "systemuiAtlas";
+    private const string addressableKey_defaultFonts = "LiberationSans_SDF";
 
 
     void Start()
@@ -40,7 +43,9 @@ public class NavigationTabController : MonoBehaviour
 
     public async Task InitTab()
     {
+        //await LoadUIDefaultFonts();
         await LoadUIAtlases();
+        await LoadSystemUIAtlases();
         await LoadStatSlotPrefabToFirstTab();
         await LoadItemSlotPrefabToFirstTab();
         await LoadCharacterSlotPrefabToFirstTab();
@@ -101,6 +106,28 @@ public class NavigationTabController : MonoBehaviour
         }
     }
 
+    // async Task LoadUIDefaultFonts()
+    // {
+    //     var handle = Addressables.LoadAssetAsync<TMP_FontAsset>(addressableKey_defaultFonts);
+
+    //     if (!handle.IsValid())
+    //     {
+    //         Debug.LogError("❌ InvalidHandle: Address may be wrong or not built!");
+    //         return;
+    //     }
+
+    //     TMP_FontAsset fonts = await handle.Task;
+
+    //     if (fonts == null)
+    //     {
+    //         Debug.LogError("❌ fonts is null even after valid handle!");
+    //     }
+    //     else
+    //     {
+    //         UIManager.Instance.defaultFontAssets = fonts;
+    //         Debug.Log("✅ Fonts loaded: " + fonts.name);
+    //     }
+    // }
     async Task LoadUIAtlases()
     {
         {
@@ -165,6 +192,29 @@ public class NavigationTabController : MonoBehaviour
                 UIManager.Instance.uiAtlas[STATUS_UI.TAB.Dex] = atlas;
                 Debug.Log("✅ SpriteAtlas loaded: " + atlas.name);
             }
+        }
+    }
+
+    async Task LoadSystemUIAtlases()
+    {
+        var handle = Addressables.LoadAssetAsync<SpriteAtlas>(addressableKey_systemuiAtlas);
+
+        if (!handle.IsValid())
+        {
+            Debug.LogError("❌ InvalidHandle: Address may be wrong or not built!");
+            return;
+        }
+
+        SpriteAtlas atlas = await handle.Task;
+
+        if (atlas == null)
+        {
+            Debug.LogError("❌ Atlas is null even after valid handle!");
+        }
+        else
+        {
+            UIManager.Instance.systemuiAtlas = atlas;
+            Debug.Log("✅ SpriteAtlas loaded: " + atlas.name);
         }
     }
 
