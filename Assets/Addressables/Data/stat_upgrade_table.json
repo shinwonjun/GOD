@@ -1,0 +1,27 @@
+{
+  "levelUpgrade": {
+    "baseCost": 10,
+    "costConstant": 1.2,
+    "maxLevel": 100
+  },
+  "attackUpgrade": {
+    "baseCost": 10,
+    "costConstant": 1.2,
+    "maxLevel": 100
+  },
+  "speedUpgrade": {
+    "baseCost": 50,
+    "costConstant": 1.2,
+    "maxLevel": 100
+  },
+  "critChanceUpgrade": {
+    "baseCost": 100,
+    "costConstant": 1.2,
+    "maxLevel": 100
+  },
+  "critDamageUpgrade": {
+    "baseCost": 500,
+    "costConstant": 1.2,
+    "maxLevel": 100
+  }
+}

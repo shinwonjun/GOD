@@ -7,6 +7,14 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class DataManager : Singleton<DataManager>
 {
+
+    private string addressableKey_stat_data = "Assets/Addressables/Data/stat_data.json";
+    private string addressableKey_item_data = "Assets/Addressables/Data/item_data.json";
+    private string addressableKey_equipslot_data = "Assets/Addressables/Data/equipslot_data.json";
+    private string addressableKey_herolist_data = "Assets/Addressables/Data/herolist_data.json";
+    private string addressableKey_hero_data = "Assets/Addressables/Data/hero_data.json";    
+    private string addressableKey_stat_upgrade_table = "Assets/Addressables/Data/stat_upgrade_table.json";
+
     public List<DATA.StatData> statData = new List<DATA.StatData>();
     public Dictionary<string, List<DATA.ItemData>> itemDataByMaterial = new Dictionary<string, List<DATA.ItemData>>();
     public Dictionary<int, DATA.ItemData> itemData = new Dictionary<int, DATA.ItemData>();
@@ -15,13 +23,7 @@ public class DataManager : Singleton<DataManager>
     public List<DATA.HeroList> heroList = new List<DATA.HeroList>();
     public Dictionary<string, List<DATA.HeroData>> heroDataByHeroType = new Dictionary<string, List<DATA.HeroData>>();
     public Dictionary<int, DATA.HeroData> heroData = new Dictionary<int, DATA.HeroData>();
-
-
-    private string addressableKey_stat_data = "Assets/Addressables/Data/stat_data.json";
-    private string addressableKey_item_data = "Assets/Addressables/Data/item_data.json";
-    private string addressableKey_equipslot_data = "Assets/Addressables/Data/equipslot_data.json";
-    private string addressableKey_herolist_data = "Assets/Addressables/Data/herolist_data.json";
-    private string addressableKey_hero_data = "Assets/Addressables/Data/hero_data.json";
+    public Dictionary<STATUS_UI.Stat, DATA.StatUpgradeData> statUpgradeTable = new Dictionary<STATUS_UI.Stat, DATA.StatUpgradeData>();
 
     public async Task InitData()
     {
@@ -30,6 +32,8 @@ public class DataManager : Singleton<DataManager>
         await LoadCharacterData();
         await LoadHeroList();
         await LoadHeroData();
+
+        await LoadStatUpgradeTable();
     }
 
     private async Task LoadStatData()
@@ -178,6 +182,40 @@ public class DataManager : Singleton<DataManager>
         else
         {
             Debug.LogError("DataManager: hero_data.json 로드 실패2!");
+        }
+    }
+
+    private async Task LoadStatUpgradeTable()
+    {
+        var handle = Addressables.LoadAssetAsync<TextAsset>(addressableKey_stat_upgrade_table);
+        await handle.Task; // 비동기적으로 완료를 기다림
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            //Addressables에서 로드된 데이터 파싱
+            TextAsset asset = handle.Result;
+            DATA.StatUpgradeTable table = JsonConvert.DeserializeObject<DATA.StatUpgradeTable>(asset.text);
+
+            if (table == null)
+            {
+                Debug.LogError("DataManager: stat_upgrade_table.json 로드 실패1!");
+                return;
+            }
+
+            statUpgradeTable = new Dictionary<STATUS_UI.Stat, DATA.StatUpgradeData>
+            {
+                [STATUS_UI.Stat.Level] = table.LevelUpgrade,
+                [STATUS_UI.Stat.AttackPower] = table.AttackUpgrade,
+                [STATUS_UI.Stat.AttackSpeed] = table.SpeedUpgrade,
+                [STATUS_UI.Stat.CriticalChance] = table.CritChanceUpgrade,
+                [STATUS_UI.Stat.CriticalDamage] = table.CritDamageUpgrade
+            };
+
+            Debug.Log("DataManager: stat_upgrade_table.json 로딩 및 매핑 완료!");
+        }
+        else
+        {
+            Debug.LogError("DataManager: stat_upgrade_table.json 로드 실패2!");
         }
     }
 

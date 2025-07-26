@@ -43,7 +43,6 @@ public class NavigationTabController : MonoBehaviour
 
     public async Task InitTab()
     {
-        //await LoadUIDefaultFonts();
         await LoadUIAtlases();
         await LoadSystemUIAtlases();
         await LoadStatSlotPrefabToFirstTab();
@@ -97,37 +96,9 @@ public class NavigationTabController : MonoBehaviour
 
         if (index == 0 && !isFirstTabLoaded)
         {
-            // LoadStatSlotPrefabToFirstTab();
-            // LoadItemSlotPrefabToFirstTab();
-            // LoadCharacterSlotPrefabToFirstTab();
-            // LoadDexSlotPrefabToFirstTab();
-            // LoadPopupPrefabToFirstTab();
             isFirstTabLoaded = true;
         }
     }
-
-    // async Task LoadUIDefaultFonts()
-    // {
-    //     var handle = Addressables.LoadAssetAsync<TMP_FontAsset>(addressableKey_defaultFonts);
-
-    //     if (!handle.IsValid())
-    //     {
-    //         Debug.LogError("❌ InvalidHandle: Address may be wrong or not built!");
-    //         return;
-    //     }
-
-    //     TMP_FontAsset fonts = await handle.Task;
-
-    //     if (fonts == null)
-    //     {
-    //         Debug.LogError("❌ fonts is null even after valid handle!");
-    //     }
-    //     else
-    //     {
-    //         UIManager.Instance.defaultFontAssets = fonts;
-    //         Debug.Log("✅ Fonts loaded: " + fonts.name);
-    //     }
-    // }
     async Task LoadUIAtlases()
     {
         {
@@ -236,12 +207,12 @@ public class NavigationTabController : MonoBehaviour
                 Debug.Log($"Name: {item.Name}, Discription: {item.Description}");
                 if (Enum.TryParse(item.Name, true, out STATUS_UI.Stat statEnum))
                 {
-
                     GameObject statSlotInstance = Instantiate(handle.Result, Vector3.zero, Quaternion.identity, parentContent);
                     statSlotInstance.name = "statslot_" + item.Name;
                     statSlotInstance.transform.localScale = Vector3.one;
 
                     var statSlotView = statSlotInstance.GetComponent<StatSlotView>();
+                    statSlotView.SetType(statEnum);
                     statSlotView.SetData(item);
                     UIManager.Instance.statHandlers[statEnum] = statSlotView;
                 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CurrencyManager : MonoSingleton<CurrencyManager>
 {
-    public float gainInterval = 60f;  // 60초마다 획득
+    public float gainInterval = 10f;  // 60초마다 획득
     public int resourcePerInterval = 100;
     private Coroutine gainCoroutine;
 
@@ -30,9 +30,10 @@ public class CurrencyManager : MonoSingleton<CurrencyManager>
             var delta = serverTime.Value - lastClaimTime.Value;
             int intervals = Mathf.FloorToInt((float)delta.TotalSeconds / gainInterval);
             int reward = intervals * resourcePerInterval;
-            GameMyData.Instance.coin += reward;
 
-            Debug.Log($"[CurrencyManager] 오프라인 보상: {reward} 획득 → 총 재화: {GameMyData.Instance.coin}");
+            NetworkManager.SendRequest_Test("AddCoin", reward.ToString());
+
+            Debug.Log($"[CurrencyManager] 오프라인 보상: {reward} 획득 → request AddCoin");
             StartAutoGain();
         }
     }
@@ -69,8 +70,8 @@ public class CurrencyManager : MonoSingleton<CurrencyManager>
         while (true)
         {
             yield return new WaitForSeconds(gainInterval);
-            GameMyData.Instance.coin += resourcePerInterval;
-            Debug.Log($"[로컬] 재화 획득! 현재 재화: {GameMyData.Instance.coin}");
+            NetworkManager.SendRequest_Test("AddCoin", resourcePerInterval.ToString());
+            Debug.Log($"[로컬] 재화 획득! request AddCoin");
         }
     }
 

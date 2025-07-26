@@ -96,6 +96,42 @@ public static class NetworkManager
                 CurrencyManager.Instance.SetLastClaimTime(DateTime.Parse(lastClaimTime.lastClaimTime));
                 Debug.Log("SetLastClaimTime - " + lastClaimTime.lastClaimTime);
                 break;
+            case "AddCoin":
+                var coinObj = GameMyData.Instance.LoadFromJson(json, typeof(AddCoinResponse));
+                var coin = (AddCoinResponse)coinObj;
+                if (coin.success)
+                    GameMyData.Instance.Coin = coin.newCoin;
+                Debug.Log($"AddCoin:{coin.success} - 현재 코인: {GameMyData.Instance.Coin}");
+                break;
+            case "StatUpgrade":
+                var statUpgradeObj = GameMyData.Instance.LoadFromJson(json, typeof(StatUpgradeResponse));
+                var statUpgrade = (StatUpgradeResponse)statUpgradeObj;
+                if (statUpgrade.success)
+                {
+                    GameMyData.Instance.Coin = statUpgrade.remainingCoin;
+                    STATUS_UI.Stat statType;
+                    if (statUpgrade.stat == "LevelUpgrade")
+                        statType = STATUS_UI.Stat.Level;
+                    else if (statUpgrade.stat == "AttackPower")
+                        statType = STATUS_UI.Stat.AttackPower;
+                    else if (statUpgrade.stat == "AttackSpeed")
+                        statType = STATUS_UI.Stat.AttackSpeed;
+                    else if (statUpgrade.stat == "CriticalChance")
+                        statType = STATUS_UI.Stat.CriticalChance;
+                    else if (statUpgrade.stat == "CriticalDamage")
+                        statType = STATUS_UI.Stat.CriticalDamage;
+                    else
+                        return;
+
+                    GameMyData.Instance.dicStatLevel[statType] = statUpgrade.newLevel;
+                    UIManager.Instance.statHandlers[statType].IncreaseLevel(statUpgrade.newLevel);
+                    Debug.Log($"StatUpgrade:{statUpgrade.success} - 레벨: {statUpgrade.newLevel} , 현재 코인: {statUpgrade.message}");
+                }
+                else
+                {
+                    Debug.Log($"StatUpgrade:{statUpgrade.success} - 현재 코인: {statUpgrade.message}");
+                }
+                break;
             default:
                 Debug.LogWarning($"[NetworkManager] Unhandled responseType: {responseType}");
                 break;

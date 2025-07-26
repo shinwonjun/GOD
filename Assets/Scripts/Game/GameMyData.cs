@@ -37,6 +37,23 @@ public class UserIdWrapper
     public int userId;
 }
 
+[System.Serializable]
+public class AddCoinResponse
+{
+    public bool success;
+    public long newCoin;
+}
+
+[System.Serializable]
+public class StatUpgradeResponse
+{
+    public bool success;
+    public int newLevel;
+    public long remainingCoin;
+    public string message; // 실패 시에만 존재
+    public string stat;    // 선택적으로 추가
+}
+
 
 public class GameMyData : Singleton<GameMyData>
 {
@@ -46,12 +63,41 @@ public class GameMyData : Singleton<GameMyData>
     public List<int> listEquipHeros = new List<int>();
     public Dictionary<ITEM.AttachPart, int> dicdicEquipItems = new Dictionary<ITEM.AttachPart, int>();
     public List<int> listOwnedItems = new List<int>();  // 보유하고 있는 아이템
-    public BigInteger coin = 0;
-    public BigInteger diamond = 0;
+
+    /// <summary>
+    /// currency 재화
+    /// </summary>
+    private BigInteger coin;
+    public BigInteger Coin
+    {
+        get => coin;
+        set
+        {
+            coin = value;
+            OnCoinChanged?.Invoke(coin); // 이벤트 발생
+        }
+    }
+    public event Action<BigInteger> OnCoinChanged;
+
+
+    private BigInteger diamond = 0;
+    public BigInteger Diamond
+    {
+        get => diamond;
+        set
+        {
+            diamond = value;
+            OnDiamondChanged?.Invoke(diamond); // 이벤트 발생
+        }
+    }
+    public event Action<BigInteger> OnDiamondChanged;
+
+
+    ////////////////////////////////////////////////////////////
 
     public object LoadFromJson(string json, Type cType)
     {
-       return JsonConvert.DeserializeObject(json, cType);
+        return JsonConvert.DeserializeObject(json, cType);
     }
     public void LoadGameInfoJson(string json)
     {
@@ -63,7 +109,7 @@ public class GameMyData : Singleton<GameMyData>
         dicStatLevel.Clear();
         foreach (var kv in serverData.statLevels)
         {
-            if (System.Enum.TryParse(kv.Key, out STATUS_UI.Stat stat))
+            if (Enum.TryParse(kv.Key, out STATUS_UI.Stat stat))
             {
                 dicStatLevel[stat] = kv.Value;
             }
@@ -83,7 +129,7 @@ public class GameMyData : Singleton<GameMyData>
         dicdicEquipItems.Clear();
         foreach (var kv in serverData.equippedItems)
         {
-            if (System.Enum.TryParse(kv.Key, out ITEM.AttachPart part))
+            if (Enum.TryParse(kv.Key, out ITEM.AttachPart part))
             {
                 dicdicEquipItems[part] = kv.Value;
             }

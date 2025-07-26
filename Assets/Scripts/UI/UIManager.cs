@@ -42,9 +42,6 @@ public class UIManager : MonoSingleton<UIManager>
     // Atlas
     public Dictionary<STATUS_UI.TAB, SpriteAtlas> uiAtlas = new Dictionary<STATUS_UI.TAB, SpriteAtlas>();
 
-    // Font
-    //public TMP_FontAsset defaultFontAssets;
-
     [HideInInspector] public SpriteAtlas systemuiAtlas;
     public SpriteAtlas statAtlas { get; set; } = null;
     public SpriteAtlas itemAtlas { get; set; } = null;
@@ -58,25 +55,34 @@ public class UIManager : MonoSingleton<UIManager>
     }
     void Start()
     {
+        // 앱 시작 시 초기값
+        currencyUI.coinText.text = GameMyData.Instance.Coin.ToString("N0");
+        currencyUI.diamondText.text = GameMyData.Instance.Diamond.ToString("N0");
+
+        GameMyData.Instance.OnCoinChanged += coin =>
+        {
+            currencyUI.coinText.text = coin.ToString("N0"); // 천단위 쉼표 포함
+        };
+        GameMyData.Instance.OnDiamondChanged += diamond =>
+        {
+            currencyUI.diamondText.text = diamond.ToString("N0"); // 천단위 쉼표 포함
+        };
     }
 
     public async Task LoadDataUI()
     {
         await DataManager.Instance.InitData();
         await tabHandlers.InitTab();            // 여기서 아틀라스 로드
-        await InitUI();
+        await InitCurrencyUI();
         await Task.Delay(0);
     }
 
-    public async Task InitUI()
+    public async Task InitCurrencyUI()
     {
         {
             // currency ui load(재화)
             currencyUI.coin.sprite = systemuiAtlas.GetSprite("coin");
             currencyUI.diamond.sprite = systemuiAtlas.GetSprite("diamond");
-
-            currencyUI.coinText.text = GameMyData.Instance.coin.ToString();
-            currencyUI.diamondText.text = GameMyData.Instance.diamond.ToString();
         }
         await Task.Delay(0);
     }
