@@ -51,7 +51,7 @@ public static class NetworkManager
         {
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.DataProcessingError)
             {
-                Debug.LogError($"Error: {request.error}");
+                Debug.LogError($"[NetworkManager] Error: {request.error}");
             }
             else
             {
@@ -88,20 +88,20 @@ public static class NetworkManager
                 var serverTimeObj = GameMyData.Instance.LoadFromJson(json, typeof(ServerTimeResponse));
                 var serverTime = (ServerTimeResponse)serverTimeObj;
                 CurrencyManager.Instance.SetServerTime(DateTime.Parse(serverTime.serverTime));
-                Debug.Log("GetServerTime - " + serverTime.serverTime);
+                Debug.Log("[NetworkManager] GetServerTime - " + serverTime.serverTime);
                 break;
             case "GetLastClaimTime":
                 var lastClaimTimeObj = GameMyData.Instance.LoadFromJson(json, typeof(LastClaimTimeResponse));
                 var lastClaimTime = (LastClaimTimeResponse)lastClaimTimeObj;
                 CurrencyManager.Instance.SetLastClaimTime(DateTime.Parse(lastClaimTime.lastClaimTime));
-                Debug.Log("SetLastClaimTime - " + lastClaimTime.lastClaimTime);
+                Debug.Log("[NetworkManager] SetLastClaimTime - " + lastClaimTime.lastClaimTime);
                 break;
             case "AddCoin":
                 var coinObj = GameMyData.Instance.LoadFromJson(json, typeof(AddCoinResponse));
                 var coin = (AddCoinResponse)coinObj;
                 if (coin.success)
                     GameMyData.Instance.Coin = coin.newCoin;
-                Debug.Log($"AddCoin:{coin.success} - 현재 코인: {GameMyData.Instance.Coin}");
+                Debug.Log($"[NetworkManager] AddCoin:{coin.success} - 현재 코인: {GameMyData.Instance.Coin}");
                 break;
             case "StatUpgrade":
                 var statUpgradeObj = GameMyData.Instance.LoadFromJson(json, typeof(StatUpgradeResponse));
@@ -123,13 +123,13 @@ public static class NetworkManager
                     else
                         return;
 
-                    GameMyData.Instance.dicStatLevel[statType] = statUpgrade.newLevel;
+                    GameMyData.Instance.UserData.statLevelsByIndex[(int)statType] = statUpgrade.newLevel;
                     UIManager.Instance.statHandlers[statType].IncreaseLevel(statUpgrade.newLevel);
-                    Debug.Log($"StatUpgrade:{statUpgrade.success} - 레벨: {statUpgrade.newLevel} , 현재 코인: {statUpgrade.message}");
+                    Debug.Log($"[NetworkManager] StatUpgrade:{statUpgrade.success} - 레벨: {statUpgrade.newLevel} , 현재 코인: {statUpgrade.message}");
                 }
                 else
                 {
-                    Debug.Log($"StatUpgrade:{statUpgrade.success} - 현재 코인: {statUpgrade.message}");
+                    Debug.Log($"[NetworkManager] StatUpgrade:{statUpgrade.success} - 현재 코인: {statUpgrade.message}");
                 }
                 break;
             default:

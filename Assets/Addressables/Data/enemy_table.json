@@ -1,0 +1,12 @@
+{
+  "defaultLevel": 1,
+  "maxLevel": 100,
+  "defaultHP": 10,
+  "defaultDef": 10,
+  "constantDef": 0.02,
+  "naturalConstant": 2.71828,
+  "rateHP": 1.15,
+  "defaultReward": 100,
+  "constantReward": 1.1,
+  "maxKill": 100,
+}

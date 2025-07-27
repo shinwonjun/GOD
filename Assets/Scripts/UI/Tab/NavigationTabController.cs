@@ -34,7 +34,6 @@ public class NavigationTabController : MonoBehaviour
     private const string addressableKey_itemAtlas = "itemAtlas";
     private const string addressableKey_heroAtlas = "heroAtlas";
     private const string addressableKey_systemuiAtlas = "systemuiAtlas";
-    private const string addressableKey_defaultFonts = "LiberationSans_SDF";
 
 
     void Start()

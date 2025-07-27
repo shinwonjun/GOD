@@ -112,4 +112,70 @@ namespace DATA
             return BaseCost * Mathf.Pow(CostConstant, level - 1);
         }
     }
+
+    public class CurrencyTable
+    {
+        [JsonProperty("resourcePerInterval")]
+        public int ResourcePerInterval { get; set; }
+
+        [JsonProperty("gainInterval")]
+        public float GainInterval { get; set; }
+    }
+
+    public class EnemyTable
+    {
+        [JsonProperty("defaultLevel")]
+        public int DefaultLevel { get; set; }
+
+        [JsonProperty("maxLevel")]
+        public int MaxLevel { get; set; }
+
+        [JsonProperty("defaultHP")]
+        public int DefaultHP { get; set; }
+
+        [JsonProperty("defaultDef")]
+        public int DefaultDef { get; set; }
+
+        [JsonProperty("constantDef")]
+        public float ConstantDef { get; set; }
+
+        [JsonProperty("naturalConstant")]
+        public float NaturalConstant { get; set; }
+
+        [JsonProperty("rateHP")]
+        public float RateHP { get; set; }
+
+        [JsonProperty("defaultReward")]
+        public int DefaultReward { get; set; }
+
+        [JsonProperty("constantReward")]
+        public float ConstantReward { get; set; }
+
+        [JsonProperty("maxKill")]
+        public int MaxKill { get; set; }
+    }
+
+    public class MyCharacterTable
+    {
+        [JsonProperty("defaultLevel")]
+        public int DefaultLevel { get; set; }
+
+        [JsonProperty("maxLevel")]
+        public int MaxLevel { get; set; }
+
+        [JsonProperty("defaultAttackPower")]
+        public float DefaultAttackPower { get; set; }
+
+        [JsonProperty("defaultAttackSpeed")]
+        public float DefaultAttackSpeed { get; set; }
+
+        [JsonProperty("constantAttack")]
+        public float ConstantAttack { get; set; }
+
+        [JsonProperty("defaultCriticalChance")]
+        public float DefaultCriticalChance { get; set; }
+
+        [JsonProperty("defaultCriticalDamage")]
+        public float DefaultCriticalDamage { get; set; }
+    }
 }

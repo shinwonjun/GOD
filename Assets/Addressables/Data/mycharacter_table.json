@@ -1,0 +1,9 @@
+{
+  "defaultLevel": 1,
+  "maxLevel": 100,
+  "defaultAttackPower": 10,
+  "defaultAttackSpeed": 1,
+  "constantAttack": 0.02,
+  "defaultCriticalChance": 0,
+  "defaultCriticalDamage": 10
+}

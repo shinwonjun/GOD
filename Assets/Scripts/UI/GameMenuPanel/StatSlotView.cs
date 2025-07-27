@@ -31,7 +31,7 @@ public class StatSlotView : SlotViewBase<DATA.StatData>
         popupType = POPUP.POPUP.stat;
         data = newData;
 
-        level = GameMyData.Instance.dicStatLevel[type];
+        level = GameMyData.Instance.UserData.statLevelsByIndex[(int)type];
         setLevel(level.ToString());
 
         setTitle(data.Name);

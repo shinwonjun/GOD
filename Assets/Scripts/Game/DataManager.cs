@@ -14,6 +14,9 @@ public class DataManager : Singleton<DataManager>
     private string addressableKey_herolist_data = "Assets/Addressables/Data/herolist_data.json";
     private string addressableKey_hero_data = "Assets/Addressables/Data/hero_data.json";    
     private string addressableKey_stat_upgrade_table = "Assets/Addressables/Data/stat_upgrade_table.json";
+    private string addressableKey_currency_table = "Assets/Addressables/Data/currency_table.json";
+    private string addressableKey_enemy_table = "Assets/Addressables/Data/enemy_table.json";
+    private string addressableKey_mycharacter_table = "Assets/Addressables/Data/mycharacter_table.json";
 
     public List<DATA.StatData> statData = new List<DATA.StatData>();
     public Dictionary<string, List<DATA.ItemData>> itemDataByMaterial = new Dictionary<string, List<DATA.ItemData>>();
@@ -25,6 +28,10 @@ public class DataManager : Singleton<DataManager>
     public Dictionary<int, DATA.HeroData> heroData = new Dictionary<int, DATA.HeroData>();
     public Dictionary<STATUS_UI.Stat, DATA.StatUpgradeData> statUpgradeTable = new Dictionary<STATUS_UI.Stat, DATA.StatUpgradeData>();
 
+    public DATA.CurrencyTable currencyTable;
+    public DATA.EnemyTable enemyTable;
+    public DATA.MyCharacterTable myCharacterTable;
+
     public async Task InitData()
     {
         await LoadStatData();
@@ -34,6 +41,9 @@ public class DataManager : Singleton<DataManager>
         await LoadHeroData();
 
         await LoadStatUpgradeTable();
+        await LoadCurrencyTable();
+        await LoadEnemyTable();
+        await LoadMyCharacterTable();
     }
 
     private async Task LoadStatData()
@@ -218,8 +228,103 @@ public class DataManager : Singleton<DataManager>
             Debug.LogError("DataManager: stat_upgrade_table.json 로드 실패2!");
         }
     }
+    private async Task LoadCurrencyTable()
+    {
+        var handle = Addressables.LoadAssetAsync<TextAsset>(addressableKey_currency_table);
+        await handle.Task; // 비동기적으로 완료를 기다림
 
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            //Addressables에서 로드된 데이터 파싱
+            TextAsset asset = handle.Result;
+            DATA.CurrencyTable table = JsonConvert.DeserializeObject<DATA.CurrencyTable>(asset.text);
 
+            if (table == null)
+            {
+                Debug.LogError("DataManager: currency_table.json 로드 실패1!");
+                return;
+            }
+
+            currencyTable = new DATA.CurrencyTable();
+            currencyTable.ResourcePerInterval = table.ResourcePerInterval;
+            currencyTable.GainInterval = table.GainInterval;
+
+            Debug.Log("DataManager: currency_table.json 로딩 및 매핑 완료!");
+        }
+        else
+        {
+            Debug.LogError("DataManager: currency_table.json 로드 실패2!");
+        }
+    }
+    private async Task LoadEnemyTable()
+    {
+        var handle = Addressables.LoadAssetAsync<TextAsset>(addressableKey_enemy_table);
+        await handle.Task; // 비동기적으로 완료를 기다림
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            //Addressables에서 로드된 데이터 파싱
+            TextAsset asset = handle.Result;
+            DATA.EnemyTable table = JsonConvert.DeserializeObject<DATA.EnemyTable>(asset.text);
+
+            if (table == null)
+            {
+                Debug.LogError("DataManager: enemy_table.json 로드 실패1!");
+                return;
+            }
+
+            enemyTable = new DATA.EnemyTable();
+            enemyTable.DefaultLevel = table.DefaultLevel;
+            enemyTable.MaxLevel = table.MaxLevel;
+            enemyTable.DefaultHP = table.DefaultHP;
+            enemyTable.DefaultDef = table.DefaultDef;
+            enemyTable.ConstantDef = table.ConstantDef;
+            enemyTable.NaturalConstant = table.NaturalConstant;
+            enemyTable.RateHP = table.RateHP;
+            enemyTable.DefaultReward = table.DefaultReward;
+            enemyTable.ConstantReward = table.ConstantReward;
+            enemyTable.MaxKill = table.MaxKill;
+
+            Debug.Log("DataManager: enemy_table.json 로딩 및 매핑 완료!");
+        }
+        else
+        {
+            Debug.LogError("DataManager: enemy_table.json 로드 실패2!");
+        }
+    }
+    private async Task LoadMyCharacterTable()
+    {
+        var handle = Addressables.LoadAssetAsync<TextAsset>(addressableKey_mycharacter_table);
+        await handle.Task; // 비동기적으로 완료를 기다림
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            //Addressables에서 로드된 데이터 파싱
+            TextAsset asset = handle.Result;
+            DATA.MyCharacterTable table = JsonConvert.DeserializeObject<DATA.MyCharacterTable>(asset.text);
+
+            if (table == null)
+            {
+                Debug.LogError("DataManager: mycharacter_table.json 로드 실패1!");
+                return;
+            }
+
+            myCharacterTable = new DATA.MyCharacterTable();
+            myCharacterTable.DefaultLevel = table.DefaultLevel;
+            myCharacterTable.MaxLevel = table.MaxLevel;
+            myCharacterTable.DefaultAttackPower = table.DefaultAttackPower;
+            myCharacterTable.DefaultAttackSpeed = table.DefaultAttackSpeed;
+            myCharacterTable.ConstantAttack = table.ConstantAttack;
+            myCharacterTable.DefaultCriticalChance = table.DefaultCriticalChance;
+            myCharacterTable.DefaultCriticalDamage = table.DefaultCriticalDamage;
+
+            Debug.Log("DataManager: mycharacter_table.json 로딩 및 매핑 완료!");
+        }
+        else
+        {
+            Debug.LogError("DataManager: mycharacter_table.json 로드 실패2!");
+        }
+    }
 
     /////////////////////////////////////////////////////////
 

@@ -1,24 +1,46 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Numerics;
 using Newtonsoft.Json;
 using UnityEngine;
 public class FakeUserData
 {
     public UserId userId;
-    public StatLevels statLevels;
+    public Ability ability;
+    public StatLevels statLevels;    
+    [JsonIgnore] public int[] statLevelsByIndex;
     public List<int> ownedHeroIds;
     public List<int> equippedHeroIds;
     public Dictionary<string, int> equippedItems;
     public List<int> ownedItems;
     public BigInteger coin;
     public BigInteger diamond;
+    public FakeEnemyData enemy;
+
+    public void InitStatArrayFromClass()
+    {
+        statLevelsByIndex = new int[Enum.GetValues(typeof(STATUS_UI.Stat)).Length];
+        statLevelsByIndex[(int)STATUS_UI.Stat.Level] = statLevels.Level;
+        statLevelsByIndex[(int)STATUS_UI.Stat.AttackPower] = statLevels.AttackPower;
+        statLevelsByIndex[(int)STATUS_UI.Stat.AttackSpeed] = statLevels.AttackSpeed;
+        statLevelsByIndex[(int)STATUS_UI.Stat.CriticalChance] = statLevels.CriticalChance;
+        statLevelsByIndex[(int)STATUS_UI.Stat.CriticalDamage] = statLevels.CriticalDamage;
+    }
 
     public class UserId
     {
         public int userId;
     }
 
+    public class Ability
+    {
+        public int AttackPower;
+        public int AttackSpeed;
+        public float CostConstant;
+        public int CriticalChance;
+        public int CriticalDamage;
+    }
     public class StatLevels
     {
         public int Level;
@@ -27,18 +49,66 @@ public class FakeUserData
         public int CriticalChance;
         public int CriticalDamage;
     }
+    public class FakeEnemyData
+    {
+        public int EnemyId;
+        public int Level;
+
+        /// <summary>
+        /// 현재 레벨에 따른 체력 계산
+        /// </summary>
+        public float GetHP()
+        {
+            var table = DataManager.Instance.enemyTable;
+            if (table == null || Level < 1) return 0;
+
+            return table.DefaultHP * Mathf.Pow(table.RateHP, Level - 1);
+        }
+
+        /// <summary>
+        /// 현재 레벨에 따른 방어력 계산
+        /// </summary>
+        public float GetDefense()
+        {
+            var table = DataManager.Instance.enemyTable;
+            if (table == null || Level < 1) return 0;
+
+            return table.DefaultDef * Mathf.Pow(table.NaturalConstant, table.ConstantDef * (Level - 1));
+        }
+
+        /// <summary>
+        /// 누적 처치 수에 따른 보상 재화 계산
+        /// </summary>
+        public float GetReward()
+        {
+            var table = DataManager.Instance.enemyTable;
+            if (table == null || Level < 1) return 0;
+
+            return table.DefaultReward * Mathf.Pow(table.ConstantReward, Level - 1);
+        }
+    }
 }
+
 public static class FakeServer
 {
     // (requestType, responseData)
     public static Action<string, string> OnReceiveResponse;
 
+    // DB에 저장 해야 될 값을(임시 데이터로 사용)
     public static FakeUserData UserData { get; private set; }
+
     static FakeServer()
     {
         string response = @"{
             ""userId"": {
                 ""userId"": 99999
+            },
+            ""ability"": {
+                ""AttackPower"": 10,
+                ""AttackSpeed"": 1,
+                ""CostConstant"": 0.02,
+                ""CriticalChance"": 0,
+                ""CriticalDamage"": 10,
             },
             ""statLevels"": {
                 ""Level"": 1,
@@ -74,7 +144,12 @@ public static class FakeServer
                 //501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524
             ],
             ""coin"": 1590000,
-            ""diamond"": 100
+            ""diamond"": 100,
+
+            ""enemy"": {
+                ""EnemyId"": 39,        // 39 ~ 61번이 데몬 진영 캐릭터임 악당으로 쓰자 - 나중에 데몬 진영에서 랜덤하게 뽑도록 적용
+                ""Level"": 1,           // 테스트
+            }
         }";
 
         UserData = JsonConvert.DeserializeObject<FakeUserData>(response);
@@ -102,7 +177,6 @@ public static class FakeServer
                 break;
             /////////////////////////
             ///////////////////////// 
-            /// 
 
             /////////////////////////
             /// stat upgrade
@@ -110,21 +184,6 @@ public static class FakeServer
             case "StatUpgrade":
                 StatUpgrade(requestType, payload);
                 break;
-            // case "LevelUpgrade":
-            //     LevelUpgrade(requestType, payload);
-            //     break;
-            // case "AttackPower":
-            //     AttackPower(requestType, payload);
-            //     break;
-            // case "AttackSpeed":
-            //     AttackSpeed(requestType, payload);
-            //     break;
-            // case "CriticalChance":
-            //     CriticalChance(requestType, payload);
-            //     break;
-            // case "CriticalDamage":
-            //     CriticalDamage(requestType, payload);
-            //     break;
             /////////////////////////
             ///////////////////////// 
             default:
@@ -253,5 +312,5 @@ public static class FakeServer
         });
 
         OnReceiveResponse?.Invoke(responseType, successResponse);
-    }    
+    }
 }

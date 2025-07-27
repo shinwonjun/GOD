@@ -48,7 +48,7 @@ public class HeroHandler : MonoBehaviour
 
                 var hero = goHero.GetComponent<Hero>();
 
-                int id = GameMyData.Instance.listEquipHeros[i];
+                int id = GameMyData.Instance.UserData.equippedHeroIds[i];
                 bool checkEquip = false;
                 if (DataManager.Instance.heroData.ContainsKey(id))
                 {
@@ -90,7 +90,8 @@ public class HeroHandler : MonoBehaviour
 
                 var enemy = goEnemy.GetComponent<Enemy>();
 
-                int id = GameMyData.Instance.listEquipHeros[i];
+                //int id = GameMyData.Instance.UserData.equippedHeroIds[i];
+                int id = GameMyData.Instance.UserData.enemy.EnemyId;
                 bool checkEquip = false;
                 if (DataManager.Instance.heroData.ContainsKey(id))
                 {
@@ -99,6 +100,7 @@ public class HeroHandler : MonoBehaviour
                     {
                         var type = (GAME.HeroType)Enum.Parse(typeof(GAME.HeroType), data.Type);
                         enemy.init(type, i, data.Sprite);
+                        enemy.setLevel(GameMyData.Instance.UserData.enemy.Level);
                         checkEquip = true;
                     }
                 }
