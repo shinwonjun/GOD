@@ -103,7 +103,7 @@ public static class NetworkManager
                     GameMyData.Instance.Coin = coin.newCoin;
                 Debug.Log($"[NetworkManager] AddCoin:{coin.success} - 현재 코인: {GameMyData.Instance.Coin}");
                 break;
-            case "StatUpgrade":
+            case "UpgradeStat":
                 var statUpgradeObj = GameMyData.Instance.LoadFromJson(json, typeof(StatUpgradeResponse));
                 var statUpgrade = (StatUpgradeResponse)statUpgradeObj;
                 if (statUpgrade.success)
@@ -125,11 +125,25 @@ public static class NetworkManager
 
                     GameMyData.Instance.UserData.statLevelsByIndex[(int)statType] = statUpgrade.newLevel;
                     UIManager.Instance.statHandlers[statType].IncreaseLevel(statUpgrade.newLevel);
-                    Debug.Log($"[NetworkManager] StatUpgrade:{statUpgrade.success} - 레벨: {statUpgrade.newLevel} , 현재 코인: {statUpgrade.message}");
+                    Debug.Log($"[NetworkManager] UpgradeStat:{statUpgrade.success} - 레벨: {statUpgrade.newLevel} , 현재 코인: {statUpgrade.message}");
                 }
                 else
                 {
-                    Debug.Log($"[NetworkManager] StatUpgrade:{statUpgrade.success} - 현재 코인: {statUpgrade.message}");
+                    Debug.Log($"[NetworkManager] UpgradeStat:{statUpgrade.success} - 현재 코인: {statUpgrade.message}");
+                }
+                break;
+            case "KillEnemy":
+                var killEnemyObj = GameMyData.Instance.LoadFromJson(json, typeof(KillEnemyResponse));
+                var killEnemy = (KillEnemyResponse)killEnemyObj;
+
+                if (killEnemy.success)
+                {
+                    GameMyData.Instance.Coin = killEnemy.totalCoin;
+                    Debug.Log($"[NetworkManager] KillEnemy 성공 - 보상: {killEnemy.reward}, 총 코인: {killEnemy.totalCoin}");
+                }
+                else
+                {
+                    Debug.LogWarning($"[NetworkManager] KillEnemy 실패 - 사유: {killEnemy.message}");
                 }
                 break;
             default:

@@ -1,3 +1,4 @@
+using System;
 using GAME;
 using TMPro;
 using UnityEngine;
@@ -6,15 +7,22 @@ public class Enemy : HeroBase
 {
     private TextMeshProUGUI textLevel = null;
     private TextMeshProUGUI textHP = null;
-    public override void init(HeroType type, int pos, string sprite)
+    public override void init(DATA.HeroData data, int pos)
     {
-        base.init(type, pos, sprite);
+        base.init(data, pos);
     }
     public override void attack()
     {
     }
-    public override void hit()
+    public override void hit(float beforeHP, float damage, bool isCrit)
     {
+        Debug.Log("[Simulation] enemy hit!");
+
+        float afterHP = Math.Max(beforeHP - damage, 0);
+        string current = afterHP.ToString("F2"); // 반올림
+        string hp = GameMyData.Instance.UserData.enemy.GetHP().ToString("F2"); // 반올림
+
+        textHP.text = $"{current}/{hp}";
     }
 
     public void setLevel(int level)
@@ -55,8 +63,8 @@ public class Enemy : HeroBase
         textObj.transform.SetParent(transform);
         textHP = textObj.AddComponent<TextMeshProUGUI>();
 
-        string current = GameMyData.Instance.UserData.enemy.GetHP().ToString("F0"); // 반올림
-        string hp = GameMyData.Instance.UserData.enemy.GetHP().ToString("F0"); // 반올림
+        string current = GameMyData.Instance.UserData.enemy.GetHP().ToString("F2"); // 반올림
+        string hp = GameMyData.Instance.UserData.enemy.GetHP().ToString("F2"); // 반올림
 
         textHP.text = $"{current}/{hp}";
         textHP.fontSize = 16;

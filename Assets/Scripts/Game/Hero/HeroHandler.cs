@@ -55,14 +55,13 @@ public class HeroHandler : MonoBehaviour
                     var data = DataManager.Instance.GetHeroData(id);
                     if (data != null)
                     {
-                        var type = (GAME.HeroType)Enum.Parse(typeof(GAME.HeroType), data.Type);
-                        hero.init(type, i, data.Sprite);
+                        hero.init(data, i);
                         checkEquip = true;
                     }
                 }
                 if (checkEquip == false)
                 {
-                    hero.init(GAME.HeroType.None, -1, "");
+                    hero.init(null, -1);
                 }
 
                 heros[i] = hero;
@@ -98,15 +97,14 @@ public class HeroHandler : MonoBehaviour
                     var data = DataManager.Instance.GetHeroData(id);
                     if (data != null)
                     {
-                        var type = (GAME.HeroType)Enum.Parse(typeof(GAME.HeroType), data.Type);
-                        enemy.init(type, i, data.Sprite);
+                        enemy.init(data, i);
                         enemy.setLevel(GameMyData.Instance.UserData.enemy.Level);
                         checkEquip = true;
                     }
                 }
                 if (checkEquip == false)
                 {
-                    enemy.init(GAME.HeroType.None, -1, "");
+                    enemy.init(null, -1);
                 }
 
                 enemys[i] = enemy;

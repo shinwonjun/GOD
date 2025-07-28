@@ -76,7 +76,7 @@ public class StatSlotView : SlotViewBase<DATA.StatData>
             packetpayload = "CriticalDamage";
         //NetworkManager.SendRequest_Test(packetpayload, "");
 
-        NetworkManager.SendRequest_Test("StatUpgrade", packetpayload);
+        NetworkManager.SendRequest_Test("UpgradeStat", packetpayload);
     }
 
     private void OnDestroy()

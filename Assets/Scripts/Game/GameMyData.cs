@@ -6,6 +6,9 @@ using System.Numerics;
 using Newtonsoft.Json;
 using UnityEngine;
 
+/// <summary>
+/// 서버 응답
+/// </summary>
 [System.Serializable]
 public class ServerTimeResponse
 {
@@ -34,6 +37,16 @@ public class StatUpgradeResponse
     public string message; // 실패 시에만 존재
     public string stat;    // 선택적으로 추가
 }
+
+[System.Serializable]
+public class KillEnemyResponse
+{
+    public bool success;
+    public float reward;
+    public string message;
+    public BigInteger totalCoin;
+}
+
 
 
 public class GameMyData : Singleton<GameMyData>

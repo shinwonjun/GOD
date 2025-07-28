@@ -3,14 +3,15 @@ using UnityEngine;
 
 public class Hero : HeroBase
 {
-    public override void init(HeroType type, int pos, string sprite)
+    public override void init(DATA.HeroData data, int pos)
     {
-        base.init(type, pos, sprite);
+        base.init(data, pos);
     }
     public override void attack()
     {
+        Debug.Log("[Simulation] hero attack!");
     }
-    public override void hit()
+    public override void hit(float beforeHP, float damage, bool isCrit)
     {
     }
 }

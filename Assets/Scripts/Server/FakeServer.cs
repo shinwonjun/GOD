@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Numerics;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 public class FakeUserData
 {
     public UserId userId;
     public Ability ability;
-    public StatLevels statLevels;    
+    public StatLevels statLevels;
     [JsonIgnore] public int[] statLevelsByIndex;
     public List<int> ownedHeroIds;
     public List<int> equippedHeroIds;
@@ -181,11 +182,25 @@ public static class FakeServer
             /////////////////////////
             /// stat upgrade
             ///////////////////////// 
-            case "StatUpgrade":
-                StatUpgrade(requestType, payload);
+            case "UpgradeStat":
+                UpgradeStat(requestType, payload);
                 break;
             /////////////////////////
             ///////////////////////// 
+
+
+
+
+            /////////////////////////
+            /// simulation
+            ///////////////////////// 
+            case "KillEnemy":
+                KillEnemy(requestType, payload);
+                break;
+
+            /////////////////////////
+            ///////////////////////// 
+
             default:
                 Debug.LogWarning("[FakeServer] Unknown request type.");
                 break;
@@ -234,7 +249,7 @@ public static class FakeServer
             OnReceiveResponse?.Invoke(responseType, error);
         }
     }
-    private static void StatUpgrade(string responseType, string payload)
+    private static void UpgradeStat(string responseType, string payload)
     {
         STATUS_UI.Stat statType;
         if (payload == "LevelUpgrade")
@@ -312,5 +327,79 @@ public static class FakeServer
         });
 
         OnReceiveResponse?.Invoke(responseType, successResponse);
+    }
+
+
+    private static void KillEnemy(string responseType, string payload)
+    {
+        var jObj = JObject.Parse(payload);
+        float enemyHP = jObj["enemyHP"]?.Value<float>() ?? -1f;
+        float lastHit = jObj["lastHit"]?.Value<float>() ?? -1f;
+
+
+        var serverEnemy = UserData.enemy;
+
+        // 서버 기준 체력 계산
+        float serverEnemyHp = serverEnemy.GetHP();
+
+        // 1. 체력 검증: 클라가 0이라고 보낸 게 실제 서버에서 0일 수 있는지
+        if (enemyHP > serverEnemyHp)
+        {
+            var error = JsonConvert.SerializeObject(new
+            {
+                success = false,
+                message = "클라이언트가 보내온 적 체력이 서버 기준보다 높음 (조작 의심)"
+            });
+            OnReceiveResponse?.Invoke(responseType, error);
+            return;
+        }
+
+        // 2. 마지막 데미지가 내 캐릭터 공격력보다 너무 크지 않은지 검증
+        float maxServerAttack = GetFinalAttackPower_UserControlled(UserData, serverEnemy, withCritical: true); // 서버 입장에서 계산
+        if (lastHit > maxServerAttack * 1.5f) // 1.5배 이상은 조작 의심
+        {
+            var error = JsonConvert.SerializeObject(new
+            {
+                success = false,
+                message = "마지막 공격 데미지가 비정상적으로 큼 (조작 의심)"
+            });
+            OnReceiveResponse?.Invoke(responseType, error);
+            return;
+        }
+
+        // 모든 검증 통과 → 보상 지급
+        float reward = serverEnemy.GetReward();
+        UserData.coin += (BigInteger)reward;
+
+        var response = JsonConvert.SerializeObject(new
+        {
+            success = true,
+            reward = reward,
+            totalCoin = UserData.coin
+        });
+
+        OnReceiveResponse?.Invoke(responseType, response);
+    }
+
+    public static float GetFinalAttackPower_UserControlled(FakeUserData user, FakeUserData.FakeEnemyData enemy, bool withCritical = true)
+    {
+        // 서버에서 검증용, 크리티컬 항상 적용, 적 방어력 계산X 
+        var table = DataManager.Instance.myCharacterTable;
+        var statLevels = new int[]
+        {
+        user.statLevels.Level,
+        user.statLevels.AttackPower,
+        user.statLevels.AttackSpeed,
+        user.statLevels.CriticalChance,
+        user.statLevels.CriticalDamage
+        };
+
+        float baseAtk = table.DefaultAttackPower * Mathf.Log(statLevels[(int)STATUS_UI.Stat.AttackPower] + 1) * table.ConstantAttack;
+
+        if (!withCritical)
+            return baseAtk;
+
+        float critMultiplier = table.DefaultCriticalDamage + statLevels[(int)STATUS_UI.Stat.CriticalDamage] * 0.5f;
+        return baseAtk * critMultiplier;
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
@@ -64,49 +65,28 @@ public class GameManager : MonoSingleton<GameManager>
             elapsedTime += attackInterval;
             attackCount++;
 
-            var stat = GameMyData.Instance.UserData.statLevelsByIndex;
-            var table = DataManager.Instance.myCharacterTable;
-
-            // 공격력 계산
-            int levelAtk = stat[(int)STATUS_UI.Stat.AttackPower];
-            float baseAtk = table.DefaultAttackPower;
-            float calcAtk = baseAtk * Mathf.Log(levelAtk + 1) * table.ConstantAttack;
-
-            // 크리티컬
-            int levelCritChance = stat[(int)STATUS_UI.Stat.CriticalChance];
-            int levelCritDamage = stat[(int)STATUS_UI.Stat.CriticalDamage];
-
-            float critChance = Mathf.Min(100f, table.DefaultCriticalChance + levelCritChance);
-            float critMultiplier = table.DefaultCriticalDamage + levelCritDamage * 0.5f;
-
-            // 방어력
-            float defense = currentEnemy.GetDefense();
-
-            // 최종 데미지
-            bool isCrit;
-            float damageBeforeDef = calcAtk;
-            float damageAfterDef = damageBeforeDef * (1f / (1f + defense / 100f));
-            isCrit = UnityEngine.Random.value < (critChance / 100f);
-            float finalDamage = isCrit ? damageAfterDef * critMultiplier : damageAfterDef;
-
             float beforeHP = currentEnemyHP;
+
+            bool isCrit;
+            float finalDamage = SimulationCalc.GetFinalAttackPower(out isCrit);
             currentEnemyHP -= finalDamage;
 
-            // 출력
+            HandleAttack(beforeHP, finalDamage, isCrit);
+
             Debug.Log(
     $@"[공격 {attackCount}회차] ⏱️ 시간: {elapsedTime:F2}초
 	┌──────────── 캐릭터 상태 ────────────┐
 	│ 레벨:           {GameMyData.Instance.UserData.statLevelsByIndex[(int)STATUS_UI.Stat.Level]}
-	│ 공격력:         기본 {baseAtk:F2} → 계산 {calcAtk:F2} → 방어 후 {damageAfterDef:F2}
+	│ 공격력:         {SimulationCalc.GetAttackPower():F2} -> 방어력 계산 후 {finalDamage:F2}
 	│ 공격속도:       {SimulationCalc.GetAttackSpeed():F2} 회/초
-	│ 크리티컬 확률:   {critChance:F2}%
-	│ 크리티컬 데미지: {critMultiplier:F2}배
+	│ 크리티컬 확률:   {SimulationCalc.GetCriticalChance():F2}%
+	│ 크리티컬 데미지: {SimulationCalc.GetCriticalDamage():F2}배
 	│ 보유 재화:       {GameMyData.Instance.Coin:F2}
 	└──────────────────────────────┘
 	┌────── 적 상태 ──────┐
 	│ 레벨:    {currentEnemy.Level}
 	│ 체력:    {beforeHP:F2} → {Mathf.Max(0, currentEnemyHP):F2}
-	│ 방어력:  {defense:F2}
+	│ 방어력:  {currentEnemy.GetDefense():F2}
 	└─────────────────┘
 
 	💥 입힌 데미지: {finalDamage:F2} {(isCrit ? "(크리티컬 공격!)" : "(일반 공격)")}\n"
@@ -115,6 +95,7 @@ public class GameManager : MonoSingleton<GameManager>
             if (currentEnemyHP <= 0)
             {
                 Debug.Log("[Simulation] 적 처치 완료!");
+                HandleEnemyKilled(finalDamage);
                 StopSimulation();
                 yield break;
             }
@@ -131,4 +112,31 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
+    private void HandleAttack(float beforeHP, float damage, bool isCrit)
+    {
+        float afterHP = beforeHP - damage;
+
+        // hero attack 
+        heroHandlers.heros[0].attack();
+
+        // enemy 체력 차감
+        heroHandlers.enemys[0].hit(beforeHP, damage, isCrit);
+    }
+
+    private void HandleEnemyKilled(float lastHitDamage)
+    {
+        var enemyHP = GameMyData.Instance.UserData.enemy.GetHP();
+
+        var payloadObj = new
+        {
+            enemyHP = enemyHP,
+            lastHit = lastHitDamage
+        };
+
+        string payloadJson = JsonConvert.SerializeObject(payloadObj);
+
+
+        NetworkManager.SendRequest_Test("KillEnemy", payloadJson);
+        Debug.Log("[Simulation] kill!");
+    }
 }

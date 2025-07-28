@@ -52,7 +52,8 @@ public static class SimulationCalc
 
         // 2. 방어력 적용 (simulation.js 기반)
         float enemyDef = enemy.GetDefense(); // EnemyTable 기반
-        float atkAfterDefense = rawAtk * (1f / (1f + enemyDef / 100f));
+        //float atkAfterDefense = rawAtk * (1f / (1f + enemyDef / 100f));
+        float atkAfterDefense = ApplyDefense(rawAtk, enemyDef);
 
         // 3. 크리티컬 확률 / 배율
         float critChance = Mathf.Min(100f, table.DefaultCriticalChance + levelCritChance);
