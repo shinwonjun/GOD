@@ -45,6 +45,8 @@ public class KillEnemyResponse
     public float reward;
     public string message;
     public BigInteger totalCoin;
+    public int EnemyId;
+    public int Level;
 }
 
 

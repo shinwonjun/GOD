@@ -371,16 +371,46 @@ public static class FakeServer
         float reward = serverEnemy.GetReward();
         UserData.coin += (BigInteger)reward;
 
+        selectEnemy();  // 새로운 적 선택 + 적 레벨 업
+
         var response = JsonConvert.SerializeObject(new
         {
             success = true,
             reward = reward,
-            totalCoin = UserData.coin
+            totalCoin = UserData.coin,
+            EnemyId = UserData.enemy.EnemyId,
+            Level = UserData.enemy.Level
         });
 
         OnReceiveResponse?.Invoke(responseType, response);
     }
 
+
+    public static void selectEnemy()
+    {
+        var demonList = DataManager.Instance.heroDataByHeroType[GAME.HeroType.DEMON.ToString()];
+        if (demonList == null || demonList.Count == 0)
+        {
+            Debug.LogWarning("[FakeServer] DEMON 타입 적이 존재하지 않습니다.");
+            return;
+        }
+
+        // 랜덤하게 하나 선택
+        int index = UnityEngine.Random.Range(0, demonList.Count);
+        var selected = demonList[index];
+
+        int beforeLevel = UserData.enemy.Level;
+        int afterLevel = beforeLevel + 1;
+
+        // UserData에 설정
+        UserData.enemy = new FakeUserData.FakeEnemyData
+        {
+            EnemyId = int.Parse(selected.Id),
+            Level = afterLevel
+        };
+
+        Debug.Log($"[FakeServer] DEMON 적 선택 완료 → ID: {selected.Id}, Name: {selected.Name}");
+    }
     public static float GetFinalAttackPower_UserControlled(FakeUserData user, FakeUserData.FakeEnemyData enemy, bool withCritical = true)
     {
         // 서버에서 검증용, 크리티컬 항상 적용, 적 방어력 계산X 

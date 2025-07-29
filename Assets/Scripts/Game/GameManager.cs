@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
@@ -138,5 +139,36 @@ public class GameManager : MonoSingleton<GameManager>
 
         NetworkManager.SendRequest_Test("KillEnemy", payloadJson);
         Debug.Log("[Simulation] kill!");
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    public async Task SetNextEnemy(bool successed)
+    {
+        int id = GameMyData.Instance.UserData.enemy.EnemyId;
+        var data = DataManager.Instance.GetHeroData(id);
+        if (data != null)
+        {
+            heroHandlers.enemys[0].init(data, 0);
+            Enemy enemy = heroHandlers.enemys[0] as Enemy;
+            if (enemy != null)
+            {
+                enemy.setLevel(GameMyData.Instance.UserData.enemy.Level);
+            }
+        }
+
+        if (successed == true)
+        {
+            Debug.Log($"[GameManager] KillEnemy 성공 - 새로운 적 등장: {id}, 총 코인: {GameMyData.Instance.UserData.enemy.Level}");
+            await Task.Delay(1000);
+        }
+        else
+        {
+            Debug.Log($"[GameManager] KillEnemy 실패 - 다시 시작: {id}, 총 코인: {GameMyData.Instance.UserData.enemy.Level}");
+            await Task.Delay(1000);
+        }
+
+        // 1초 후 시뮬 다시 시작
+        StartSimulation();
     }
 }

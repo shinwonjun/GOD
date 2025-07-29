@@ -140,11 +140,17 @@ public static class NetworkManager
                 {
                     GameMyData.Instance.Coin = killEnemy.totalCoin;
                     Debug.Log($"[NetworkManager] KillEnemy 성공 - 보상: {killEnemy.reward}, 총 코인: {killEnemy.totalCoin}");
+
+                    GameMyData.Instance.UserData.enemy.EnemyId = killEnemy.EnemyId;
+                    GameMyData.Instance.UserData.enemy.Level = killEnemy.Level;
                 }
                 else
                 {
                     Debug.LogWarning($"[NetworkManager] KillEnemy 실패 - 사유: {killEnemy.message}");
                 }
+
+                await GameManager.Instance.SetNextEnemy(killEnemy.success);
+                
                 break;
             default:
                 Debug.LogWarning($"[NetworkManager] Unhandled responseType: {responseType}");
