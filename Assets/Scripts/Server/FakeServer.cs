@@ -113,10 +113,10 @@ public static class FakeServer
             },
             ""statLevels"": {
                 ""Level"": 1,
-                ""AttackPower"": 1,
-                ""AttackSpeed"": 1,
-                ""CriticalChance"": 1,
-                ""CriticalDamage"": 1
+                ""AttackPower"": 0,
+                ""AttackSpeed"": 0,
+                ""CriticalChance"": 0,
+                ""CriticalDamage"": 0
             },
             ""ownedHeroIds"":  [
                 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,

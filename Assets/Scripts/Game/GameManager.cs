@@ -51,7 +51,6 @@ public class GameManager : MonoSingleton<GameManager>
         currentEnemyHP = GameMyData.Instance.UserData.enemy.GetHP();
         battleRoutine = StartCoroutine(BattleLoop());
     }
-
     private IEnumerator BattleLoop()
     {
         var currentEnemy = GameMyData.Instance.UserData.enemy;
@@ -68,29 +67,38 @@ public class GameManager : MonoSingleton<GameManager>
 
             float beforeHP = currentEnemyHP;
 
+            // 개별 계산
+            float baseAtk = SimulationCalc.GetBaseAttack(); // 기본 공격력 (defaultAttack)
+            float rawAtk = SimulationCalc.GetAttackPower(); // 스탯 및 레벨 적용된 계산 공격력
+            float reducedAtk = SimulationCalc.ApplyDefense(rawAtk, currentEnemy.GetDefense());
+
             bool isCrit;
             float finalDamage = SimulationCalc.GetFinalAttackPower(out isCrit);
             currentEnemyHP -= finalDamage;
 
             HandleAttack(beforeHP, finalDamage, isCrit);
 
+            var statLevels = GameMyData.Instance.UserData.statLevelsByIndex;
+
             Debug.Log(
     $@"[공격 {attackCount}회차] ⏱️ 시간: {elapsedTime:F2}초
-	┌──────────── 캐릭터 상태 ────────────┐
-	│ 레벨:           {GameMyData.Instance.UserData.statLevelsByIndex[(int)STATUS_UI.Stat.Level]}
-	│ 공격력:         {SimulationCalc.GetAttackPower():F2} -> 방어력 계산 후 {finalDamage:F2}
-	│ 공격속도:       {SimulationCalc.GetAttackSpeed():F2} 회/초
-	│ 크리티컬 확률:   {SimulationCalc.GetCriticalChance():F2}%
-	│ 크리티컬 데미지: {SimulationCalc.GetCriticalDamage():F2}배
-	│ 보유 재화:       {GameMyData.Instance.Coin:F2}
-	└──────────────────────────────┘
-	┌────── 적 상태 ──────┐
-	│ 레벨:    {currentEnemy.Level}
-	│ 체력:    {beforeHP:F2} → {Mathf.Max(0, currentEnemyHP):F2}
-	│ 방어력:  {currentEnemy.GetDefense():F2}
-	└─────────────────┘
+┌──────────── 캐릭터 상태 ────────────┐
+│ 레벨:           {statLevels[(int)STATUS_UI.Stat.Level]}
+│ 공격력:         기본 {baseAtk:F2} → 계산 {rawAtk:F2} → 방어 후 {reducedAtk:F2} → 최종 {finalDamage:F2}
+│ 공격속도:       {SimulationCalc.GetAttackSpeed():F2} 회/초
+│ 크리티컬 확률:   {SimulationCalc.GetCriticalChance():F2}% (Lv {statLevels[(int)STATUS_UI.Stat.CriticalChance]})
+│ 크리티컬 데미지: {SimulationCalc.GetCriticalDamage():F2}배 (Lv {statLevels[(int)STATUS_UI.Stat.CriticalDamage]})
+│ 공격력 레벨:     {statLevels[(int)STATUS_UI.Stat.AttackPower]}
+│ 속도 레벨:       {statLevels[(int)STATUS_UI.Stat.AttackSpeed]}
+│ 보유 재화:       {GameMyData.Instance.Coin:F2}
+└──────────────────────────────┘
+┌────── 적 상태 ──────┐
+│ 레벨:    {currentEnemy.Level}
+│ 체력:    {beforeHP:F2} → {Mathf.Max(0, currentEnemyHP):F2}
+│ 방어력:  {currentEnemy.GetDefense():F2}
+└─────────────────┘
 
-	💥 입힌 데미지: {finalDamage:F2} {(isCrit ? "(크리티컬 공격!)" : "(일반 공격)")}\n"
+💥 입힌 데미지: {finalDamage:F2} {(isCrit ? "(크리티컬 공격!)" : "(일반 공격)")}\n"
             );
 
             if (currentEnemyHP <= 0)
@@ -102,6 +110,7 @@ public class GameManager : MonoSingleton<GameManager>
             }
         }
     }
+
 
     public void StopSimulation()
     {
