@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7356747161628384762}
   - component: {fileID: 2260956773067270266}
   m_Layer: 9
-  m_Name: textDiscription
+  m_Name: textDescription
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -857,17 +857,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 4197831917740270914}
-  textTitleComponent: {fileID: 8315334615720345014}
-  textLevelComponent: {fileID: 2406399999787706506}
-  textDiscriptionComponent: {fileID: 2260956773067270266}
-  textExpenseComponent: {fileID: 8333767796579822539}
-  textCostComponent: {fileID: 1438252287466243890}
-  upgradeButton: {fileID: 7698515621378091358}
   textTitle: {fileID: 8315334615720345014}
   textLevel: {fileID: 2406399999787706506}
-  textDiscription: {fileID: 2260956773067270266}
-  textExpense: {fileID: 0}
-  textCost: {fileID: 0}
+  textDescription: {fileID: 2260956773067270266}
+  textExpense: {fileID: 8333767796579822539}
+  textCost: {fileID: 1438252287466243890}
+  upgradeButton: {fileID: 7698515621378091358}
 --- !u!1 &5554314246899919202
 GameObject:
   m_ObjectHideFlags: 0

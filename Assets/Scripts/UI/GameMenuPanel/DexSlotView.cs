@@ -11,7 +11,7 @@ public class DexSlotView : SlotViewBase<DATA.HeroData>
     public override void SetData(DATA.HeroData newData)
     {
         tabType = STATUS_UI.TAB.Dex;
-        popupType = POPUP.POPUP.item;
+        popupType = POPUP.POPUP.dex;
         data = newData;
 
         var has = GameMyData.Instance.hasDex(int.Parse(data.Id));
@@ -28,7 +28,9 @@ public class DexSlotView : SlotViewBase<DATA.HeroData>
 
     public override void ShowPopup()
     {
-        UIManager.Instance.ShowPopup(data.Description, popupType);
+        //var itemData = GameMyData.Instance.getItemData(int.Parse(data.Id));
+        var checkEquiped = GameMyData.Instance.checkEquipedDex(int.Parse(data.Id));
+        UIManager.Instance.ShowPopup(popupType, data, checkEquiped);
     }
     private void setImage(string _sprite)
     {

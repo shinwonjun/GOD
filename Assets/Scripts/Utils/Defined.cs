@@ -40,8 +40,9 @@ namespace POPUP
     {
         None = -1,
         stat,
-        item,
+        inventory,
         character,
+        dex,
     }
 }
 

@@ -31,13 +31,13 @@ public class UIManager : MonoSingleton<UIManager>
     public Dictionary<string, ItemSlotView> inventoryHandlers = new Dictionary<string, ItemSlotView>();
 
     // Character Tab
-    public Dictionary<STATUS_UI.Character, CharacterSlotView> characterHandlers = new Dictionary<STATUS_UI.Character, CharacterSlotView>();
+    public Dictionary<STATUS_UI.Character, PartsSlotView> characterHandlers = new Dictionary<STATUS_UI.Character, PartsSlotView>();
 
     // Dex Tab
     public Dictionary<string, DexSlotView> dexHandlers = new Dictionary<string, DexSlotView>();
 
     // Popup
-    public Dictionary<POPUP.POPUP, IPopupBase> popupHandlers = new Dictionary<POPUP.POPUP, IPopupBase>();
+    public Dictionary<POPUP.POPUP, PopupBase> popupHandlers = new Dictionary<POPUP.POPUP, PopupBase>();
 
     // Atlas
     public Dictionary<STATUS_UI.TAB, SpriteAtlas> uiAtlas = new Dictionary<STATUS_UI.TAB, SpriteAtlas>();
@@ -47,7 +47,7 @@ public class UIManager : MonoSingleton<UIManager>
     public SpriteAtlas itemAtlas { get; set; } = null;
 
     public Transform PopupPanel { get; set; } = null;
-    public GameObject currentPopup { get; set; } = null;
+    public PopupBase currentPopup { get; set; } = null;
 
     protected override void Awake()
     {
@@ -87,15 +87,76 @@ public class UIManager : MonoSingleton<UIManager>
         await Task.Delay(0);
     }
 
-    public void ShowPopup(string description, POPUP.POPUP type)
+    public void ShowPopup(POPUP.POPUP type, DATA.ItemData itemData, bool equiped)
     {
         if (popupHandlers.ContainsKey(type))
         {
-            currentPopup = popupHandlers[type].ShowPopup(description);
+            if (type == POPUP.POPUP.inventory)
+                (popupHandlers[type] as PopupItem).SetItem(itemData);
+            else if (type == POPUP.POPUP.character)
+                (popupHandlers[type] as PopupCharacter).SetItem(itemData);
+
+            currentPopup = popupHandlers[type].ShowPopup(itemData.Description, equiped);
         }
         else
         {
             Debug.Log(type + " 타입의 팝업은 아직 없습니다.");
+        }
+    }
+
+    public void ShowPopup(POPUP.POPUP type, DATA.StatData statData)
+    {
+        if (popupHandlers.ContainsKey(type))
+        {
+            currentPopup = popupHandlers[type].ShowPopup(statData.Description, true);
+        }
+        else
+        {
+            Debug.Log(type + " 타입의 팝업은 아직 없습니다.");
+        }
+    }
+
+    public void ShowPopup(POPUP.POPUP type, DATA.HeroData heroData, bool equiped)
+    {
+        if (popupHandlers.ContainsKey(type))
+        {
+            (popupHandlers[type] as PopupDex).SetItem(heroData);
+            currentPopup = popupHandlers[type].ShowPopup(heroData.Description, equiped);
+        }
+        else
+        {
+            Debug.Log(type + " 타입의 팝업은 아직 없습니다.");
+        }
+    }
+
+    public void refreshInventory(int prevId, int equipId)
+    {
+        if (prevId != -1)
+        {
+            foreach (var pair in inventoryHandlers)
+            {
+                ItemSlotView slotView = pair.Value;
+
+                if (slotView.GetData() != null && slotView.GetData().Id == prevId.ToString())
+                {
+                    slotView.Refresh(prevId);
+                    break; // 해당 슬롯만 갱신하면 되므로 루프 종료
+                }
+            }
+        }
+
+        if (equipId != -1)
+        {
+            foreach (var pair in inventoryHandlers)
+            {
+                ItemSlotView slotView = pair.Value;
+
+                if (slotView.GetData() != null && slotView.GetData().Id == equipId.ToString())
+                {
+                    slotView.Refresh(equipId);
+                    break; // 해당 슬롯만 갱신하면 되므로 루프 종료
+                }
+            }
         }
     }
 }

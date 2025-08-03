@@ -25,8 +25,9 @@ public class NavigationTabController : MonoBehaviour
     private string addressableKey_characterslot = "Assets/Addressables/Prefabs/UI/Tab_Character/characterslot.prefab";
     private string addressableKey_dexsList = "Assets/Addressables/Prefabs/UI/Tab_Dex/dexList.prefab";
     private string addressableKey_dexslot = "Assets/Addressables/Prefabs/UI/Tab_Dex/dexSlot.prefab";
-    private string addressableKey_popupItem = "Assets/Addressables/Prefabs/UI/Popup/popupItem.prefab";
+    private string addressableKey_popupInventory = "Assets/Addressables/Prefabs/UI/Popup/popupInventory.prefab";
     private string addressableKey_popupCharacter = "Assets/Addressables/Prefabs/UI/Popup/popupCharacter.prefab";
+    private string addressableKey_popupDex = "Assets/Addressables/Prefabs/UI/Popup/popupDex.prefab";
 
 
 
@@ -260,6 +261,7 @@ public class NavigationTabController : MonoBehaviour
                     var itemSlotView = itemslotInstance.GetComponent<ItemSlotView>();
                     itemSlotView.SetData(item);
                     UIManager.Instance.inventoryHandlers["itemslot_" + idx] = itemSlotView;
+                    idx++;
                 }
             }
         }
@@ -289,17 +291,17 @@ public class NavigationTabController : MonoBehaviour
                 if (slot != null)
                 {
                     GameObject characterslotInstance = Instantiate(handle.Result, Vector3.zero, Quaternion.identity, slot);
-                    characterslotInstance.name = "characterslot_" + name;
+                    characterslotInstance.name = "partsslot_" + name;
                     characterslotInstance.transform.localScale = Vector3.one;
                     characterslotInstance.transform.localPosition = Vector3.zero;
 
-                    var characterSlotView = characterslotInstance.GetComponent<CharacterSlotView>();
-                    characterSlotView.type = characterEnum;
+                    var partsSlotView = characterslotInstance.GetComponent<PartsSlotView>();
+                    partsSlotView.type = characterEnum;
 
                     var item = DataManager.Instance.characterData[name];
-                    characterSlotView.SetData(item);
+                    partsSlotView.SetData(item);
 
-                    UIManager.Instance.characterHandlers[characterEnum] = characterSlotView;
+                    UIManager.Instance.characterHandlers[characterEnum] = partsSlotView;
                 }
             }
         }
@@ -392,32 +394,37 @@ public class NavigationTabController : MonoBehaviour
 
     private async Task LoadPopupPrefabToFirstTab()
     {
-        var handle = Addressables.LoadAssetAsync<GameObject>(addressableKey_popupItem); ;
+        var handle = Addressables.LoadAssetAsync<GameObject>(addressableKey_popupInventory);
         await handle.Task;
-        OnLoadPrefabsPopupItem(handle);
+        OnLoadPrefabsPopupInventory(handle);
 
         var handle2 = Addressables.LoadAssetAsync<GameObject>(addressableKey_popupCharacter);
         await handle2.Task;
-        OnLoadPrefabsPopupCharacter(handle);
+        OnLoadPrefabsPopupCharacter(handle2);
+
+        var handle3 = Addressables.LoadAssetAsync<GameObject>(addressableKey_popupDex);
+        await handle3.Task;
+        OnLoadPrefabsPopupDex(handle3);
     }
 
-    private void OnLoadPrefabsPopupItem(AsyncOperationHandle<GameObject> handle)
+    private void OnLoadPrefabsPopupInventory(AsyncOperationHandle<GameObject> handle)
     {
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
             var parent = UIManager.Instance.PopupPanel;
 
             GameObject instance = Instantiate(handle.Result, Vector3.zero, Quaternion.identity, parent);
-            instance.name = "popupItem";
+            instance.name = "popupInventory";
             instance.transform.localScale = Vector3.one;
+            instance.transform.localPosition = Vector3.zero;
 
-            var popup = instance.GetComponent<IPopupBase>();
-            UIManager.Instance.popupHandlers[POPUP.POPUP.item] = popup;
+            var popup = instance.GetComponent<PopupBase>();
+            UIManager.Instance.popupHandlers[POPUP.POPUP.inventory] = popup;
             instance.SetActive(false);
         }
         else
         {
-            Debug.LogError($"Failed to load Addressable prefab at {addressableKey_popupItem}");
+            Debug.LogError($"Failed to load Addressable prefab at {addressableKey_popupInventory}");
         }
     }
 
@@ -430,14 +437,36 @@ public class NavigationTabController : MonoBehaviour
             GameObject instance = Instantiate(handle.Result, Vector3.zero, Quaternion.identity, parent);
             instance.name = "popupCharacter";
             instance.transform.localScale = Vector3.one;
+            instance.transform.localPosition = Vector3.zero;
 
-            var popup = instance.GetComponent<IPopupBase>();
+            var popup = instance.GetComponent<PopupBase>();
             UIManager.Instance.popupHandlers[POPUP.POPUP.character] = popup;
             instance.SetActive(false);
         }
         else
         {
-            Debug.LogError($"Failed to load Addressable prefab at {addressableKey_popupItem}");
+            Debug.LogError($"Failed to load Addressable prefab at {addressableKey_popupCharacter}");
+        }
+    }
+
+    private void OnLoadPrefabsPopupDex(AsyncOperationHandle<GameObject> handle)
+    {
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            var parent = UIManager.Instance.PopupPanel;
+
+            GameObject instance = Instantiate(handle.Result, Vector3.zero, Quaternion.identity, parent);
+            instance.name = "popupDex";
+            instance.transform.localScale = Vector3.one;
+            instance.transform.localPosition = Vector3.zero;
+
+            var popup = instance.GetComponent<PopupBase>();
+            UIManager.Instance.popupHandlers[POPUP.POPUP.dex] = popup;
+            instance.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError($"Failed to load Addressable prefab at {addressableKey_popupDex}");
         }
     }
 

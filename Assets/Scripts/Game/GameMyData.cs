@@ -49,6 +49,25 @@ public class KillEnemyResponse
     public int Level;
 }
 
+[System.Serializable]
+public class EquipItem
+{
+    public bool success;
+    public string parts;
+    public int prevId;
+    public int equipId;
+    public string message;
+}
+[System.Serializable]
+public class UnEquipItem
+{
+    public bool success;
+    public string parts;
+    public int prevId;
+    public int equipId;
+    public string message;
+}
+
 
 
 public class GameMyData : Singleton<GameMyData>
@@ -123,6 +142,10 @@ public class GameMyData : Singleton<GameMyData>
         return UserData.equippedHeroIds.Contains(id);
     }
 
+    public DATA.ItemData getItemData(int id)
+    {
+        return DataManager.Instance.itemData[id];
+    }
     public DATA.ItemData getEquipedPartsID(ITEM.AttachPart parts)
     {
         if (UserData.equippedItems.ContainsKey(parts.ToString()))

@@ -150,7 +150,34 @@ public static class NetworkManager
                 }
 
                 await GameManager.Instance.SetNextEnemy(killEnemy.success);
-                
+                break;
+            case "EquipItem":
+                var EquipItemObj = GameMyData.Instance.LoadFromJson(json, typeof(EquipItem));
+                var equipItem = (EquipItem)EquipItemObj;
+                if (equipItem.success)
+                {
+                    GameMyData.Instance.UserData.equippedItems[equipItem.parts] = equipItem.equipId;
+                    UIManager.Instance.refreshInventory(equipItem.prevId, equipItem.equipId);
+                    UIManager.Instance.currentPopup.HidePopup();
+                }
+
+                Debug.Log($"[NetworkManager] EquipItem:{equipItem.success} - message : {equipItem.message}");
+                break;
+            case "UnEquipItem":
+                var UnEquipItemObj = GameMyData.Instance.LoadFromJson(json, typeof(UnEquipItem));
+                var unequipitem = (UnEquipItem)UnEquipItemObj;
+                if (unequipitem.success)
+                {
+                    GameMyData.Instance.UserData.equippedItems[unequipitem.parts] = unequipitem.equipId;
+                    UIManager.Instance.refreshInventory(unequipitem.prevId, unequipitem.equipId);
+                    UIManager.Instance.currentPopup.HidePopup();
+                }
+
+                Debug.Log($"[NetworkManager] UnEquipItem:{unequipitem.success} - message : {unequipitem.message}");
+                break;
+            case "EquipHero":
+                break;
+            case "UnEquipHero":
                 break;
             default:
                 Debug.LogWarning($"[NetworkManager] Unhandled responseType: {responseType}");

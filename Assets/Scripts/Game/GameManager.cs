@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>

@@ -1,15 +1,16 @@
+using System;
 using DATA;
 using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PopupItem : PopupBase, IPopupItem
+public class PopupDex : PopupBase, IPopupDex
 {
-    private ItemData itemData = null;
+    private HeroData heroData = null;
     public override void Equip()
     {
-        if (itemData == null)
+        if (heroData == null)
             return;
 
         if (equiped)
@@ -22,11 +23,11 @@ public class PopupItem : PopupBase, IPopupItem
             Debug.Log("Equip Clicked");
             var payloadObj = new
             {
-                itemId = itemData.Id
+                heroId = heroData.Id
             };
 
             string payloadJson = JsonConvert.SerializeObject(payloadObj);
-            NetworkManager.SendRequest_Test("EquipItem", payloadJson);
+            NetworkManager.SendRequest_Test("EquipHero", payloadJson);
         }
     }
     public override void Unequip()
@@ -34,15 +35,15 @@ public class PopupItem : PopupBase, IPopupItem
         Debug.Log("Unequip Clicked");
         var payloadObj = new
         {
-            itemId = itemData.Id
+            itemId = heroData.Id
         };
 
         string payloadJson = JsonConvert.SerializeObject(payloadObj);
-        NetworkManager.SendRequest_Test("UnEquipItem", payloadJson);
+        NetworkManager.SendRequest_Test("UnEquipHero", payloadJson);
     }
 
-    public void SetItem(ItemData itemData)
+    public void SetItem(HeroData heroData)
     {
-        this.itemData = itemData;
+        this.heroData = heroData;
     }
 }

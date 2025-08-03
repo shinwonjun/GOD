@@ -13,7 +13,7 @@ public class ItemSlotView : SlotViewBase<DATA.ItemData>
     public override void SetData(DATA.ItemData newData)
     {
         tabType = STATUS_UI.TAB.Inventory;
-        popupType = POPUP.POPUP.item;
+        popupType = POPUP.POPUP.inventory;
         data = newData;
 
         var has = GameMyData.Instance.hasItem(int.Parse(data.Id));
@@ -30,10 +30,18 @@ public class ItemSlotView : SlotViewBase<DATA.ItemData>
 
     public override void ShowPopup()
     {
-        UIManager.Instance.ShowPopup(data.Description, popupType);
+        //var itemData = GameMyData.Instance.getItemData(int.Parse(data.Id));
+
+        var checkEquiped = GameMyData.Instance.checkEquipedItem(int.Parse(data.Id));
+        UIManager.Instance.ShowPopup(popupType, data, checkEquiped);
     }
     private void setImage(string _sprite)
     {
         image.sprite = UIManager.Instance.uiAtlas[tabType].GetSprite(_sprite);
+    }
+    public override void Refresh(int id)
+    {
+        var itemData = DataManager.Instance.itemData[id];
+        SetData(itemData);
     }
 }

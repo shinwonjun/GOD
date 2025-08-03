@@ -17,4 +17,8 @@ public abstract class SlotViewBase<TData> : MonoBehaviour, IPointerClickHandler
         TData data = GetData();
         ShowPopup();
     }
+
+    public virtual void Refresh(int id)
+    {
+    }
 }

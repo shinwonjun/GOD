@@ -6,19 +6,12 @@ using System.Numerics;
 public class StatSlotView : SlotViewBase<DATA.StatData>
 {
     [SerializeField] private Image image;
-    [SerializeField] private TextMeshProUGUI textTitleComponent;
-    [SerializeField] private TextMeshProUGUI textLevelComponent;
-    [SerializeField] private TextMeshProUGUI textDiscriptionComponent;
-    [SerializeField] private TextMeshProUGUI textExpenseComponent;
-    [SerializeField] private TextMeshProUGUI textCostComponent;
+    [SerializeField] private TextMeshProUGUI textTitle;
+    [SerializeField] private TextMeshProUGUI textLevel;
+    [SerializeField] private TextMeshProUGUI textDescription;
+    [SerializeField] private TextMeshProUGUI textExpense;
+    [SerializeField] private TextMeshProUGUI textCost;
     [SerializeField] private Button upgradeButton;
-
-
-    [HideInInspector] public TextMeshProUGUI textTitle;
-    [HideInInspector] public TextMeshProUGUI textLevel;
-    [HideInInspector] public TextMeshProUGUI textDiscription;
-    [HideInInspector] public TextMeshProUGUI textExpense;
-    [HideInInspector] public TextMeshProUGUI textCost;
 
     [HideInInspector] public int level { get; private set; } = 1;
 
@@ -57,7 +50,7 @@ public class StatSlotView : SlotViewBase<DATA.StatData>
     }
     public override void ShowPopup()
     {
-        UIManager.Instance.ShowPopup(data.Description, popupType);
+        //UIManager.Instance.ShowPopup(popupType, data);
     }
 
     private void OnUpgradeButtonClicked()
@@ -86,92 +79,27 @@ public class StatSlotView : SlotViewBase<DATA.StatData>
 
     private void setTitle(string _title)
     {
-        GameObject textObj = new GameObject("textName");
-        textObj.transform.SetParent(transform);
-        textTitle = textObj.AddComponent<TextMeshProUGUI>();
         textTitle.text = _title;
-        textTitle.fontSize = 36;
-        textTitle.color = Color.white;
-        textTitle.alignment = TextAlignmentOptions.Left | TextAlignmentOptions.Center;
-
-        RectTransform rect = textTitleComponent.GetComponent<RectTransform>();
-        RectTransform newRect = textObj.GetComponent<RectTransform>();
-
-        Utils.CopyRectTransform(rect, newRect);
-
-        Destroy(textTitleComponent.gameObject);
     }
 
     private void setLevel(string _level)
     {
-        GameObject textObj = new GameObject("textLv");
-        textObj.transform.SetParent(transform);
-        textLevel = textObj.AddComponent<TextMeshProUGUI>();
         textLevel.text = _level;
-        textLevel.fontSize = 36;
-        textLevel.color = Color.white;
-        textLevel.alignment = TextAlignmentOptions.Left | TextAlignmentOptions.Center;
-
-        RectTransform rect = textLevelComponent.GetComponent<RectTransform>();
-        RectTransform newRect = textObj.GetComponent<RectTransform>();
-
-        Utils.CopyRectTransform(rect, newRect);
-
-        Destroy(textLevelComponent.gameObject);
     }
 
-    private void setDiscription(string _discription)
+    private void setDiscription(string _description)
     {
-        GameObject textObj = new GameObject("textLv");
-        textObj.transform.SetParent(transform);
-        textDiscription = textObj.AddComponent<TextMeshProUGUI>();
-        textDiscription.text = _discription;
-        textDiscription.fontSize = 32;
-        textDiscription.color = Color.white;
-        textDiscription.alignment = TextAlignmentOptions.Left | TextAlignmentOptions.Center;
-
-        RectTransform rect = textDiscriptionComponent.GetComponent<RectTransform>();
-        RectTransform newRect = textObj.GetComponent<RectTransform>();
-
-        Utils.CopyRectTransform(rect, newRect);
-
-        Destroy(textDiscriptionComponent.gameObject);
+        textDescription.text = _description;
     }
 
     private void setButtonName(string _name)
     {
-        GameObject textObj = new GameObject("textExpense");
-        textObj.transform.SetParent(upgradeButton.transform);
-        textExpense = textObj.AddComponent<TextMeshProUGUI>();
         textExpense.text = _name;
-        textExpense.fontSize = 24;
-        textExpense.color = Color.black;
-        textExpense.alignment = TextAlignmentOptions.Center;
-
-        RectTransform rect = textExpenseComponent.GetComponent<RectTransform>();
-        RectTransform newRect = textObj.GetComponent<RectTransform>();
-
-        Utils.CopyRectTransform(rect, newRect);
-
-        Destroy(textExpenseComponent.gameObject);
     }
 
     private void setCost(BigInteger cost)
     {
-        GameObject textObj = new GameObject("textCost");
-        textObj.transform.SetParent(upgradeButton.transform);
-        textCost = textObj.AddComponent<TextMeshProUGUI>();
         textCost.text = cost.ToString();
-        textCost.fontSize = 24;
-        textCost.color = Color.black;
-        textCost.alignment = TextAlignmentOptions.Center;
-
-        RectTransform rect = textCostComponent.GetComponent<RectTransform>();
-        RectTransform newRect = textObj.GetComponent<RectTransform>();
-
-        Utils.CopyRectTransform(rect, newRect);
-
-        Destroy(textCostComponent.gameObject);
     }
 
     private void setImage(string _sprite)

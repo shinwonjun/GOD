@@ -4,6 +4,8 @@ using System.Data;
 using System.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Unity.Android.Gradle.Manifest;
+using Unity.VisualScripting;
 using UnityEngine;
 public class FakeUserData
 {
@@ -130,12 +132,12 @@ public static class FakeServer
             ""equippedHeroIds"": [1, 4, 7],
             ""equippedItems"": {
                 ""Pitching"": 101,
-                ""Armor"": 102,
-                ""Shoes"": 104,
-                ""Gloves"": 103,
-                ""Necklace"": 105,
-                ""RingL"": 106,
-                ""RingR"": 107
+                ""Armor"": 105,
+                ""Shoes"": 113,
+                ""Gloves"": 109,
+                ""Necklace"": 117,
+                ""RingL"": 121,
+                ""RingR"": 122
             },
             ""ownedItems"": [
                 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124,
@@ -170,6 +172,8 @@ public static class FakeServer
             case "GetLastClaimTime":
                 GetLastClaimTime(requestType, payload);
                 break;
+
+
             /////////////////////////
             /// coin add
             ///////////////////////// 
@@ -178,6 +182,8 @@ public static class FakeServer
                 break;
             /////////////////////////
             ///////////////////////// 
+
+
 
             /////////////////////////
             /// stat upgrade
@@ -190,14 +196,32 @@ public static class FakeServer
 
 
 
-
             /////////////////////////
             /// simulation
             ///////////////////////// 
             case "KillEnemy":
                 KillEnemy(requestType, payload);
                 break;
+            /////////////////////////
+            ///////////////////////// 
 
+
+
+            /////////////////////////
+            /// equip (item, hero)
+            ///////////////////////// 
+            case "EquipItem":
+                EquipItem(requestType, payload);
+                break;
+            case "UnEquipItem":
+                UnEquipItem(requestType, payload);
+                break;
+            case "EquipHero":
+                EquipHero(requestType, payload);
+                break;
+            case "UnEquipHero":
+                UnEquipHero(requestType, payload);
+                break;
             /////////////////////////
             ///////////////////////// 
 
@@ -223,10 +247,12 @@ public static class FakeServer
         var response = JsonConvert.SerializeObject(new { lastClaimTime });
         OnReceiveResponse?.Invoke(responseType, response);
     }
+
     private static void AddCoin(string responseType, string payload)
     {
         if (BigInteger.TryParse(payload, out BigInteger coinToAdd))
         {
+            // [DB갱신]
             UserData.coin += coinToAdd;
 
             // 응답 내려주기
@@ -249,6 +275,7 @@ public static class FakeServer
             OnReceiveResponse?.Invoke(responseType, error);
         }
     }
+
     private static void UpgradeStat(string responseType, string payload)
     {
         STATUS_UI.Stat statType;
@@ -318,6 +345,8 @@ public static class FakeServer
         // 성공 처리: 코인 차감
         UserData.coin -= cost;
 
+        // [DB갱신]
+
         var successResponse = JsonConvert.SerializeObject(new
         {
             success = true,
@@ -328,7 +357,6 @@ public static class FakeServer
 
         OnReceiveResponse?.Invoke(responseType, successResponse);
     }
-
 
     private static void KillEnemy(string responseType, string payload)
     {
@@ -373,6 +401,8 @@ public static class FakeServer
 
         selectEnemy();  // 새로운 적 선택 + 적 레벨 업
 
+        // [DB갱신]
+
         var response = JsonConvert.SerializeObject(new
         {
             success = true,
@@ -384,8 +414,6 @@ public static class FakeServer
 
         OnReceiveResponse?.Invoke(responseType, response);
     }
-
-
     public static void selectEnemy()
     {
         var demonList = DataManager.Instance.heroDataByHeroType[GAME.HeroType.DEMON.ToString()];
@@ -431,5 +459,326 @@ public static class FakeServer
 
         float critMultiplier = table.DefaultCriticalDamage + statLevels[(int)STATUS_UI.Stat.CriticalDamage] * 0.5f;
         return baseAtk * critMultiplier;
+    }
+
+
+    private static void EquipItem(string responseType, string payload)
+    {
+        var jObj = JObject.Parse(payload);
+        int itemId = jObj["itemId"]?.Value<int>() ?? -1;
+        if (itemId == -1)
+        {
+            var error = JsonConvert.SerializeObject(new
+            {
+                success = false,
+                message = "(-1) 잘못된 아이템"
+            });
+            OnReceiveResponse?.Invoke(responseType, error);
+            return;
+        }
+
+        // 유효한 아이템인지 체크
+        // 보유한 아이템인지 체크
+        // 이미 착용중인 아이템인지 체크(이미 착용중인데 또 착용예외처리)
+        int successType = -1;
+        string _message = "";
+        string parts = "";
+        int equipId = -1;
+        int prevId = -1;
+
+        if (DataManager.Instance.itemData.TryGetValue(itemId, out DATA.ItemData data))
+        {
+            if (!UserData.ownedItems.Contains(itemId))
+            {
+                var error = JsonConvert.SerializeObject(new
+                {
+                    success = false,
+                    message = "보유하지 않은 아이템."
+                });
+                OnReceiveResponse?.Invoke(responseType, error);
+                return;
+            }
+
+            if (data.Part == "Ring")
+            {
+                string[] ringSlots = { "RingL", "RingR" };
+                string targetSlot = null;
+                int? existingItemId = null;
+
+                foreach (string ringPart in ringSlots)
+                {
+                    if (UserData.equippedItems.TryGetValue(ringPart, out int equippedId))
+                    {
+                        if (equippedId == -1)
+                        {
+                            // 비어 있는 슬롯 발견 → 여기에 장착
+                            successType = 1;
+                            parts = ringPart;
+                            prevId = -1;
+                            equipId = itemId;
+                            _message = $"{ringPart} 슬롯에 장착되었습니다.";
+
+                            targetSlot = ringPart;
+                            existingItemId = equippedId;
+                            break;
+                        }
+                        else if (equippedId == itemId)
+                        {
+                            successType = -2;
+                            _message = "이 아이템은 현재 장착 중입니다.";
+                            break;
+                        }
+                        else if (targetSlot == null)
+                        {
+                            // 첫 번째 장착 슬롯만 저장     반지가 두쪽 다 껴있다면 RingL만 교체
+                            targetSlot = ringPart;
+                            existingItemId = equippedId;
+                        }
+                    }
+                }
+
+                // 여기까지 왔다는 건 둘 다 차 있음 → 교체
+                if (targetSlot != null)
+                {
+                    successType = 2;
+                    parts = targetSlot;
+                    prevId = existingItemId ?? -1;
+                    equipId = itemId;
+                    _message = $"{targetSlot} 슬롯에 장착된 아이템({prevId})이 교체되었습니다.";
+                }
+            }
+            else
+            {
+                if (UserData.equippedItems.TryGetValue(data.Part, out int equippedId))
+                {
+                    if (equippedId == itemId)
+                    {
+                        //Debug.Log("이 아이템은 현재 장착 중입니다.");
+                        successType = -2;
+                        _message = "이 아이템은 현재 장착 중입니다.";
+                    }
+                    else
+                    {
+                        //Debug.Log($"이 파츠에는 다른 아이템({equippedId})이 장착되어 있습니다.");
+                        successType = 2;
+                        parts = data.Part;
+                        prevId = equippedId;
+                        equipId = itemId;
+                        _message = $"이 파츠에는 다른 아이템({equippedId})이 장착되어 있습니다 - 교체 되었습니다.";
+                    }
+                }
+                else
+                {
+                    //Debug.Log("이 파츠에는 아직 아무 것도 장착되지 않았습니다.");
+                    successType = 1;
+                    parts = data.Part;
+                    prevId = -1;
+                    equipId = itemId;
+                    _message = "장착 되었습니다.";
+                }
+            }
+        }
+        else
+        {
+            successType = -1;
+            _message = "존재하지 않는 아이템입니다.";
+        }
+
+        if (successType > 0)
+        {
+            // [DB갱신]
+            UserData.equippedItems[parts] = equipId;
+        }
+
+        var msg = JsonConvert.SerializeObject(new
+        {
+            success = successType > 0 ? true : false,
+            parts = parts,
+            prevId = prevId,
+            equipId = equipId,
+            message = _message
+        });
+
+        OnReceiveResponse?.Invoke(responseType, msg);
+    }
+    private static void UnEquipItem(string responseType, string payload)
+    {
+        var jObj = JObject.Parse(payload);
+        int itemId = jObj["itemId"]?.Value<int>() ?? -1;
+        if (itemId == -1)
+        {
+            var error = JsonConvert.SerializeObject(new
+            {
+                success = false,
+                message = "(-1) 잘못된 아이템"
+            });
+            OnReceiveResponse?.Invoke(responseType, error);
+            return;
+        }
+
+        // 유효한 아이템인지 체크
+        // 보유한 아이템인지 체크
+        // 이미 착용중인 아이템인지 체크(이미 착용중인데 또 착용예외처리)
+        int successType = -1;
+        string _message = "";
+        string parts = "";
+        int equipId = -1;
+        int prevId = itemId;
+
+        if (DataManager.Instance.itemData.TryGetValue(itemId, out DATA.ItemData data))
+        {
+            if (!UserData.ownedItems.Contains(itemId))
+            {
+                var error = JsonConvert.SerializeObject(new
+                {
+                    success = false,
+                    message = "보유하지 않은 아이템."
+                });
+                OnReceiveResponse?.Invoke(responseType, error);
+                return;
+            }
+
+            if (data.Part == "Ring")
+            {
+                // RingL, RingR 둘 다 확인
+                string[] ringSlots = { "RingL", "RingR" };
+                foreach (string slot in ringSlots)
+                {
+                    if (UserData.equippedItems.TryGetValue(slot, out int equippedId))
+                    {
+                        if (equippedId == -3)
+                        {
+                            successType = -1;
+                            _message = "아이템이 장착되지 않은 슬롯입니다. 오류";
+                        }
+                        else if (equippedId == itemId)
+                        {
+                            successType = 1;
+                            parts = slot;
+                            equipId = -1;
+                            prevId = itemId;
+                            _message = $"{slot} 슬롯에서 장착 해제되었습니다.";
+
+                            // [DB 갱신]
+                            UserData.equippedItems[slot] = -1;
+                            break;
+                        }
+                    }
+                }
+
+                if (successType != 1)
+                {
+                    successType = -2;
+                    _message = "이 아이템은 현재 장착 중이 아닙니다.";
+                }
+            }
+            else
+            {
+                if (UserData.equippedItems.TryGetValue(data.Part, out int equippedId))
+                {
+                    if (equippedId == itemId)
+                    {
+                        successType = 1;
+                        parts = data.Part;
+                        equipId = -1;
+                        _message = "이 아이템은 현재 장착 중입니다 - 장착 해제되었습니다.";
+                        prevId = equippedId;
+                    }
+                }
+                else
+                {
+                    successType = -3;
+                    _message = "이 파츠에는 아직 아무 것도 장착되지 않았습니다.";
+                }
+            }
+        }
+        else
+        {
+            successType = -1;
+            _message = "존재하지 않는 아이템입니다.";
+        }
+
+        if (successType > 0)
+        {
+            // [DB갱신]
+            UserData.equippedItems[parts] = -1;
+        }
+
+        var msg = JsonConvert.SerializeObject(new
+        {
+            success = successType > 0 ? true : false,
+            parts = parts,
+            prevId = prevId,
+            equipId = equipId,
+            message = _message
+        });
+
+        OnReceiveResponse?.Invoke(responseType, msg);    
+    }
+    private static void EquipHero(string responseType, string payload)
+    {
+        // var jObj = JObject.Parse(payload);
+        // int heroId = jObj["heroId"]?.Value<int>() ?? -1;
+        // if (heroId == -1)
+        // {
+        //     var error = JsonConvert.SerializeObject(new
+        //     {
+        //         success = false,
+        //         message = "(-1) 잘못된 히어로"
+        //     });
+        //     OnReceiveResponse?.Invoke(responseType, error);
+        //     return;
+        // }
+
+        // // 유효한 아이템인지 체크
+        // // 보유한 아이템인지 체크
+        // // 이미 착용중인 아이템인지 체크(이미 착용중인데 또 착용예외처리)
+        // int successType = -1;
+        // string _message = "";
+        // string parts = "";
+        // int equipId = -1;
+
+        // if (DataManager.Instance.heroData.TryGetValue(heroId, out DATA.HeroData data))
+        // {
+        //     if (UserData.equippedHeroIds.Contains(heroId))
+        //     {
+        //         //Debug.Log("이 아이템은 현재 장착 중입니다.");
+        //         successType = -2;
+        //         _message = "이 아이템은 현재 장착 중입니다.";
+        //     }
+        //     else
+        //     {
+        //         //Debug.Log("이 파츠에는 아직 아무 것도 장착되지 않았습니다.");
+        //         successType = 1;
+        //         parts = data.Part;
+        //         equipId = equippedId;
+        //         _message = "장착 되었습니다.";
+        //     }
+        // }
+        // else
+        // {
+        //     successType = -1;
+        //     _message = "존재하지 않는 아이템입니다.";
+        // }
+
+        // if (successType > 0)
+        // {
+        //     // [DB갱신]
+        //     UserData.equippedItems[parts] = equipId;
+        // }
+
+        // var msg = JsonConvert.SerializeObject(new
+        // {
+        //     success = successType > 0 ? true : false,
+        //     message = _message
+        // });
+
+        // OnReceiveResponse?.Invoke(responseType, msg);
+    }
+    private static void UnEquipHero(string responseType, string payload)
+    {
+        // 유요한 히어로인지 체크
+        // 보유한 히어로인지 체크
+        // 이미 착용중인 히어로인지 체크(착용중이지 않은 아이템인데 착용 해제할 수 없음)        
     }
 }

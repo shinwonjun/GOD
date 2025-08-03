@@ -1,35 +1,32 @@
 using System;
+using DATA;
+using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PopupCharacter : MonoBehaviour, IPopupBase
+public class PopupCharacter : PopupBase, IPopupItem
 {
-    [SerializeField] public Button closeButton;
-    [SerializeField] public Button infoButton;
-    [SerializeField] public Button equipButton;     // 장착, 장착해제 두가지 기능
-
-    public void Awake()
+    private ItemData itemData = null;
+    public override void Equip()
     {
-        if (closeButton != null)
-            closeButton.onClick.AddListener(HidePopup);
+        // 파츠는 이미 착용되어 있기 때문에 착용 버튼은 없다
+        base.Equip();
+    }
+    public override void Unequip()
+    {
+        Debug.Log("Unequip Clicked");
+        var payloadObj = new
+        {
+            itemId = itemData.Id
+        };
+
+        string payloadJson = JsonConvert.SerializeObject(payloadObj);
+        NetworkManager.SendRequest_Test("UnEquipItem", payloadJson);
     }
 
-
-    public GameObject ShowPopup(string description)
+    public void SetItem(ItemData itemData)
     {
-        bool ac = description == "" ? false : true;
-        infoButton.gameObject.SetActive(ac);
-        equipButton.gameObject.SetActive(true);
-
-        gameObject.transform.localPosition = Vector3.zero;
-        gameObject.SetActive(true);
-
-        return gameObject;
-    }
-
-    public void HidePopup()
-    {
-        gameObject.SetActive(false);
+        this.itemData = itemData;
     }
 }
