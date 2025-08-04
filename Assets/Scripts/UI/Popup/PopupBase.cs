@@ -11,7 +11,7 @@ public class PopupBase : MonoBehaviour, IPopupBase
 
     protected bool equiped = false;
 
-    public void Start()
+    public virtual void Start()
     {
         if (closeButton != null)
             closeButton.onClick.AddListener(HidePopup);

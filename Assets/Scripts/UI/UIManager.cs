@@ -140,7 +140,7 @@ public class UIManager : MonoSingleton<UIManager>
                 if (slotView.GetData() != null && slotView.GetData().Id == prevId.ToString())
                 {
                     slotView.Refresh(prevId);
-                    break; // 해당 슬롯만 갱신하면 되므로 루프 종료
+                    break;
                 }
             }
         }
@@ -154,7 +154,37 @@ public class UIManager : MonoSingleton<UIManager>
                 if (slotView.GetData() != null && slotView.GetData().Id == equipId.ToString())
                 {
                     slotView.Refresh(equipId);
-                    break; // 해당 슬롯만 갱신하면 되므로 루프 종료
+                    break;
+                }
+            }
+        }
+    }
+    public void refreshDex(int prevId)
+    {
+        foreach (var pair in GameMyData.Instance.UserData.equippedHeroIds)
+        {
+            string key = pair.Key;
+            int equippedId = pair.Value;
+
+            // dexHandlers의 모든 슬롯 검사
+            foreach (var slot in dexHandlers.Values)
+            {
+                if (slot.GetData().Id == equippedId.ToString())
+                {
+                    slot.Refresh(equippedId); // 갱신 처리
+                    break;
+                }
+            }
+        }
+
+        if (prevId > 0)
+        {
+            foreach (var slot in dexHandlers.Values)
+            {
+                if (slot.GetData().Id == prevId.ToString())
+                {
+                    slot.Refresh(prevId); // 갱신 처리
+                    break;
                 }
             }
         }

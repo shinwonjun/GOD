@@ -165,17 +165,32 @@ public static class NetworkManager
                 break;
             case "UnEquipItem":
                 var UnEquipItemObj = GameMyData.Instance.LoadFromJson(json, typeof(UnEquipItem));
-                var unequipitem = (UnEquipItem)UnEquipItemObj;
-                if (unequipitem.success)
+                var unEquipItem = (UnEquipItem)UnEquipItemObj;
+                if (unEquipItem.success)
                 {
-                    GameMyData.Instance.UserData.equippedItems[unequipitem.parts] = unequipitem.equipId;
-                    UIManager.Instance.refreshInventory(unequipitem.prevId, unequipitem.equipId);
+                    GameMyData.Instance.UserData.equippedItems[unEquipItem.parts] = unEquipItem.equipId;
+                    UIManager.Instance.refreshInventory(unEquipItem.prevId, unEquipItem.equipId);
                     UIManager.Instance.currentPopup.HidePopup();
                 }
 
-                Debug.Log($"[NetworkManager] UnEquipItem:{unequipitem.success} - message : {unequipitem.message}");
+                Debug.Log($"[NetworkManager] UnEquipItem:{unEquipItem.success} - message : {unEquipItem.message}");
                 break;
             case "EquipHero":
+                var EquipHeroObj = GameMyData.Instance.LoadFromJson(json, typeof(EquipHero));
+                var equipHero = (EquipHero)EquipHeroObj;
+                if (equipHero.success)
+                {
+                    if (equipHero.prevPos > 0)
+                    {
+                        GameMyData.Instance.UserData.equippedHeroIds[equipHero.prevPos.ToString()] = -1;
+                    }
+                    GameMyData.Instance.UserData.equippedHeroIds[equipHero.equipPos.ToString()] = equipHero.equipId;
+
+                    UIManager.Instance.refreshDex(equipHero.prevId);
+                    UIManager.Instance.currentPopup.HidePopup();
+                }
+
+                Debug.Log($"[NetworkManager] EquipHero:{equipHero.success} - message : {equipHero.message}");
                 break;
             case "UnEquipHero":
                 break;

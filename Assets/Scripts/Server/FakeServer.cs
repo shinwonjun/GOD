@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -14,7 +15,7 @@ public class FakeUserData
     public StatLevels statLevels;
     [JsonIgnore] public int[] statLevelsByIndex;
     public List<int> ownedHeroIds;
-    public List<int> equippedHeroIds;
+    public Dictionary<string, int> equippedHeroIds;
     public Dictionary<string, int> equippedItems;
     public List<int> ownedItems;
     public BigInteger coin;
@@ -129,7 +130,11 @@ public static class FakeServer
                 // 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
                 // 61
             ],
-            ""equippedHeroIds"": [1, 4, 7],
+            ""equippedHeroIds"": {             
+                ""1"": 1,
+                ""2"": -1,
+                ""3"": -1
+            },
             ""equippedItems"": {
                 ""Pitching"": 101,
                 ""Armor"": 105,
@@ -717,63 +722,100 @@ public static class FakeServer
     }
     private static void EquipHero(string responseType, string payload)
     {
-        // var jObj = JObject.Parse(payload);
-        // int heroId = jObj["heroId"]?.Value<int>() ?? -1;
-        // if (heroId == -1)
-        // {
-        //     var error = JsonConvert.SerializeObject(new
-        //     {
-        //         success = false,
-        //         message = "(-1) 잘못된 히어로"
-        //     });
-        //     OnReceiveResponse?.Invoke(responseType, error);
-        //     return;
-        // }
+        var jObj = JObject.Parse(payload);
+        int heroId = jObj["heroId"]?.Value<int>() ?? -1;
+        int prevposition = jObj["prevposition"]?.Value<int>() ?? -1;
+        int position = jObj["position"]?.Value<int>() ?? -1;
+        if (heroId == -1)
+        {
+            var error = JsonConvert.SerializeObject(new
+            {
+                success = false,
+                message = "(-1) 잘못된 히어로"
+            });
+            OnReceiveResponse?.Invoke(responseType, error);
+            return;
+        }
 
-        // // 유효한 아이템인지 체크
-        // // 보유한 아이템인지 체크
-        // // 이미 착용중인 아이템인지 체크(이미 착용중인데 또 착용예외처리)
-        // int successType = -1;
-        // string _message = "";
-        // string parts = "";
-        // int equipId = -1;
+        // 유효한 히어로인지 체크
+        // 보유한 히어로인지 체크
+        // 이미 착용중인 히어로인지 체크(이미 착용중인데 또 착용예외처리)
+        int successType = -1;
+        string _message = "";
+        int prevId = -1;
+        int prevpos = -1;
+        int pos = -1;
+        int equipId = -1;
 
-        // if (DataManager.Instance.heroData.TryGetValue(heroId, out DATA.HeroData data))
-        // {
-        //     if (UserData.equippedHeroIds.Contains(heroId))
-        //     {
-        //         //Debug.Log("이 아이템은 현재 장착 중입니다.");
-        //         successType = -2;
-        //         _message = "이 아이템은 현재 장착 중입니다.";
-        //     }
-        //     else
-        //     {
-        //         //Debug.Log("이 파츠에는 아직 아무 것도 장착되지 않았습니다.");
-        //         successType = 1;
-        //         parts = data.Part;
-        //         equipId = equippedId;
-        //         _message = "장착 되었습니다.";
-        //     }
-        // }
-        // else
-        // {
-        //     successType = -1;
-        //     _message = "존재하지 않는 아이템입니다.";
-        // }
+        if (DataManager.Instance.heroData.TryGetValue(heroId, out DATA.HeroData data))
+        {
+            if (!UserData.ownedHeroIds.Contains(heroId))
+            {
+                var error = JsonConvert.SerializeObject(new
+                {
+                    success = false,
+                    message = "보유하지 않은 히어로."
+                });
+                OnReceiveResponse?.Invoke(responseType, error);
+                return;
+            }
 
-        // if (successType > 0)
-        // {
-        //     // [DB갱신]
-        //     UserData.equippedItems[parts] = equipId;
-        // }
+            var id = UserData.equippedHeroIds[position.ToString()];
+            if (id == -1)
+            {
+                //Debug.Log("이 파츠에는 아직 아무 것도 장착되지 않았습니다.");
+                successType = 1;
+                prevId = -1;
+                prevpos = prevposition;
+                pos = position;
+                equipId = heroId;
+                _message = "장착 되었습니다.";
+            }
+            else
+            {
+                if (id == heroId)
+                {
+                    successType = -2;
+                    _message = "이 히어로는 현재 장착 중입니다.";
+                }
+                else
+                {
+                    successType = 2;
+                    prevId = id;
+                    prevpos = prevposition;
+                    pos = position;
+                    equipId = heroId;
+                    _message = "기존 이 위치에 장착된 히어로는 해제되고, 선택한 히어로가 장착됩니다.";
+                }
+            }
+        }
+        else
+        {
+            successType = -1;
+            _message = "존재하지 않는 히어로입니다.";
+        }
 
-        // var msg = JsonConvert.SerializeObject(new
-        // {
-        //     success = successType > 0 ? true : false,
-        //     message = _message
-        // });
+        if (successType > 0)
+        {
+            // [DB갱신]
+            if (prevpos > 0)
+            {
+                UserData.equippedHeroIds[prevpos.ToString()] = -1;
+            }
+            UserData.equippedHeroIds[pos.ToString()] = equipId;
+        }
 
-        // OnReceiveResponse?.Invoke(responseType, msg);
+        var msg = JsonConvert.SerializeObject(new
+        {
+            success = successType > 0 ? true : false,
+            prevId = prevId,
+            prevPos = prevposition,
+            equipPos = position,
+            equipId = equipId,
+            message = _message
+        });
+
+        OnReceiveResponse?.Invoke(responseType, msg);
     }
     private static void UnEquipHero(string responseType, string payload)
     {

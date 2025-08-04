@@ -48,7 +48,6 @@ public class KillEnemyResponse
     public int EnemyId;
     public int Level;
 }
-
 [System.Serializable]
 public class EquipItem
 {
@@ -64,6 +63,16 @@ public class UnEquipItem
     public bool success;
     public string parts;
     public int prevId;
+    public int equipId;
+    public string message;
+}
+[System.Serializable]
+public class EquipHero
+{
+    public bool success;
+    public int prevId;
+    public int prevPos;
+    public int equipPos;
     public int equipId;
     public string message;
 }
@@ -137,9 +146,21 @@ public class GameMyData : Singleton<GameMyData>
         return UserData.ownedHeroIds.Contains(id);
     }
 
-    public Boolean checkEquipedDex(int id)
+    public Boolean checkEquippedDex(int id)
     {
-        return UserData.equippedHeroIds.Contains(id);
+        return UserData.equippedHeroIds.Values.Contains(id);
+    }
+
+    public string getEquippedDexIndex(int id)
+    {
+        foreach (var pair in UserData.equippedHeroIds)
+        {
+            if (pair.Value == id)
+            {
+                return pair.Key; // 문자열 키를 int로 변환해서 리턴
+            }
+        }
+        return "-1"; // 못 찾았을 경우
     }
 
     public DATA.ItemData getItemData(int id)
