@@ -120,8 +120,8 @@ public class UIManager : MonoSingleton<UIManager>
     {
         if (popupHandlers.ContainsKey(type))
         {
-            (popupHandlers[type] as PopupDex).SetItem(heroData);
             currentPopup = popupHandlers[type].ShowPopup(heroData.Description, equiped);
+            (popupHandlers[type] as PopupDex).SetItem(heroData);
         }
         else
         {

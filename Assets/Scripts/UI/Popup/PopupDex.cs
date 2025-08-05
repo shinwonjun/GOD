@@ -11,32 +11,27 @@ public class PopupDex : PopupBase, IPopupDex
     public Toggle selectPos1;
     public Toggle selectPos2;
     public Toggle selectPos3;
-
+    void Awake()
+    {
+    }
+    
     public override void Start()
     {
         base.Start();
 
-        // 리스너 등록
-        selectPos1.onValueChanged.AddListener((isOn) => OnToggleChanged(1, isOn));
-        selectPos2.onValueChanged.AddListener((isOn) => OnToggleChanged(2, isOn));
-        selectPos3.onValueChanged.AddListener((isOn) => OnToggleChanged(3, isOn));
+        selectPos1.onValueChanged.AddListener((isOn) => { if (isOn) OnToggleChanged(1); });
+        selectPos2.onValueChanged.AddListener((isOn) => { if (isOn) OnToggleChanged(2); });
+        selectPos3.onValueChanged.AddListener((isOn) => { if (isOn) OnToggleChanged(3); });
     }
 
-    void OnToggleChanged(int index, bool isOn)
+    public override void init()
     {
-        if (isOn)
-        {
-            Debug.Log($"선택된 포지션: {index}");
-            // 예: 다른 토글 끄기
-            DeselectOthers(index);
-        }
+        base.init();
     }
 
-    void DeselectOthers(int selectedIndex)
+    void OnToggleChanged(int index)
     {
-        if (selectedIndex != 1) selectPos1.isOn = false;
-        if (selectedIndex != 2) selectPos2.isOn = false;
-        if (selectedIndex != 3) selectPos3.isOn = false;
+        Debug.Log($"선택된 포지션: {index}");
     }
 
     public int GetSelectedIndex()
@@ -44,7 +39,7 @@ public class PopupDex : PopupBase, IPopupDex
         if (selectPos1.isOn) return 1;
         if (selectPos2.isOn) return 2;
         if (selectPos3.isOn) return 3;
-        return 0; // 아무 것도 선택되지 않은 경우
+        return 0; // 아무것도 선택되지 않음 (AllowSwitchOff=true인 경우 가능)
     }
 
     public override void Equip()
@@ -81,9 +76,12 @@ public class PopupDex : PopupBase, IPopupDex
     public override void Unequip()
     {
         Debug.Log("Unequip Clicked");
+
+        var position = GameMyData.Instance.getEquippedDexIndex(int.Parse(heroData.Id));
         var payloadObj = new
         {
-            itemId = heroData.Id
+            heroId = heroData.Id,
+            position = position,
         };
 
         string payloadJson = JsonConvert.SerializeObject(payloadObj);
@@ -93,5 +91,13 @@ public class PopupDex : PopupBase, IPopupDex
     public void SetItem(HeroData heroData)
     {
         this.heroData = heroData;
+        var position = GameMyData.Instance.getEquippedDexIndex(int.Parse(heroData.Id));
+        switch (position)
+        {
+            case "1": selectPos1.isOn = true; break;
+            case "2": selectPos2.isOn = true; break;
+            case "3": selectPos3.isOn = true; break;
+            default: break;
+        }
     }
 }

@@ -76,6 +76,15 @@ public class EquipHero
     public int equipId;
     public string message;
 }
+[System.Serializable]
+public class UnEquipHero
+{
+    public bool success;
+    public int unEquipPos;
+    public int unEquipId;
+    public int equipId;
+    public string message;
+}
 
 
 

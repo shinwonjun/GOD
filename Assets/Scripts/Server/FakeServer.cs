@@ -5,8 +5,6 @@ using System.Linq;
 using System.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Unity.Android.Gradle.Manifest;
-using Unity.VisualScripting;
 using UnityEngine;
 public class FakeUserData
 {
@@ -819,8 +817,89 @@ public static class FakeServer
     }
     private static void UnEquipHero(string responseType, string payload)
     {
-        // 유요한 히어로인지 체크
+        var jObj = JObject.Parse(payload);
+        int heroId = jObj["heroId"]?.Value<int>() ?? -1;
+        int position = jObj["position"]?.Value<int>() ?? -1;
+        if (heroId == -1)
+        {
+            var error = JsonConvert.SerializeObject(new
+            {
+                success = false,
+                message = "(-1) 잘못된 히어로"
+            });
+            OnReceiveResponse?.Invoke(responseType, error);
+            return;
+        }
+
+        // 유효한 히어로인지 체크
         // 보유한 히어로인지 체크
-        // 이미 착용중인 히어로인지 체크(착용중이지 않은 아이템인데 착용 해제할 수 없음)        
+        // 이미 착용중인 히어로인지 체크(이미 착용중인데 또 착용예외처리)
+        int successType = -1;
+        string _message = "";
+        int equipId = -1;
+        int unequipId = -1;
+
+        if (DataManager.Instance.heroData.TryGetValue(heroId, out DATA.HeroData data))
+        {
+            if (!UserData.ownedHeroIds.Contains(heroId))
+            {
+                var error = JsonConvert.SerializeObject(new
+                {
+                    success = false,
+                    message = "보유하지 않은 히어로."
+                });
+                OnReceiveResponse?.Invoke(responseType, error);
+                return;
+            }
+
+            var id = UserData.equippedHeroIds[position.ToString()];
+            if (id == -1)
+            {
+                //Debug.Log("이 파츠에는 아직 아무 것도 장착되지 않았습니다.");
+                successType = -2;
+                _message = "장착되어 있지 않은 히어로 입니다.";
+            }
+            else
+            {
+                if (id == heroId)
+                {
+                    successType = 1;
+                    unequipId = heroId;
+                    _message = "정상적으로 장착 해제되었습니다.";
+                }
+                else
+                {
+                    successType = -3;
+                    unequipId = heroId;
+                    equipId = id;
+                    _message = "장착되어 있는 히어로와 다릅니다.";
+                }
+            }
+        }
+        else
+        {
+            successType = -1;
+            _message = "존재하지 않는 히어로입니다.";
+        }
+
+        if (successType > 0)
+        {
+            // [DB갱신]
+            if (position > 0)
+            {
+                UserData.equippedHeroIds[position.ToString()] = -1;
+            }
+        }
+
+        var msg = JsonConvert.SerializeObject(new
+        {
+            success = successType > 0 ? true : false,
+            unEquipPos = position,
+            unEquipId = unequipId,
+            equipId = equipId,
+            message = _message
+        });
+
+        OnReceiveResponse?.Invoke(responseType, msg);
     }
 }

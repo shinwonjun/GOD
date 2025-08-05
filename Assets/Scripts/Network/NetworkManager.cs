@@ -193,6 +193,20 @@ public static class NetworkManager
                 Debug.Log($"[NetworkManager] EquipHero:{equipHero.success} - message : {equipHero.message}");
                 break;
             case "UnEquipHero":
+                var EUnquipHeroObj = GameMyData.Instance.LoadFromJson(json, typeof(UnEquipHero));
+                var unequipHero = (UnEquipHero)EUnquipHeroObj;
+                if (unequipHero.success)
+                {
+                    if (unequipHero.unEquipPos > 0)
+                    {
+                        GameMyData.Instance.UserData.equippedHeroIds[unequipHero.unEquipPos.ToString()] = -1;
+                    }
+
+                    UIManager.Instance.refreshDex(unequipHero.unEquipId);
+                    UIManager.Instance.currentPopup.HidePopup();
+                }
+
+                Debug.Log($"[NetworkManager] UnEquipHero:{unequipHero.success} - message : {unequipHero.message}");
                 break;
             default:
                 Debug.LogWarning($"[NetworkManager] Unhandled responseType: {responseType}");

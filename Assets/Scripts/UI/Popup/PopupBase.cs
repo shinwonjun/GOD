@@ -19,6 +19,11 @@ public class PopupBase : MonoBehaviour, IPopupBase
             equipButton.onClick.AddListener(Equip);
     }
 
+    public virtual void init()
+    {
+        
+    }
+
     public virtual PopupBase ShowPopup(string description, bool equiped)
     {
         gameObject.SetActive(true);

@@ -420,6 +420,7 @@ public class NavigationTabController : MonoBehaviour
 
             var popup = instance.GetComponent<PopupBase>();
             UIManager.Instance.popupHandlers[POPUP.POPUP.inventory] = popup;
+            popup.init();
             instance.SetActive(false);
         }
         else
@@ -441,6 +442,7 @@ public class NavigationTabController : MonoBehaviour
 
             var popup = instance.GetComponent<PopupBase>();
             UIManager.Instance.popupHandlers[POPUP.POPUP.character] = popup;
+            popup.init();
             instance.SetActive(false);
         }
         else
@@ -462,6 +464,7 @@ public class NavigationTabController : MonoBehaviour
 
             var popup = instance.GetComponent<PopupBase>();
             UIManager.Instance.popupHandlers[POPUP.POPUP.dex] = popup;
+            popup.init();
             instance.SetActive(false);
         }
         else
