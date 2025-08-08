@@ -1,7 +1,8 @@
-using System;
+
+using System.Collections.Generic;
+using System.Linq;
 using DATA;
 using Newtonsoft.Json;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,10 +12,13 @@ public class PopupDex : PopupBase, IPopupDex
     public Toggle selectPos1;
     public Toggle selectPos2;
     public Toggle selectPos3;
+
+    bool _isReverting = false; // 이벤트 되돌릴 때 재진입 방지
+    int _prevToggleIndex = 0;
     void Awake()
     {
     }
-    
+
     public override void Start()
     {
         base.Start();
@@ -29,9 +33,41 @@ public class PopupDex : PopupBase, IPopupDex
         base.init();
     }
 
+    public override PopupBase ShowPopup(string description, bool equiped)
+    {
+        gameObject.SetActive(true);
+        uiInfoText.text = description;
+        //this.equiped = equiped;
+        //uiEquipBtnText.text = equiped ? "UNEQUIP" : "EQUIP";
+        return this;
+    }
+
     void OnToggleChanged(int index)
     {
         Debug.Log($"선택된 포지션: {index}");
+
+        var equippedPos = GameMyData.Instance.getEquippedDexIndex(int.Parse(heroData.Id)); // "-1" or "1"/"2"/"3"
+
+
+        // 같은 위치를 다시 누른 경우: 그대로 두면 됨
+        if (equippedPos == index.ToString())
+        {
+            Debug.Log("이미 장착되어 있는 위치입니다.");
+
+            _isReverting = true;               // 재진입 방지
+            SetToggleTo(_prevToggleIndex); // 이벤트 없이 토글 상태만 변경
+            _isReverting = false;
+            return;
+        }
+    }
+    void SetToggleTo(int pos)
+    {
+        if (pos == -1)
+            return;
+        // 이벤트 없이 상태만 바꾸기
+        selectPos1.SetIsOnWithoutNotify(pos == 1);
+        selectPos2.SetIsOnWithoutNotify(pos == 2);
+        selectPos3.SetIsOnWithoutNotify(pos == 3);
     }
 
     public int GetSelectedIndex()
@@ -47,31 +83,23 @@ public class PopupDex : PopupBase, IPopupDex
         if (heroData == null)
             return;
 
-        if (equiped)
+        Debug.Log("Equip Clicked");
+        var prevPos = GameMyData.Instance.getEquippedDexIndex(int.Parse(heroData.Id));
+        var pos = GetSelectedIndex();
+        if (pos == 0)
         {
-            Unequip();
             return;
         }
-        else
+
+        var payloadObj = new
         {
-            Debug.Log("Equip Clicked");
-            var prevPos = GameMyData.Instance.getEquippedDexIndex(int.Parse(heroData.Id));
-            var pos = GetSelectedIndex();
-            if (pos == 0)
-            {
-                return;
-            }
+            heroId = heroData.Id,
+            prevposition = prevPos,
+            position = pos
+        };
 
-            var payloadObj = new
-            {
-                heroId = heroData.Id,
-                prevposition = prevPos,
-                position = pos
-            };
-
-            string payloadJson = JsonConvert.SerializeObject(payloadObj);
-            NetworkManager.SendRequest_Test("EquipHero", payloadJson);
-        }
+        string payloadJson = JsonConvert.SerializeObject(payloadObj);
+        NetworkManager.SendRequest_Test("EquipHero", payloadJson);
     }
     public override void Unequip()
     {
@@ -92,12 +120,58 @@ public class PopupDex : PopupBase, IPopupDex
     {
         this.heroData = heroData;
         var position = GameMyData.Instance.getEquippedDexIndex(int.Parse(heroData.Id));
-        switch (position)
+        var equippedHeroIds = GameMyData.Instance.UserData.equippedHeroIds;
+        string targetSlot = FindPreferredSlot(equippedHeroIds, position);
+
+        if (targetSlot != null)
         {
-            case "1": selectPos1.isOn = true; break;
-            case "2": selectPos2.isOn = true; break;
-            case "3": selectPos3.isOn = true; break;
-            default: break;
+            _prevToggleIndex = int.Parse(targetSlot);
+            switch (targetSlot)
+            {
+                case "1": selectPos1.isOn = true; break;
+                case "2": selectPos2.isOn = true; break;
+                case "3": selectPos3.isOn = true; break;
+                default: break;
+            }
         }
+        else
+        {
+            Debug.Log("PopupDex SetItem : 장착할 위치가 없음 오류");
+        }
+    }
+    string FindPreferredSlot(Dictionary<string, int> equippedHeroIds, string position)
+    {
+        string[] order = equippedHeroIds.Keys
+        .Select(k => int.Parse(k))
+        .OrderBy(k => k)
+        .Select(k => k.ToString())
+        .ToArray();
+
+        // 1) 빈 슬롯(-1) 우선 탐색 (현재 위치 제외)
+        for (int i = 0; i < order.Length; i++)
+        {
+            string slot = order[i];
+
+            if (position != "-1" && slot == position)
+                continue;
+
+            int val = equippedHeroIds.TryGetValue(slot, out var v) ? v : -1;
+            if (val == -1)
+                return slot;
+        }
+
+        // 2) 빈 슬롯이 없다면: 같은 순서로 (현재 위치 제외) 첫 슬롯 선택
+        for (int i = 0; i < order.Length; i++)
+        {
+            string slot = order[i];
+
+            if (position != "-1" && slot == position)
+                continue;
+
+            return slot; // 앞번호 반환
+        }
+
+        // 3) 모든 슬롯이 현재 위치뿐인 기묘한 경우(슬롯이 1개뿐이라면 등)
+        return null;
     }
 }

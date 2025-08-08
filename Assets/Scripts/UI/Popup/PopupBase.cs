@@ -7,6 +7,7 @@ public class PopupBase : MonoBehaviour, IPopupBase
     [SerializeField] public TextMeshProUGUI uiInfoText;
     [SerializeField] public TextMeshProUGUI uiEquipBtnText;
     [SerializeField] public Button equipButton;
+    [SerializeField] public Button unQquipButton;
     [SerializeField] public Button closeButton;
 
     protected bool equiped = false;
@@ -17,6 +18,8 @@ public class PopupBase : MonoBehaviour, IPopupBase
             closeButton.onClick.AddListener(HidePopup);
         if (equipButton != null)
             equipButton.onClick.AddListener(Equip);
+        if (unQquipButton != null)
+            unQquipButton.onClick.AddListener(Unequip);
     }
 
     public virtual void init()
