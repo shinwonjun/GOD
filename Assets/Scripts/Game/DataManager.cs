@@ -13,6 +13,7 @@ public class DataManager : Singleton<DataManager>
     private string addressableKey_equipslot_data = "Assets/Addressables/Data/equipslot_data.json";
     private string addressableKey_herolist_data = "Assets/Addressables/Data/herolist_data.json";
     private string addressableKey_hero_data = "Assets/Addressables/Data/hero_data.json";    
+    private string addressableKey_hero_option_data = "Assets/Addressables/Data/hero_option_data.json";    
     private string addressableKey_stat_upgrade_table = "Assets/Addressables/Data/stat_upgrade_table.json";
     private string addressableKey_currency_table = "Assets/Addressables/Data/currency_table.json";
     private string addressableKey_enemy_table = "Assets/Addressables/Data/enemy_table.json";
@@ -26,6 +27,7 @@ public class DataManager : Singleton<DataManager>
     public List<DATA.HeroList> heroList = new List<DATA.HeroList>();
     public Dictionary<string, List<DATA.HeroData>> heroDataByHeroType = new Dictionary<string, List<DATA.HeroData>>();
     public Dictionary<int, DATA.HeroData> heroData = new Dictionary<int, DATA.HeroData>();
+    public Dictionary<int, List<DATA.HeroOptionData>> heroOptionData = new Dictionary<int, List<DATA.HeroOptionData>>();
     public Dictionary<STATUS_UI.Stat, DATA.StatUpgradeData> statUpgradeTable = new Dictionary<STATUS_UI.Stat, DATA.StatUpgradeData>();
 
     public DATA.CurrencyTable currencyTable;
@@ -39,6 +41,7 @@ public class DataManager : Singleton<DataManager>
         await LoadCharacterData();
         await LoadHeroList();
         await LoadHeroData();
+        await LoadHeroOptionData();
 
         await LoadStatUpgradeTable();
         await LoadCurrencyTable();
@@ -192,6 +195,43 @@ public class DataManager : Singleton<DataManager>
         else
         {
             Debug.LogError("DataManager: hero_data.json 로드 실패2!");
+        }
+    }
+
+    private async Task LoadHeroOptionData()
+    {
+        var handle = Addressables.LoadAssetAsync<TextAsset>(addressableKey_hero_option_data);
+        await handle.Task; // 비동기적으로 완료를 기다림
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            //Addressables에서 로드된 데이터 파싱
+            TextAsset asset = handle.Result;
+            List<DATA.HeroOptionData> allHeroOptionData = JsonConvert.DeserializeObject<List<DATA.HeroOptionData>>(asset.text);
+            if (allHeroOptionData == null)
+            {
+                Debug.LogError("DataManager: hero_data_option.json 로드 실패1!");
+                return;
+            }
+
+            // 2) heroData 딕셔너리 초기화 및 그룹화
+            heroOptionData = new Dictionary<int, List<DATA.HeroOptionData>>();
+            foreach (DATA.HeroOptionData item in allHeroOptionData)
+            {
+                int key = int.Parse(item.Type);
+                if (heroOptionData.ContainsKey(key))
+                {
+                    heroOptionData[key].Add(item);
+                }
+                else
+                {
+                    heroOptionData[key] = new List<DATA.HeroOptionData> { item };
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("DataManager: hero_data_option.json 로드 실패2!");
         }
     }
 

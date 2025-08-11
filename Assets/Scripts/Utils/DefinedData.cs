@@ -10,7 +10,34 @@ namespace DATA
 
         [JsonProperty("Type")]
         public string Type;
+    } 
+    public class StatData
+    {
+        [JsonProperty("Name")]
+        public string Name;
+
+        [JsonProperty("Description")]
+        public string Description;
+
+        [JsonProperty("Sprite")]
+        public string Sprite;
     }
+    public class EquipslotData
+    {
+        [JsonProperty("Part")]
+        public string Part;
+
+        [JsonProperty("Description")]
+        public string Description;
+    }
+
+
+
+
+
+/// <summary>
+/// 서버 클라이언트 공용
+/// </summary>
 
     public class HeroData
     {
@@ -32,7 +59,26 @@ namespace DATA
         [JsonProperty("Sprite")]
         public string Sprite;
     }
+    public class HeroOptionData
+    {
+        [JsonProperty("Id")]
+        public string Id;
 
+        [JsonProperty("Description")]
+        public string Description;
+
+        [JsonProperty("Type")]
+        public string Type;
+
+        [JsonProperty("Slot")]
+        public string[] Slot;
+
+        [JsonProperty("Min")]
+        public float Min;
+
+        [JsonProperty("Max")]
+        public float Max;
+    }
     public class ItemData
     {
         [JsonProperty("Id")]
@@ -50,30 +96,6 @@ namespace DATA
         [JsonProperty("Sprite")]
         public string Sprite;
     }
-
-    public class StatData
-    {
-        [JsonProperty("Name")]
-        public string Name;
-
-        [JsonProperty("Description")]
-        public string Description;
-
-        [JsonProperty("Sprite")]
-        public string Sprite;
-    }
-
-    public class EquipslotData
-    {
-        [JsonProperty("Part")]
-        public string Part;
-
-        [JsonProperty("Description")]
-        public string Description;
-    }
-
-    ////////////////////////////////////////////////////////////////////////
-
     public class StatUpgradeTable
     {
         [JsonProperty("levelUpgrade")]
@@ -112,7 +134,6 @@ namespace DATA
             return BaseCost * Mathf.Pow(CostConstant, level - 1);
         }
     }
-
     public class CurrencyTable
     {
         [JsonProperty("resourcePerInterval")]
@@ -121,7 +142,6 @@ namespace DATA
         [JsonProperty("gainInterval")]
         public float GainInterval { get; set; }
     }
-
     public class EnemyTable
     {
         [JsonProperty("defaultLevel")]

@@ -1,0 +1,31 @@
+[
+  {"Id":1001,"Description":"공격력 증가(%)","Type":"10","Slot":["10","20","31","32"],"min":5,"Max":25},
+  {"Id":1002,"Description":"공격속도 증가(%)","Type":"10","Slot":["10","20","31","32"],"min":3,"Max":20},
+  {"Id":1003,"Description":"크리티컬 데미지 증가(%)","Type":"10","Slot":["10","20","31","32"],"min":10,"Max":50},
+  {"Id":1004,"Description":"크리티컬 확률 증가(%)","Type":"10","Slot":["10","20","31","32"],"min":3,"Max":20},
+  {"Id":1005,"Description":"두 번 공격 확률","Type":"10","Slot":["10","20"],"min":1,"Max":10},
+  {"Id":1006,"Description":"세 번 공격 확률","Type":"10","Slot":["10","20"],"min":1,"Max":10},
+
+  {"Id":2001,"Description":"(시간) 골드 획득량 증가","Type":"20","Slot":["20"],"min":5,"Max":200},
+  {"Id":2002,"Description":"(시간) 획득 골드 배수","Type":"20","Slot":["20"],"min":2.2,"Max":10.5},
+  {"Id":2003,"Description":"보스에게 주는 데미지 증가(%)","Type":"20","Slot":["20"],"min":10,"Max":60},
+  {"Id":2004,"Description":"보스일 때 공격 속도 증가(%)","Type":"20","Slot":["20"],"min":5,"Max":25},
+  {"Id":2005,"Description":"보스일 때 크뎀 증가(%)","Type":"20","Slot":["20"],"min":15,"Max":60},
+  {"Id":2006,"Description":"보스일 때 크확 증가(%)","Type":"20","Slot":["20"],"min":5,"Max":25},
+  {"Id":2007,"Description":"몬스터 처치 시 골드 10배(확률)","Type":"20","Slot":["20"],"min":1,"Max":10},
+  {"Id":2008,"Description":"광폭화 게이지 증가율","Type":"20","Slot":["20"],"min":10,"Max":100},
+  {"Id":2009,"Description":"광폭화 효과 2배(발동 확률)","Type":"20","Slot":["20"],"min":5,"Max":25},
+  {"Id":2010,"Description":"광폭화 효과 3배(발동 확률)","Type":"20","Slot":["20"],"min":2,"Max":12},
+
+  {"Id":3101,"Description":"전 HP 10% 미만 즉사 확률","Type":"31","Slot":["31"],"min":1,"Max":8},
+  {"Id":3102,"Description":"전 현재 비례 추가 피해(가산)","Type":"31","Slot":["31"],"min":0.5,"Max":5},
+  {"Id":3103,"Description":"성스러운 공격 확률(30초간 5배)","Type":"31","Slot":["31"],"min":0.3,"Max":3},
+  {"Id":3104,"Description":"신격화: 1분 방어무시+성스러운(5배)","Type":"31","Slot":["31"],"min":0.1,"Max":1},
+
+  {"Id":3201,"Description":"악마도 무시 확률","Type":"32","Slot":["32"],"min":2,"Max":12},
+  {"Id":3202,"Description":"방어력 관통(%)","Type":"32","Slot":["32"],"min":5,"Max":30},
+  {"Id":3203,"Description":"새 적 등장 시 체력 감소","Type":"32","Slot":["32"],"min":-2,"Max":-15},
+  {"Id":3204,"Description":"보스 현재 체력의 %/초 감소","Type":"32","Slot":["32"],"min":0.2,"Max":1},
+  {"Id":3205,"Description":"악마화: 매 공격 즉사 확률","Type":"32","Slot":["32"],"min":0.05,"Max":1.5},
+  {"Id":3206,"Description":"저주: 30초간 적 방어력 0","Type":"32","Slot":["32"],"min":0.2,"Max":1.5}
+]
