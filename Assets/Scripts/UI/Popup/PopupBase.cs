@@ -4,7 +4,8 @@ using UnityEngine.UI;
 
 public class PopupBase : MonoBehaviour, IPopupBase
 {
-    [SerializeField] public TextMeshProUGUI uiInfoText;
+    [SerializeField] public TextMeshProUGUI uiTitle;
+    [SerializeField] public TextMeshProUGUI uiDescription;
     [SerializeField] public TextMeshProUGUI uiEquipBtnText;
     [SerializeField] public Button equipButton;
     [SerializeField] public Button unQquipButton;
@@ -27,12 +28,9 @@ public class PopupBase : MonoBehaviour, IPopupBase
         
     }
 
-    public virtual PopupBase ShowPopup(string description, bool equiped)
+    public virtual PopupBase ShowPopup()
     {
         gameObject.SetActive(true);
-        uiInfoText.text = description;
-        this.equiped = equiped;
-        uiEquipBtnText.text = equiped ? "UNEQUIP" : "EQUIP";
         return this;
     }
 

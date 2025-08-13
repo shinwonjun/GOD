@@ -24,6 +24,17 @@ public class PopupCharacter : PopupBase, IPopupItem
         string payloadJson = JsonConvert.SerializeObject(payloadObj);
         NetworkManager.SendRequest_Test("UnEquipItem", payloadJson);
     }
+    
+    public override PopupBase ShowPopup()
+    {
+        gameObject.SetActive(true);
+        uiTitle.text = itemData.Name;
+        uiDescription.text = itemData.Description;
+
+        equiped = true; // 내 캐릭터가 장착한 아이템을 클릭한거라 무조건 true
+        uiEquipBtnText.text = equiped ? "UNEQUIP" : "EQUIP";
+        return this;
+    }
 
     public void SetItem(ItemData itemData)
     {

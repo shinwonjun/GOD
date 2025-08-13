@@ -5,7 +5,7 @@ public interface IPopupBase
     /// <summary>
     /// 팝업을 화면에 띄운다.
     /// </summary>
-    PopupBase ShowPopup(string description, bool equiped);
+    PopupBase ShowPopup();
 
     /// <summary>
     /// 착용 버튼

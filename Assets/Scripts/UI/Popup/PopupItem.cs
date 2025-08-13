@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class PopupItem : PopupBase, IPopupItem
 {
+    [SerializeField] public TextMeshProUGUI uiOption1_a;
+    [SerializeField] public TextMeshProUGUI uiOption1_b;
+    [SerializeField] public TextMeshProUGUI uiOption2;
+    [SerializeField] public TextMeshProUGUI uiOption3;
     private ItemData itemData = null;
     public override void Equip()
     {
@@ -39,6 +43,15 @@ public class PopupItem : PopupBase, IPopupItem
 
         string payloadJson = JsonConvert.SerializeObject(payloadObj);
         NetworkManager.SendRequest_Test("UnEquipItem", payloadJson);
+    }
+    public override PopupBase ShowPopup()
+    {
+        gameObject.SetActive(true);
+        uiTitle.text = itemData.Name;
+        uiDescription.text = itemData.Description;
+
+        equiped = GameMyData.Instance.checkEquipedItem(int.Parse(itemData.Id));
+        return this;
     }
 
     public void SetItem(ItemData itemData)

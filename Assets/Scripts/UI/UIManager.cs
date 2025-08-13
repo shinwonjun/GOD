@@ -87,7 +87,7 @@ public class UIManager : MonoSingleton<UIManager>
         await Task.Delay(0);
     }
 
-    public void ShowPopup(POPUP.POPUP type, DATA.ItemData itemData, bool equiped)
+    public void ShowPopup(POPUP.POPUP type, DATA.ItemData itemData)
     {
         if (popupHandlers.ContainsKey(type))
         {
@@ -96,7 +96,7 @@ public class UIManager : MonoSingleton<UIManager>
             else if (type == POPUP.POPUP.character)
                 (popupHandlers[type] as PopupCharacter).SetItem(itemData);
 
-            currentPopup = popupHandlers[type].ShowPopup(itemData.Description, equiped);
+            currentPopup = popupHandlers[type].ShowPopup();
         }
         else
         {
@@ -108,7 +108,7 @@ public class UIManager : MonoSingleton<UIManager>
     {
         if (popupHandlers.ContainsKey(type))
         {
-            currentPopup = popupHandlers[type].ShowPopup(statData.Description, true);
+            currentPopup = popupHandlers[type].ShowPopup();
         }
         else
         {
@@ -116,12 +116,12 @@ public class UIManager : MonoSingleton<UIManager>
         }
     }
 
-    public void ShowPopup(POPUP.POPUP type, DATA.HeroData heroData, bool equiped)
+    public void ShowPopup(POPUP.POPUP type, DATA.HeroData heroData)
     {
         if (popupHandlers.ContainsKey(type))
         {
-            currentPopup = popupHandlers[type].ShowPopup(heroData.Description, equiped);
             (popupHandlers[type] as PopupDex).SetItem(heroData);
+            currentPopup = popupHandlers[type].ShowPopup();
         }
         else
         {

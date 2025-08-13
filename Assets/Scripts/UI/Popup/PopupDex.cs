@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using DATA;
 using Newtonsoft.Json;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PopupDex : PopupBase, IPopupDex
 {
+    [SerializeField] public TextMeshProUGUI uiOption1_a;
+    [SerializeField] public TextMeshProUGUI uiOption1_b;
+    [SerializeField] public TextMeshProUGUI uiOption2;
+    [SerializeField] public TextMeshProUGUI uiOption3;
     private HeroData heroData = null;
     public Toggle selectPos1;
     public Toggle selectPos2;
@@ -33,12 +38,13 @@ public class PopupDex : PopupBase, IPopupDex
         base.init();
     }
 
-    public override PopupBase ShowPopup(string description, bool equiped)
+    public override PopupBase ShowPopup()
     {
         gameObject.SetActive(true);
-        uiInfoText.text = description;
-        //this.equiped = equiped;
-        //uiEquipBtnText.text = equiped ? "UNEQUIP" : "EQUIP";
+        uiTitle.text = heroData.Name;
+        uiDescription.text = heroData.Description;
+        //var checkEquiped = GameMyData.Instance.checkEquippedDex(int.Parse(heroData.Id)); 
+        
         return this;
     }
 

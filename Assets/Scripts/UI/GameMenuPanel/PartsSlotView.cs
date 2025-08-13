@@ -55,8 +55,8 @@ public class PartsSlotView : SlotViewBase<DATA.EquipslotData>
     public override void ShowPopup()
     {
         var itemData = GameMyData.Instance.getEquipedPartsID(parts);
-        var checkEquiped = true;       // 이미 착용하고 있는 슬롯이기 때문에
-        UIManager.Instance.ShowPopup(popupType, itemData, checkEquiped);
+        //var checkEquiped = true;       // 이미 착용하고 있는 슬롯이기 때문에
+        UIManager.Instance.ShowPopup(popupType, itemData);
     }
     private void setImage(string _sprite)
     {

@@ -84,6 +84,9 @@ namespace DATA
         [JsonProperty("Id")]
         public string Id;
 
+        [JsonProperty("Name")]
+        public string Name;
+
         [JsonProperty("Material")]
         public string Material;
 

@@ -28,9 +28,8 @@ public class DexSlotView : SlotViewBase<DATA.HeroData>
 
     public override void ShowPopup()
     {
-        //var itemData = GameMyData.Instance.getItemData(int.Parse(data.Id));
-        var checkEquiped = GameMyData.Instance.checkEquippedDex(int.Parse(data.Id));
-        UIManager.Instance.ShowPopup(popupType, data, checkEquiped);
+        //var checkEquiped = GameMyData.Instance.checkEquippedDex(int.Parse(data.Id));
+        UIManager.Instance.ShowPopup(popupType, data);
     }
     private void setImage(string _sprite)
     {

@@ -30,10 +30,8 @@ public class ItemSlotView : SlotViewBase<DATA.ItemData>
 
     public override void ShowPopup()
     {
-        //var itemData = GameMyData.Instance.getItemData(int.Parse(data.Id));
-
-        var checkEquiped = GameMyData.Instance.checkEquipedItem(int.Parse(data.Id));
-        UIManager.Instance.ShowPopup(popupType, data, checkEquiped);
+        //var checkEquiped = GameMyData.Instance.checkEquipedItem(int.Parse(data.Id));
+        UIManager.Instance.ShowPopup(popupType, data);
     }
     private void setImage(string _sprite)
     {
