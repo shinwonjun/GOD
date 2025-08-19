@@ -78,5 +78,23 @@ namespace GAME
         None = -1,
         GOD,
         DEMON,
-    }    
+    }
+
+    public enum HeroSkilSlot
+    {
+        None = -1,
+        Slot1_a = 10,
+        Slot1_b = 11,
+        Slot2 = 20,
+        Slot31 = 31,        // GOD 전용스킬
+        Slot32 = 32,        // DEMON 전용스킬
+    }
+    public enum ItemSkilSlot
+    {
+        None = -1,
+        Slot1_a = 10,
+        Slot1_b = 11,
+        Slot2 = 20,
+        Slot3 = 30,
+    }
 }

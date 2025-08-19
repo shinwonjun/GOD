@@ -99,6 +99,26 @@ namespace DATA
         [JsonProperty("Sprite")]
         public string Sprite;
     }
+    public class ItemOptionData
+    {
+        [JsonProperty("Id")]
+        public string Id;
+
+        [JsonProperty("Description")]
+        public string Description;
+
+        [JsonProperty("Type")]
+        public string Type;
+
+        [JsonProperty("Slot")]
+        public string[] Slot;
+
+        [JsonProperty("Min")]
+        public float Min;
+
+        [JsonProperty("Max")]
+        public float Max;
+    }
     public class StatUpgradeTable
     {
         [JsonProperty("levelUpgrade")]

@@ -1,0 +1,29 @@
+[
+  {"Id":1001,"Description":"공격력 증가(%)","Type":"10","Slot":["Pitching","Armor","Gloves","Shoes","Necklace","Ring"],"min":5,"Max":25},
+  {"Id":1002,"Description":"공격속도 증가(%)","Type":"10","Slot":["Pitching","Armor","Gloves","Shoes","Necklace","Ring"],"min":3,"Max":20},
+  {"Id":1003,"Description":"크리티컬 데미지 증가(%)","Type":"10","Slot":["Pitching","Armor","Gloves","Shoes","Necklace","Ring"],"min":10,"Max":50},
+  {"Id":1004,"Description":"크리티컬 확률 증가(%)","Type":"10","Slot":["Pitching","Armor","Gloves","Shoes","Necklace","Ring"],"min":3,"Max":20}, 
+
+  {"Id":1101,"Description":"공격력 증가(%)","Type":"11","Slot":["Pitching","Armor","Gloves","Shoes","Necklace","Ring"],"min":5,"Max":25},
+  {"Id":1102,"Description":"공격속도 증가(%)","Type":"11","Slot":["Pitching","Armor","Gloves","Shoes","Necklace","Ring"],"min":3,"Max":20},
+  {"Id":1103,"Description":"크리티컬 데미지 증가(%)","Type":"11","Slot":["Pitching","Armor","Gloves","Shoes","Necklace","Ring"],"min":10,"Max":50},
+  {"Id":1104,"Description":"크리티컬 확률 증가(%)","Type":"11","Slot":["Pitching","Armor","Gloves","Shoes","Necklace","Ring"],"min":3,"Max":20},  
+
+  {"Id":2001,"Description":"(시간) 골드 획득량 증가","Type":"20","Slot":["Necklace"],"min":5,"Max":200},
+  {"Id":2002,"Description":"(시간) 획득 골드 배수","Type":"20","Slot":["Necklace"],"min":2.2,"Max":10.5},
+  {"Id":2003,"Description":"보스에게 주는 데미지 증가(%)","Type":"20","Slot":["Ring"],"min":10,"Max":60},
+  {"Id":2004,"Description":"보스일 때 공격 속도 증가(%)","Type":"20","Slot":["Ring"],"min":5,"Max":25},
+  {"Id":2005,"Description":"보스일 때 크뎀 증가(%)","Type":"20","Slot":["Ring"],"min":15,"Max":60},
+  {"Id":2006,"Description":"보스일 때 크확 증가(%)","Type":"20","Slot":["Ring"],"min":5,"Max":25},
+  {"Id":2007,"Description":"몬스터 처치 시 골드 10배(확률)","Type":"20","Slot":["Pitching","Armor","Gloves","Shoes","Necklace","Ring"],"min":1,"Max":10},
+  {"Id":2008,"Description":"광폭화 게이지 증가율","Type":"20","Slot":["Necklace","Ring"],"min":10,"Max":100},
+  {"Id":2009,"Description":"광폭화 효과 2배(발동 확률)","Type":"20","Slot":["Necklace","Ring"],"min":5,"Max":25},
+  {"Id":2010,"Description":"광폭화 효과 3배(발동 확률)","Type":"20","Slot":["Necklace","Ring"],"min":2,"Max":12},  
+
+  {"Id":3001,"Description":"적 처치시 랜덤 다이아 보상(%)","Type":"30","Slot":["Gloves"],"min":1,"Max":10},
+  {"Id":3002,"Description":"보스 처치시 랜덤 다이아 보상(%)","Type":"30","Slot":["Pitching"],"min":1,"Max":10},
+  {"Id":3003,"Description":"GOD 2명이상 장착이면 랜덤 코인 보상(%)","Type":"30","Slot":["Armor"],"min":1,"Max":10},
+  {"Id":3004,"Description":"DEMON 2명이상 장착이면 랜덤 코인 보상(%)","Type":"30","Slot":["Shoes"],"min":0.1,"Max":1},
+  {"Id":3004,"Description":"GOD 공격시 추가 데미지(%)","Type":"30","Slot":["Necklace"],"min":0.1,"Max":1},
+  {"Id":3004,"Description":"DEMON 공격시 추가 데미지(%)","Type":"30","Slot":["Ring"],"min":0.1,"Max":1}
+]

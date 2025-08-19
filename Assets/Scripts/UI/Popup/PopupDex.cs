@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DATA;
 using Newtonsoft.Json;
+using NUnit.Framework.Constraints;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,8 +44,51 @@ public class PopupDex : PopupBase, IPopupDex
         gameObject.SetActive(true);
         uiTitle.text = heroData.Name;
         uiDescription.text = heroData.Description;
-        //var checkEquiped = GameMyData.Instance.checkEquippedDex(int.Parse(heroData.Id)); 
-        
+
+        var options = GameMyData.Instance.UserData.heroOptions.FirstOrDefault(h => h.Id == int.Parse(heroData.Id));
+        if (options != null)
+        {
+            foreach (var outer in options.options) // 바깥 Dictionary<int, Dictionary<int, List<string>>>
+            {
+                int type = outer.Key;
+                string strOptions = "";
+                foreach (var inner in outer.Value) // 안쪽 Dictionary<int, List<string>>
+                {
+                    var option = DataManager.Instance.heroOptionData[type].FirstOrDefault(opt => opt.Id == inner.Key.ToString());
+
+                    if (option != null)
+                    {
+                        float value1 = float.Parse(inner.Value[0]);
+                        float value2 = float.Parse(inner.Value[1]);
+                        float value3 = float.Parse(inner.Value[2]);
+                        strOptions = $"{option.Description}({value1}~{value2}){value3}";
+                    }
+                    else
+                    {
+                        strOptions = "";
+                    }
+                }
+
+                if (type == (int)GAME.HeroSkilSlot.Slot1_a)
+                {
+                    uiOption1_a.text = strOptions;
+                }
+                else if (type == (int)GAME.HeroSkilSlot.Slot1_b)
+                {
+
+                    uiOption1_b.text = strOptions;
+                }
+                else if (type == (int)GAME.HeroSkilSlot.Slot2)
+                {
+                    uiOption2.text = strOptions;
+                }
+                else if (type == (int)GAME.HeroSkilSlot.Slot31 || type == (int)GAME.HeroSkilSlot.Slot32)
+                {
+                    uiOption3.text = strOptions;
+                }
+            }
+        }
+
         return this;
     }
 
