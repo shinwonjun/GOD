@@ -189,4 +189,16 @@ public class UIManager : MonoSingleton<UIManager>
             }
         }
     }
+
+    public void OnRefreshEquipItem()
+    {
+        foreach (STATUS_UI.Character characterEnum in Enum.GetValues(typeof(STATUS_UI.Character)))
+        {
+            if (characterEnum == STATUS_UI.Character.None)
+                continue;
+            string name = characterEnum.ToString();           // enum 값을 문자열로 변환
+            var item = DataManager.Instance.characterData[name];
+            characterHandlers[characterEnum].SetData(item);
+        }
+    }
 }

@@ -126,7 +126,7 @@ public class GameManager : MonoSingleton<GameManager>
         float afterHP = beforeHP - damage;
 
         // hero attack 
-        heroHandlers.heros[0].attack();
+        heroHandlers.heros[0].attack(isCrit);
 
         // enemy 체력 차감
         heroHandlers.enemys[0].hit(beforeHP, damage, isCrit);

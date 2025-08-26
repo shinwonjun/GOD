@@ -11,7 +11,7 @@ public class Enemy : HeroBase
     {
         base.init(data, pos);
     }
-    public override void attack()
+    public override void attack(bool isCrit)
     {
     }
     public override void hit(float beforeHP, float damage, bool isCrit)

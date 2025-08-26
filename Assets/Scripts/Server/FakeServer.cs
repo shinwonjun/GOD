@@ -142,7 +142,7 @@ public static class FakeServer
                 61
             ],
             ""equippedHeroIds"": {             
-                ""1"": 1,
+                ""1"": 9,
                 ""2"": -1,
                 ""3"": -1
             },
@@ -428,6 +428,21 @@ public static class FakeServer
                 break;
             /////////////////////////
             ///////////////////////// 
+
+
+            /////////////////////////
+            /// hero option
+            ///////////////////////// 
+            case "GetHeroOptions":
+                GetHeroOptions(requestType, payload);
+                break;
+
+            /////////////////////////
+            /// hero option
+            ///////////////////////// 
+            case "GetItemOptions":
+                GetItemOptions(requestType, payload);
+                break;
 
             default:
                 Debug.LogWarning("[FakeServer] Unknown request type.");
@@ -1035,6 +1050,180 @@ public static class FakeServer
         // 유효한 히어로인지 체크
         // 보유한 히어로인지 체크
         // 이미 착용중인 히어로인지 체크(이미 착용중인데 또 착용예외처리)
+        int successType = -1;
+        string _message = "";
+        int equipId = -1;
+        int unequipId = -1;
+
+        if (DataManager.Instance.heroData.TryGetValue(heroId, out DATA.HeroData data))
+        {
+            if (!UserData.ownedHeroIds.Contains(heroId))
+            {
+                var error = JsonConvert.SerializeObject(new
+                {
+                    success = false,
+                    message = "보유하지 않은 히어로."
+                });
+                OnReceiveResponse?.Invoke(responseType, error);
+                return;
+            }
+
+            var id = UserData.equippedHeroIds[position.ToString()];
+            if (id == -1)
+            {
+                //Debug.Log("이 파츠에는 아직 아무 것도 장착되지 않았습니다.");
+                successType = -2;
+                _message = "장착되어 있지 않은 히어로 입니다.";
+            }
+            else
+            {
+                if (id == heroId)
+                {
+                    successType = 1;
+                    unequipId = heroId;
+                    _message = "정상적으로 장착 해제되었습니다.";
+                }
+                else
+                {
+                    successType = -3;
+                    unequipId = heroId;
+                    equipId = id;
+                    _message = "장착되어 있는 히어로와 다릅니다.";
+                }
+            }
+        }
+        else
+        {
+            successType = -1;
+            _message = "존재하지 않는 히어로입니다.";
+        }
+
+        if (successType > 0)
+        {
+            // [DB갱신]
+            if (position > 0)
+            {
+                UserData.equippedHeroIds[position.ToString()] = -1;
+            }
+        }
+
+        var msg = JsonConvert.SerializeObject(new
+        {
+            success = successType > 0 ? true : false,
+            unEquipPos = position,
+            unEquipId = unequipId,
+            equipId = equipId,
+            message = _message
+        });
+
+        OnReceiveResponse?.Invoke(responseType, msg);
+    }
+
+    private static void GetHeroOptions(string responseType, string payload)
+    {
+        var jObj = JObject.Parse(payload);
+        int heroId = jObj["heroId"]?.Value<int>() ?? -1;
+        int diamond = jObj["diamond"]?.Value<int>() ?? -1;
+        if (heroId == -1)
+        {
+            var error = JsonConvert.SerializeObject(new
+            {
+                success = false,
+                message = "(-1) 잘못된 히어로"
+            });
+            OnReceiveResponse?.Invoke(responseType, error);
+            return;
+        }
+
+        if (diamond == -1)
+        {
+            var error = JsonConvert.SerializeObject(new
+            {
+                success = false,
+                message = "(-1) 잘못된 다이아몬드"
+            });
+            OnReceiveResponse?.Invoke(responseType, error);
+            return;
+        }
+
+        // 유효한 히어로인지 체크
+        // 보유한 히어로인지 체크
+        // 보유한 다이아가 충분한지 체크
+
+        int successType = -1;
+        BigInteger currentDiamond = -1;
+        string _message = "";
+        
+
+        if (DataManager.Instance.heroData.TryGetValue(heroId, out DATA.HeroData data))
+        {
+            if (!UserData.ownedHeroIds.Contains(heroId))
+            {
+                var error = JsonConvert.SerializeObject(new
+                {
+                    success = false,
+                    message = "보유하지 않은 히어로."
+                });
+                OnReceiveResponse?.Invoke(responseType, error);
+                return;
+            }
+
+            if (UserData.diamond >= diamond)
+            {
+                UserData.diamond = UserData.diamond - diamond;
+
+                successType = 1;
+                currentDiamond = UserData.diamond;
+
+                //UserData.heroOptions.
+
+                _message = "축하합니다.";
+            }
+            else
+            {
+                successType = -2;
+                _message = "보유한 다이아몬드가 부족합니다.";
+            }
+        }
+        else
+        {
+            successType = -1;
+            _message = "존재하지 않는 히어로입니다.";
+        }
+
+        if (successType > 0)
+        {
+        }
+
+        var msg = JsonConvert.SerializeObject(new
+        {
+            success = successType > 0 ? true : false,
+            message = _message
+        });
+
+        OnReceiveResponse?.Invoke(responseType, msg);
+    }
+
+    private static void GetItemOptions(string responseType, string payload)
+    {
+        var jObj = JObject.Parse(payload);
+        int heroId = jObj["heroId"]?.Value<int>() ?? -1;
+        int position = jObj["position"]?.Value<int>() ?? -1;
+        if (heroId == -1)
+        {
+            var error = JsonConvert.SerializeObject(new
+            {
+                success = false,
+                message = "(-1) 잘못된 히어로"
+            });
+            OnReceiveResponse?.Invoke(responseType, error);
+            return;
+        }
+
+        // 유효한 아이템인지 체크
+        // 보유한 아이템인지 체크
+        // 보유한 다이아가 충분한지 체크
+        
         int successType = -1;
         string _message = "";
         int equipId = -1;

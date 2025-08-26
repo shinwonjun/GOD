@@ -5,9 +5,7 @@ using UnityEngine.UI;
 
 public abstract class HeroBase : MonoBehaviour
 {
-    private const int OptionSlot1Count = 2;
-    private const int OptionSlot2Count = 1;
-    private const int OptionSlot3Count = 1;
+     protected Animator animator = null;
     [SerializeField] protected Image image;
     [HideInInspector] protected int position = -1;
     [HideInInspector] protected DATA.HeroData info;
@@ -23,15 +21,26 @@ public abstract class HeroBase : MonoBehaviour
             return;
         }
 
-        Options[0] = new Dictionary<int, DATA.HeroOptionData>();
-        Options[1] = new Dictionary<int, DATA.HeroOptionData>();
-        Options[2] = new Dictionary<int, DATA.HeroOptionData>();
+        if (!Options.ContainsKey(0))
+            Options[0] = new Dictionary<int, DATA.HeroOptionData>();
+        else
+            Options[0].Clear(); // 기존 데이터 초기화
+
+        if (!Options.ContainsKey(1))
+            Options[1] = new Dictionary<int, DATA.HeroOptionData>();
+        else
+            Options[1].Clear(); // 기존 데이터 초기화
+
+        if (!Options.ContainsKey(2))
+            Options[2] = new Dictionary<int, DATA.HeroOptionData>();
+        else
+            Options[2].Clear(); // 기존 데이터 초기화
 
         gameObject.SetActive(true);
         heroType = (GAME.HeroType)Enum.Parse(typeof(GAME.HeroType), info.Type);
         position = pos;
         image.sprite = UIManager.Instance.uiAtlas[STATUS_UI.TAB.Dex].GetSprite(info.Sprite);
     }
-    public abstract void attack();  // 공격
+    public abstract void attack(bool isCrit);  // 공격
     public abstract void hit(float beforeHP, float damage, bool isCrit);     // 피격
 }

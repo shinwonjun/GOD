@@ -32,6 +32,30 @@ public class HeroHandler : MonoBehaviour
         await handle_enemy.Task;
         OnLoadPrefabsEnemy(handle_enemy);
     }
+
+    public void OnRefreshHero()
+    {
+        for (int i = 0; i < MAX_HERO; ++i)
+        {
+            var hero = heros[i];
+            string key = (i + 1).ToString();
+            int id = GameMyData.Instance.UserData.equippedHeroIds[key];
+            bool checkEquip = false;
+
+            var data = DataManager.Instance.GetHeroData(id);
+            if (data != null)
+            {
+                hero.init(data, i);
+                checkEquip = true;
+            }
+
+            if (checkEquip == false)
+            {
+                hero.init(null, -1);
+            }
+        }
+    }
+
     private void OnLoadPrefabsHero(AsyncOperationHandle<GameObject> handle)
     {
         if (handle.Status == AsyncOperationStatus.Succeeded)
@@ -47,19 +71,18 @@ public class HeroHandler : MonoBehaviour
                 goHero.transform.localScale = Vector3.one;
 
                 var hero = goHero.GetComponent<Hero>();
-                
+
                 string key = (i + 1).ToString();
                 int id = GameMyData.Instance.UserData.equippedHeroIds[key];
                 bool checkEquip = false;
-                if (DataManager.Instance.heroData.ContainsKey(id))
+
+                var data = DataManager.Instance.GetHeroData(id);
+                if (data != null)
                 {
-                    var data = DataManager.Instance.GetHeroData(id);
-                    if (data != null)
-                    {
-                        hero.init(data, i);
-                        checkEquip = true;
-                    }
+                    hero.init(data, i);
+                    checkEquip = true;
                 }
+
                 if (checkEquip == false)
                 {
                     hero.init(null, -1);

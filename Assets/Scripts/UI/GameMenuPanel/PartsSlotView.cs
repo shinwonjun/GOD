@@ -47,6 +47,10 @@ public class PartsSlotView : SlotViewBase<DATA.EquipslotData>
         {
             setImage(item.Sprite);
         }
+        else
+        {
+            image.sprite = null;
+        }
     }
     private void Awake()
     {

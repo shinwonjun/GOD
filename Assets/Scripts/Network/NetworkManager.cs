@@ -159,6 +159,7 @@ public static class NetworkManager
                     GameMyData.Instance.UserData.equippedItems[equipItem.parts] = equipItem.equipId;
                     UIManager.Instance.refreshInventory(equipItem.prevId, equipItem.equipId);
                     UIManager.Instance.currentPopup.HidePopup();
+                    UIManager.Instance.OnRefreshEquipItem();
                 }
 
                 Debug.Log($"[NetworkManager] EquipItem:{equipItem.success} - message : {equipItem.message}");
@@ -171,6 +172,7 @@ public static class NetworkManager
                     GameMyData.Instance.UserData.equippedItems[unEquipItem.parts] = unEquipItem.equipId;
                     UIManager.Instance.refreshInventory(unEquipItem.prevId, unEquipItem.equipId);
                     UIManager.Instance.currentPopup.HidePopup();
+                    UIManager.Instance.OnRefreshEquipItem();
                 }
 
                 Debug.Log($"[NetworkManager] UnEquipItem:{unEquipItem.success} - message : {unEquipItem.message}");
@@ -186,6 +188,7 @@ public static class NetworkManager
                     }
                     GameMyData.Instance.UserData.equippedHeroIds[equipHero.equipPos.ToString()] = equipHero.equipId;
 
+                    GameManager.Instance.heroHandlers.OnRefreshHero();
                     UIManager.Instance.refreshDex(equipHero.prevId);
                     UIManager.Instance.currentPopup.HidePopup();
                 }
@@ -202,6 +205,7 @@ public static class NetworkManager
                         GameMyData.Instance.UserData.equippedHeroIds[unequipHero.unEquipPos.ToString()] = -1;
                     }
 
+                    GameManager.Instance.heroHandlers.OnRefreshHero();
                     UIManager.Instance.refreshDex(unequipHero.unEquipId);
                     UIManager.Instance.currentPopup.HidePopup();
                 }

@@ -181,6 +181,10 @@ public class GameMyData : Singleton<GameMyData>
         if (UserData.equippedItems.ContainsKey(parts.ToString()))
         {
             int id = UserData.equippedItems[parts.ToString()];
+            if (id == -1 || !DataManager.Instance.itemData.ContainsKey(id))
+            {
+                return null;
+            }
             return DataManager.Instance.itemData[id];
         }
         return null;
