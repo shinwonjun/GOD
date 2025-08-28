@@ -14,8 +14,8 @@ public class Hero : HeroBase
         Debug.Log("[Simulation] hero attack!");
         if (animator)
         {
-            //string attackState = isCrit == true ? "hero9_critical" : "hero9_normal";
-            //animator.SetTrigger(attackState);
+            string attackState = isCrit == true ? "hero9_critical" : "hero9_normal";
+            animator.SetTrigger(attackState);
         }
     }
     public override void hit(float beforeHP, float damage, bool isCrit)

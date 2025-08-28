@@ -602,17 +602,17 @@ public static class FakeServer
         }
 
         // 2. 마지막 데미지가 내 캐릭터 공격력보다 너무 크지 않은지 검증
-        float maxServerAttack = GetFinalAttackPower_UserControlled(UserData, serverEnemy, withCritical: true); // 서버 입장에서 계산
-        if (lastHit > maxServerAttack * 1.5f) // 1.5배 이상은 조작 의심
-        {
-            var error = JsonConvert.SerializeObject(new
-            {
-                success = false,
-                message = "마지막 공격 데미지가 비정상적으로 큼 (조작 의심)"
-            });
-            OnReceiveResponse?.Invoke(responseType, error);
-            return;
-        }
+        // float maxServerAttack = GetFinalAttackPower_UserControlled(UserData, serverEnemy, withCritical: false); // 서버 입장에서 계산
+        // if (lastHit > maxServerAttack * 1.5f) // 1.5배 이상은 조작 의심
+        // {
+        //     var error = JsonConvert.SerializeObject(new
+        //     {
+        //         success = false,
+        //         message = "마지막 공격 데미지가 비정상적으로 큼 (조작 의심)"
+        //     });
+        //     OnReceiveResponse?.Invoke(responseType, error);
+        //     return;
+        // }
 
         // 모든 검증 통과 → 보상 지급
         float reward = serverEnemy.GetReward();
@@ -621,6 +621,9 @@ public static class FakeServer
         selectEnemy();  // 새로운 적 선택 + 적 레벨 업
 
         // [DB갱신]
+
+        // [test] 임시로 적은 동일하게 39번 사용해보자
+        UserData.enemy.EnemyId = 39;
 
         var response = JsonConvert.SerializeObject(new
         {
@@ -1140,10 +1143,21 @@ public static class FakeServer
             var error = JsonConvert.SerializeObject(new
             {
                 success = false,
-                message = "(-1) 잘못된 다이아몬드"
+                message = "(-2) 잘못된 다이아몬드"
             });
             OnReceiveResponse?.Invoke(responseType, error);
             return;
+        }
+
+        if (UserData.diamond != diamond)
+        {
+            // var error = JsonConvert.SerializeObject(new
+            // {
+            //     success = false,
+            //     message = "(-3) 다이아몬드 수량 오류"
+            // });
+            // OnReceiveResponse?.Invoke(responseType, error);
+            // return;
         }
 
         // 유효한 히어로인지 체크
@@ -1153,8 +1167,10 @@ public static class FakeServer
         int successType = -1;
         BigInteger currentDiamond = -1;
         string _message = "";
-        
 
+
+
+        var selected = new Dictionary<int, string>();
         if (DataManager.Instance.heroData.TryGetValue(heroId, out DATA.HeroData data))
         {
             if (!UserData.ownedHeroIds.Contains(heroId))
@@ -1168,14 +1184,65 @@ public static class FakeServer
                 return;
             }
 
-            if (UserData.diamond >= diamond)
+            if (UserData.diamond >= 100)
             {
-                UserData.diamond = UserData.diamond - diamond;
+                UserData.diamond = UserData.diamond - 100;
 
                 successType = 1;
                 currentDiamond = UserData.diamond;
 
-                //UserData.heroOptions.
+
+                System.Random rand = new System.Random();
+                foreach (var h in UserData.heroOptions)
+                {
+                    if (h.Id != heroId) continue;
+
+                    // 전체 옵션 평탄화
+                    var allOptions = DataManager.Instance.heroOptionData.Values
+                        .SelectMany(list => list)
+                        .Where(o => o?.Slot != null)
+                        .ToList();
+
+                    // 고정 슬롯
+                    var fixedSlots = new List<int> { 10, 11, 20 };
+                    foreach (var slot in fixedSlots)
+                    {
+                        var pick = PickOneForSlot(allOptions, slot);
+                        if (pick == null) continue;
+                        float rolled = RollValue(pick);
+                        selected[slot] = $"{pick.Id},{rolled.ToString()}";
+                        h.options[slot].Clear();   // 기존 데이터 싹 지움
+                        //h.options[slot][int.Parse(pick.Id)]
+
+                        h.options[slot][int.Parse(pick.Id)] = new List<string>
+                        {
+                            pick.Min.ToString(),
+                            pick.Max.ToString(),
+                            rolled.ToString()
+                        };
+                    }
+
+                    // GOD - 31 또는 DEMON - 32 중 하나
+
+                    int specialSlot = data.Type == "GOD" ? 31 : 32;
+                    var specialPick = PickOneForSlot(allOptions, specialSlot);
+                    if (specialPick != null)
+                    {
+                        fixedSlots.Add(specialSlot);
+                        float rolled = RollValue(specialPick);
+                        selected[specialSlot] = $"{specialPick.Id},{rolled.ToString()}";
+                        h.options[specialSlot].Clear();   // 기존 데이터 싹 지움
+
+                        h.options[specialSlot][int.Parse(specialPick.Id)] = new List<string>
+                        {
+                            specialPick.Min.ToString(),
+                            specialPick.Max.ToString(),
+                            rolled.ToString()
+                        };
+                    }
+
+                    break;
+                }
 
                 _message = "축하합니다.";
             }
@@ -1191,18 +1258,45 @@ public static class FakeServer
             _message = "존재하지 않는 히어로입니다.";
         }
 
-        if (successType > 0)
-        {
-        }
-
         var msg = JsonConvert.SerializeObject(new
         {
             success = successType > 0 ? true : false,
-            message = _message
+            message = _message,
+            diamond = currentDiamond,
+            heroId = heroId,
+            options = selected
         });
 
         OnReceiveResponse?.Invoke(responseType, msg);
     }
+
+    /// <summary>
+    /// 주어진 슬롯에 들어갈 수 있는 옵션 중 랜덤 1개 선택 (중복 허용)
+    /// </summary>
+    private static DATA.HeroOptionData PickOneForSlot(List<DATA.HeroOptionData> allOptions, int slot)
+    {
+        System.Random rand = new System.Random();
+        string slotStr = slot.ToString();
+        var candidates = allOptions
+            .Where(o => o.Slot.Contains(slotStr))
+            .ToList();
+
+        if (candidates.Count == 0) return null;
+        return candidates[rand.Next(candidates.Count)];
+    }
+    
+    private static float RollValue(DATA.HeroOptionData opt)
+    {
+        System.Random rand = new System.Random();
+        double v = rand.NextDouble() * (opt.Max - opt.Min) + opt.Min;
+        return (float)Math.Round(v, 2);
+    }
+
+
+
+
+
+
 
     private static void GetItemOptions(string responseType, string payload)
     {
@@ -1223,7 +1317,7 @@ public static class FakeServer
         // 유효한 아이템인지 체크
         // 보유한 아이템인지 체크
         // 보유한 다이아가 충분한지 체크
-        
+
         int successType = -1;
         string _message = "";
         int equipId = -1;

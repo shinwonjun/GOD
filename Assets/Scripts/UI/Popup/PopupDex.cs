@@ -10,6 +10,7 @@ using UnityEngine.UI;
 
 public class PopupDex : PopupBase, IPopupDex
 {
+    [SerializeField] public Button resetButton;
     [SerializeField] public TextMeshProUGUI uiOption1_a;
     [SerializeField] public TextMeshProUGUI uiOption1_b;
     [SerializeField] public TextMeshProUGUI uiOption2;
@@ -32,11 +33,20 @@ public class PopupDex : PopupBase, IPopupDex
         selectPos1.onValueChanged.AddListener((isOn) => { if (isOn) OnToggleChanged(1); });
         selectPos2.onValueChanged.AddListener((isOn) => { if (isOn) OnToggleChanged(2); });
         selectPos3.onValueChanged.AddListener((isOn) => { if (isOn) OnToggleChanged(3); });
+        
+        if (resetButton != null)
+            resetButton.onClick.AddListener(ResetOptions);
     }
 
     public override void init()
     {
         base.init();
+    }
+
+    public override void Refresh()
+    {
+        base.Refresh();
+        ShowPopup();
     }
 
     public override PopupBase ShowPopup()
@@ -54,7 +64,10 @@ public class PopupDex : PopupBase, IPopupDex
                 string strOptions = "";
                 foreach (var inner in outer.Value) // 안쪽 Dictionary<int, List<string>>
                 {
-                    var option = DataManager.Instance.heroOptionData[type].FirstOrDefault(opt => opt.Id == inner.Key.ToString());
+                    //var option = DataManager.Instance.heroOptionData[type].FirstOrDefault(opt => opt.Id == inner.Key.ToString());
+                    var option = DataManager.Instance.heroOptionData
+                        .SelectMany(kv => kv.Value)               // 모든 List<HeroOptionData> 펼치기
+                        .FirstOrDefault(o => o.Id == inner.Key.ToString());
 
                     if (option != null)
                     {
@@ -223,5 +236,19 @@ public class PopupDex : PopupBase, IPopupDex
 
         // 3) 모든 슬롯이 현재 위치뿐인 기묘한 경우(슬롯이 1개뿐이라면 등)
         return null;
+    }
+
+    public void ResetOptions()
+    {        
+        Debug.Log("Reset Clicked");
+
+        var payloadObj = new
+        {
+            heroId = heroData.Id,
+            diamond = GameMyData.Instance.UserData.diamond,
+        };
+
+        string payloadJson = JsonConvert.SerializeObject(payloadObj);
+        NetworkManager.SendRequest_Test("GetHeroOptions", payloadJson);
     }
 }

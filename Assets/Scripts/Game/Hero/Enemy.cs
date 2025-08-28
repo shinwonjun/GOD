@@ -9,7 +9,14 @@ public class Enemy : HeroBase
     private TextMeshProUGUI textHP = null;
     public override void init(DATA.HeroData data, int pos)
     {
+        animator = transform.GetComponent<Animator>();
+
         base.init(data, pos);
+
+        if (animator)
+        {
+            animator.Play("enemy39_on");
+        }
     }
     public override void attack(bool isCrit)
     {
@@ -23,6 +30,11 @@ public class Enemy : HeroBase
         string hp = GameMyData.Instance.UserData.enemy.GetHP().ToString("F2"); // 반올림
 
         textHP.text = $"{current}/{hp}";
+
+        if (animator)
+        {
+            animator.SetTrigger("hit");
+        }
     }
 
     public void setLevel(int level)
@@ -86,9 +98,19 @@ public class Enemy : HeroBase
             rect.localRotation = Quaternion.identity;
             rect.localScale = Vector3.one;
         }
-        
+
         string current = GameMyData.Instance.UserData.enemy.GetHP().ToString("F2"); // 반올림
         string hp = GameMyData.Instance.UserData.enemy.GetHP().ToString("F2"); // 반올림
         textHP.text = $"{current}/{hp}";
+    }
+
+    public override void die()
+    {
+        base.die();
+
+        if (animator)
+        {
+            animator.SetTrigger("die");
+        }
     }
 }

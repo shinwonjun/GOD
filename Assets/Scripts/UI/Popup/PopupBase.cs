@@ -25,7 +25,7 @@ public class PopupBase : MonoBehaviour, IPopupBase
 
     public virtual void init()
     {
-        
+
     }
 
     public virtual PopupBase ShowPopup()
@@ -56,5 +56,10 @@ public class PopupBase : MonoBehaviour, IPopupBase
     public virtual void HidePopup()
     {
         gameObject.SetActive(false);
+    }
+
+    public virtual void Refresh()
+    {
+
     }
 }

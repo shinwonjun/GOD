@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -196,8 +199,8 @@ public static class NetworkManager
                 Debug.Log($"[NetworkManager] EquipHero:{equipHero.success} - message : {equipHero.message}");
                 break;
             case "UnEquipHero":
-                var EUnquipHeroObj = GameMyData.Instance.LoadFromJson(json, typeof(UnEquipHero));
-                var unequipHero = (UnEquipHero)EUnquipHeroObj;
+                var UnquipHeroObj = GameMyData.Instance.LoadFromJson(json, typeof(UnEquipHero));
+                var unequipHero = (UnEquipHero)UnquipHeroObj;
                 if (unequipHero.success)
                 {
                     if (unequipHero.unEquipPos > 0)
@@ -211,6 +214,60 @@ public static class NetworkManager
                 }
 
                 Debug.Log($"[NetworkManager] UnEquipHero:{unequipHero.success} - message : {unequipHero.message}");
+                break;
+            case "GetHeroOptions":            
+                var HeroOptionObj = GameMyData.Instance.LoadFromJson(json, typeof(HeroOption));
+                var option = (HeroOption)HeroOptionObj;
+                if (option.success)
+                {
+                    var target = GameMyData.Instance.UserData.heroOptions.Find(h => h.Id == option.heroId);
+                    target.options.Clear();
+
+                    foreach (var kv in option.options) // option.options = Dictionary<int, string>
+                    {
+                        int slot = kv.Key;              // key 값 (10, 11, 20, 31 ...)
+                        string value = kv.Value;        // "1006,6.3"
+
+                        // 쉼표 기준 분리
+                        var parts = value.Split(',');
+                        if (parts.Length >= 2)
+                        {
+                            string optIdStr = parts[0].Trim();   // "1006"
+                            string rolledStr = parts[1].Trim();  // "6.3"
+
+                            int optId = int.Parse(optIdStr);
+                            float rolled = float.Parse(rolledStr, CultureInfo.InvariantCulture);
+
+                            foreach (var key in DataManager.Instance.heroOptionData)
+                            {
+                                var found = key.Value.FirstOrDefault(o => o.Id == optId.ToString());
+                                if (found != null)
+                                {
+                                    //return (found.Min, found.Max);
+
+                                    if (!target.options.ContainsKey(slot))
+                                        target.options[slot] = new Dictionary<int, List<string>>();
+
+                                    target.options[slot][optId] = new List<string>
+                                    {
+                                        found.Min.ToString(CultureInfo.InvariantCulture),
+                                        found.Max.ToString(CultureInfo.InvariantCulture),
+                                        rolled.ToString(CultureInfo.InvariantCulture)
+                                    };
+
+                                    int a = 0;
+                                    break;
+                                }
+                            }
+
+                            Console.WriteLine($"Slot={slot}, OptionId={optId}, Value={rolled}");
+                        }
+                    }
+
+                    GameMyData.Instance.Diamond = option.diamond;
+                    UIManager.Instance.currentPopup.Refresh();
+                }
+                Debug.Log($"[NetworkManager] GetHeroOptions:{option.success} - message : {option.message}");
                 break;
             default:
                 Debug.LogWarning($"[NetworkManager] Unhandled responseType: {responseType}");

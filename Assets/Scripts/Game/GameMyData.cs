@@ -85,6 +85,15 @@ public class UnEquipHero
     public int equipId;
     public string message;
 }
+[System.Serializable]
+public class HeroOption
+{
+    public bool success;
+    public BigInteger diamond;
+    public int heroId;
+    public Dictionary<int, string> options { get; set; }
+    public string message;
+}
 
 
 

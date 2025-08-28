@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public abstract class HeroBase : MonoBehaviour
 {
-     protected Animator animator = null;
+    protected Animator animator = null;
     [SerializeField] protected Image image;
     [HideInInspector] protected int position = -1;
     [HideInInspector] protected DATA.HeroData info;
@@ -43,4 +43,6 @@ public abstract class HeroBase : MonoBehaviour
     }
     public abstract void attack(bool isCrit);  // 공격
     public abstract void hit(float beforeHP, float damage, bool isCrit);     // 피격
+
+    public virtual void die() { }
 }

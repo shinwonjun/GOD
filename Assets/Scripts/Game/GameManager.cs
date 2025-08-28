@@ -154,19 +154,22 @@ public class GameManager : MonoSingleton<GameManager>
     public async Task SetNextEnemy(bool successed)
     {
         int id = GameMyData.Instance.UserData.enemy.EnemyId;
-        var data = DataManager.Instance.GetHeroData(id);
-        if (data != null)
-        {
-            heroHandlers.enemys[0].init(data, 0);
-            Enemy enemy = heroHandlers.enemys[0] as Enemy;
-            if (enemy != null)
-            {
-                enemy.setLevel(GameMyData.Instance.UserData.enemy.Level);
-            }
-        }
-
         if (successed == true)
         {
+            var data = DataManager.Instance.GetHeroData(id);
+            if (data != null)
+            {
+                heroHandlers.enemys[0].die();
+                await Task.Delay(2000);
+
+                heroHandlers.enemys[0].init(data, 0);
+                Enemy enemy = heroHandlers.enemys[0] as Enemy;
+                if (enemy != null)
+                {
+                    enemy.setLevel(GameMyData.Instance.UserData.enemy.Level);
+                }
+            }
+
             Debug.Log($"[GameManager] KillEnemy 성공 - 새로운 적 등장: {id}, 총 코인: {GameMyData.Instance.UserData.enemy.Level}");
             await Task.Delay(1000);
         }

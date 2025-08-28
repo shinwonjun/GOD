@@ -26,8 +26,10 @@ public interface IPopupBase
 public interface IPopupItem
 {
     void SetItem(DATA.ItemData itemData);
+    //void ResetOptions();
 }
 public interface IPopupDex
 {
     void SetItem(DATA.HeroData heroData);
+    void ResetOptions();
 }
