@@ -94,6 +94,15 @@ public class HeroOption
     public Dictionary<int, string> options { get; set; }
     public string message;
 }
+[System.Serializable]
+public class ItemOption
+{
+    public bool success;
+    public BigInteger diamond;
+    public int itemId;
+    public Dictionary<int, string> options { get; set; }
+    public string message;
+}
 
 
 

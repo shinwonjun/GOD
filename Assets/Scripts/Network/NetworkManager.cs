@@ -215,7 +215,7 @@ public static class NetworkManager
 
                 Debug.Log($"[NetworkManager] UnEquipHero:{unequipHero.success} - message : {unequipHero.message}");
                 break;
-            case "GetHeroOptions":            
+            case "GetHeroOptions":
                 var HeroOptionObj = GameMyData.Instance.LoadFromJson(json, typeof(HeroOption));
                 var option = (HeroOption)HeroOptionObj;
                 if (option.success)
@@ -268,6 +268,60 @@ public static class NetworkManager
                     UIManager.Instance.currentPopup.Refresh();
                 }
                 Debug.Log($"[NetworkManager] GetHeroOptions:{option.success} - message : {option.message}");
+                break;
+            case "GetItemOptions":
+                var ItemOptionObj = GameMyData.Instance.LoadFromJson(json, typeof(ItemOption));
+                var itemOption = (ItemOption)ItemOptionObj;
+                if (itemOption.success)
+                {
+                    var target = GameMyData.Instance.UserData.itemOptions.Find(h => h.Id == itemOption.itemId);
+                    target.options.Clear();
+
+                    foreach (var kv in itemOption.options) // option.options = Dictionary<int, string>
+                    {
+                        int slot = kv.Key;              // key 값 (10, 11, 20, 31 ...)
+                        string value = kv.Value;        // "1006,6.3"
+
+                        // 쉼표 기준 분리
+                        var parts = value.Split(',');
+                        if (parts.Length >= 2)
+                        {
+                            string optIdStr = parts[0].Trim();   // "1006"
+                            string rolledStr = parts[1].Trim();  // "6.3"
+
+                            int optId = int.Parse(optIdStr);
+                            float rolled = float.Parse(rolledStr, CultureInfo.InvariantCulture);
+
+                            foreach (var key in DataManager.Instance.itemOptionData)
+                            {
+                                var found = key.Value.FirstOrDefault(o => o.Id == optId.ToString());
+                                if (found != null)
+                                {
+                                    //return (found.Min, found.Max);
+
+                                    if (!target.options.ContainsKey(slot))
+                                        target.options[slot] = new Dictionary<int, List<string>>();
+
+                                    target.options[slot][optId] = new List<string>
+                                    {
+                                        found.Min.ToString(CultureInfo.InvariantCulture),
+                                        found.Max.ToString(CultureInfo.InvariantCulture),
+                                        rolled.ToString(CultureInfo.InvariantCulture)
+                                    };
+
+                                    int a = 0;
+                                    break;
+                                }
+                            }
+
+                            Console.WriteLine($"Slot={slot}, OptionId={optId}, Value={rolled}");
+                        }
+                    }
+
+                    GameMyData.Instance.Diamond = itemOption.diamond;
+                    UIManager.Instance.currentPopup.Refresh();
+                }
+                Debug.Log($"[NetworkManager] GetItemOptions:{itemOption.success} - message : {itemOption.message}");
                 break;
             default:
                 Debug.LogWarning($"[NetworkManager] Unhandled responseType: {responseType}");

@@ -29,7 +29,7 @@ public class PopupCharacter : PopupBase, IPopupItem
         string payloadJson = JsonConvert.SerializeObject(payloadObj);
         NetworkManager.SendRequest_Test("UnEquipItem", payloadJson);
     }
-    
+
     public override PopupBase ShowPopup()
     {
         gameObject.SetActive(true);
@@ -88,5 +88,10 @@ public class PopupCharacter : PopupBase, IPopupItem
     public void SetItem(ItemData itemData)
     {
         this.itemData = itemData;
+    }
+
+    public void ResetOptions()
+    {
+
     }
 }

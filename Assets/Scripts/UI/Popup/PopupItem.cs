@@ -7,11 +7,20 @@ using UnityEngine.UI;
 
 public class PopupItem : PopupBase, IPopupItem
 {
+    [SerializeField] public Button resetButton;
     [SerializeField] public TextMeshProUGUI uiOption1_a;
     [SerializeField] public TextMeshProUGUI uiOption1_b;
     [SerializeField] public TextMeshProUGUI uiOption2;
     [SerializeField] public TextMeshProUGUI uiOption3;
     private ItemData itemData = null;
+
+    public override void Start()
+    {
+        base.Start();        
+        
+        if (resetButton != null)
+            resetButton.onClick.AddListener(ResetOptions);
+    }
     public override void Equip()
     {
         if (itemData == null)
@@ -45,6 +54,11 @@ public class PopupItem : PopupBase, IPopupItem
         string payloadJson = JsonConvert.SerializeObject(payloadObj);
         NetworkManager.SendRequest_Test("UnEquipItem", payloadJson);
     }
+    public override void Refresh()
+    {
+        base.Refresh();
+        ShowPopup();
+    }
     public override PopupBase ShowPopup()
     {
         gameObject.SetActive(true);
@@ -52,6 +66,7 @@ public class PopupItem : PopupBase, IPopupItem
         uiDescription.text = itemData.Description;
 
         equiped = GameMyData.Instance.checkEquipedItem(int.Parse(itemData.Id));
+        uiEquipBtnText.text = equiped ? "UNEQUIP" : "EQUIP";
 
         var options = GameMyData.Instance.UserData.itemOptions.FirstOrDefault(h => h.Id == int.Parse(itemData.Id));
         if (options != null)
@@ -62,7 +77,10 @@ public class PopupItem : PopupBase, IPopupItem
                 string strOptions = "";
                 foreach (var inner in outer.Value) // 안쪽 Dictionary<int, List<string>>
                 {
-                    var option = DataManager.Instance.itemOptionData[type].FirstOrDefault(opt => opt.Id == inner.Key.ToString());
+                    //var option = DataManager.Instance.itemOptionData[type].FirstOrDefault(opt => opt.Id == inner.Key.ToString());
+                    var option = DataManager.Instance.itemOptionData
+                        .SelectMany(kv => kv.Value)               // 모든 List<HeroOptionData> 펼치기
+                        .FirstOrDefault(o => o.Id == inner.Key.ToString());
 
                     if (option != null)
                     {
@@ -102,5 +120,18 @@ public class PopupItem : PopupBase, IPopupItem
     public void SetItem(ItemData itemData)
     {
         this.itemData = itemData;
+    }
+    public void ResetOptions()
+    {
+        Debug.Log("Reset Clicked");
+
+        var payloadObj = new
+        {
+            itemId = itemData.Id,
+            diamond = GameMyData.Instance.UserData.diamond,
+        };
+
+        string payloadJson = JsonConvert.SerializeObject(payloadObj);
+        NetworkManager.SendRequest_Test("GetItemOptions", payloadJson);
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using Newtonsoft.Json;
@@ -1207,9 +1208,9 @@ public static class FakeServer
                     var fixedSlots = new List<int> { 10, 11, 20 };
                     foreach (var slot in fixedSlots)
                     {
-                        var pick = PickOneForSlot(allOptions, slot);
+                        var pick = PickOneForHeroSlot(allOptions, slot);
                         if (pick == null) continue;
-                        float rolled = RollValue(pick);
+                        float rolled = RollValueHero(pick);
                         selected[slot] = $"{pick.Id},{rolled.ToString()}";
                         h.options[slot].Clear();   // 기존 데이터 싹 지움
                         //h.options[slot][int.Parse(pick.Id)]
@@ -1225,11 +1226,11 @@ public static class FakeServer
                     // GOD - 31 또는 DEMON - 32 중 하나
 
                     int specialSlot = data.Type == "GOD" ? 31 : 32;
-                    var specialPick = PickOneForSlot(allOptions, specialSlot);
+                    var specialPick = PickOneForHeroSlot(allOptions, specialSlot);
                     if (specialPick != null)
                     {
                         fixedSlots.Add(specialSlot);
-                        float rolled = RollValue(specialPick);
+                        float rolled = RollValueHero(specialPick);
                         selected[specialSlot] = $"{specialPick.Id},{rolled.ToString()}";
                         h.options[specialSlot].Clear();   // 기존 데이터 싹 지움
 
@@ -1273,7 +1274,7 @@ public static class FakeServer
     /// <summary>
     /// 주어진 슬롯에 들어갈 수 있는 옵션 중 랜덤 1개 선택 (중복 허용)
     /// </summary>
-    private static DATA.HeroOptionData PickOneForSlot(List<DATA.HeroOptionData> allOptions, int slot)
+    private static DATA.HeroOptionData PickOneForHeroSlot(List<DATA.HeroOptionData> allOptions, int slot)
     {
         System.Random rand = new System.Random();
         string slotStr = slot.ToString();
@@ -1285,7 +1286,7 @@ public static class FakeServer
         return candidates[rand.Next(candidates.Count)];
     }
     
-    private static float RollValue(DATA.HeroOptionData opt)
+    private static float RollValueHero(DATA.HeroOptionData opt)
     {
         System.Random rand = new System.Random();
         double v = rand.NextDouble() * (opt.Max - opt.Min) + opt.Min;
@@ -1293,71 +1294,152 @@ public static class FakeServer
     }
 
 
-
-
-
-
-
     private static void GetItemOptions(string responseType, string payload)
     {
         var jObj = JObject.Parse(payload);
-        int heroId = jObj["heroId"]?.Value<int>() ?? -1;
-        int position = jObj["position"]?.Value<int>() ?? -1;
-        if (heroId == -1)
+        int itemId = jObj["itemId"]?.Value<int>() ?? -1;
+        int diamond = jObj["diamond"]?.Value<int>() ?? -1;
+        if (itemId == -1)
         {
             var error = JsonConvert.SerializeObject(new
             {
                 success = false,
-                message = "(-1) 잘못된 히어로"
+                message = "(-1) 잘못된 아이템"
             });
             OnReceiveResponse?.Invoke(responseType, error);
             return;
         }
 
-        // 유효한 아이템인지 체크
-        // 보유한 아이템인지 체크
+        if (diamond == -1)
+        {
+            var error = JsonConvert.SerializeObject(new
+            {
+                success = false,
+                message = "(-2) 잘못된 다이아몬드"
+            });
+            OnReceiveResponse?.Invoke(responseType, error);
+            return;
+        }
+
+        if (UserData.diamond != diamond)
+        {
+            // var error = JsonConvert.SerializeObject(new
+            // {
+            //     success = false,
+            //     message = "(-3) 다이아몬드 수량 오류"
+            // });
+            // OnReceiveResponse?.Invoke(responseType, error);
+            // return;
+        }
+
+        // 유효한 히어로인지 체크
+        // 보유한 히어로인지 체크
         // 보유한 다이아가 충분한지 체크
 
         int successType = -1;
+        BigInteger currentDiamond = -1;
         string _message = "";
-        int equipId = -1;
-        int unequipId = -1;
 
-        if (DataManager.Instance.heroData.TryGetValue(heroId, out DATA.HeroData data))
+
+
+        var selected = new Dictionary<int, string>();
+        if (DataManager.Instance.itemData.TryGetValue(itemId, out DATA.ItemData data))
         {
-            if (!UserData.ownedHeroIds.Contains(heroId))
+            if (!UserData.ownedItems.Contains(itemId))
             {
                 var error = JsonConvert.SerializeObject(new
                 {
                     success = false,
-                    message = "보유하지 않은 히어로."
+                    message = "보유하지 않은 아이템."
                 });
                 OnReceiveResponse?.Invoke(responseType, error);
                 return;
             }
 
-            var id = UserData.equippedHeroIds[position.ToString()];
-            if (id == -1)
+            string part = data.Part; // <-- 필드명이 다르면 여기를 수정
+            if (string.IsNullOrEmpty(part))
             {
-                //Debug.Log("이 파츠에는 아직 아무 것도 장착되지 않았습니다.");
-                successType = -2;
-                _message = "장착되어 있지 않은 히어로 입니다.";
+                var error = JsonConvert.SerializeObject(new
+                {
+                    success = false,
+                    message = $"부위를 찾을 수 없습니다. itemId={itemId}"
+                });
+                OnReceiveResponse?.Invoke(responseType, error);
+                return;
+            }
+
+            if (UserData.diamond >= 100)
+            {
+                UserData.diamond = UserData.diamond - 100;
+
+                successType = 1;
+                currentDiamond = UserData.diamond;
+
+
+                System.Random rand = new System.Random();
+                foreach (var h in UserData.itemOptions)
+                {
+                    if (h.Id != itemId) continue;
+
+                    // 전체 아이템 옵션 중에서, 이 부위를 지원하는 옵션만 후보로 수집
+                    var all = DataManager.Instance.itemOptionData.Values
+                        .SelectMany(v => v)
+                        .Where(o => o?.Slot != null && o.Slot.Contains(part))
+                        .ToList();
+
+                    if (all.Count == 0)
+                    {
+                        var error = JsonConvert.SerializeObject(new
+                        {
+                            success = false,
+                            message = $"해당 부위({part})에 사용할 수 있는 옵션이 없습니다."
+                        });
+                        OnReceiveResponse?.Invoke(responseType, error);
+                        return;
+                    }
+
+                    // 타입별로 그룹핑해서 각 타입에서 1개씩 뽑기
+                    var typesToSave = all
+                    .Select(o => int.Parse(o.Type)) // 데이터에 존재하는 타입들로 기본 구성
+                    .Distinct()
+                    .ToList();
+                    foreach (var typeKey in typesToSave)
+                    {
+                        var candidates = all; // Type 필터 없이 전부(파츠만 일치)
+                        if (candidates.Count == 0) continue;
+
+                        var pick = candidates[rand.Next(candidates.Count)];
+                        float rolled = (float)Math.Round(
+                            rand.NextDouble() * (pick.Max - pick.Min) + pick.Min, 2);
+
+                        int optId = int.Parse(pick.Id);
+
+                        // 이 타입 칸 초기화(타입당 1개만 유지) 후 새 값 기록
+                        if (!h.options.ContainsKey(typeKey))
+                            h.options[typeKey] = new Dictionary<int, List<string>>();
+                        else
+                            h.options[typeKey].Clear();
+
+                        h.options[typeKey][optId] = new List<string>
+                            {
+                                pick.Min.ToString(CultureInfo.InvariantCulture),
+                                pick.Max.ToString(CultureInfo.InvariantCulture),
+                                rolled.ToString(CultureInfo.InvariantCulture)
+                            };
+
+                        // 응답용: type → "optId,rolled"
+                        selected[typeKey] = $"{pick.Id},{rolled.ToString(CultureInfo.InvariantCulture)}";
+                    }
+
+
+                    break;
+                }
+                _message = "축하합니다.";
             }
             else
             {
-                if (id == heroId)
-                {
-                    successType = 1;
-                    unequipId = heroId;
-                    _message = "정상적으로 장착 해제되었습니다.";
-                }
-                else
-                {
-                    successType = -3;
-                    unequipId = heroId;
-                    equipId = id;
-                    _message = "장착되어 있는 히어로와 다릅니다.";
-                }
+                successType = -2;
+                _message = "보유한 다이아몬드가 부족합니다.";
             }
         }
         else
@@ -1366,22 +1448,13 @@ public static class FakeServer
             _message = "존재하지 않는 히어로입니다.";
         }
 
-        if (successType > 0)
-        {
-            // [DB갱신]
-            if (position > 0)
-            {
-                UserData.equippedHeroIds[position.ToString()] = -1;
-            }
-        }
-
         var msg = JsonConvert.SerializeObject(new
         {
             success = successType > 0 ? true : false,
-            unEquipPos = position,
-            unEquipId = unequipId,
-            equipId = equipId,
-            message = _message
+            message = _message,
+            diamond = currentDiamond,
+            itemId = itemId,
+            options = selected
         });
 
         OnReceiveResponse?.Invoke(responseType, msg);
